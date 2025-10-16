@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import { Card, Space, Alert, Tag } from 'antd';
-import { BitcoinOutlined } from '@ant-design/icons';
+import { AccountBookFilled } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { getBitcoinETFs } from '@/services/featuredLists';
 import StockListTable from '@/components/StockListTable';
@@ -23,7 +23,7 @@ const BitcoinETFs: React.FC = () => {
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div>
             <h1 style={{ fontSize: 28, marginBottom: 8 }}>
-              <BitcoinOutlined style={{ color: '#f7931a', marginRight: 12 }} />
+              <AccountBookFilled style={{ color: '#f7931a', marginRight: 12 }} />
               比特币ETF
             </h1>
             <p style={{ color: '#666', fontSize: 14 }}>

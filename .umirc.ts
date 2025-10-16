@@ -10,7 +10,13 @@ export default defineConfig({
   plugins: [
     '@umijs/plugins/dist/antd',
     '@umijs/plugins/dist/locale',
+    '@umijs/plugins/dist/model',
+    '@umijs/plugins/dist/initial-state',
   ],
+  mfsu: false,
+  
+  // 解决 esbuild helpers 冲突
+  esbuildMinifyIIFE: true,
   
   // Ant Design 配置
   antd: {
