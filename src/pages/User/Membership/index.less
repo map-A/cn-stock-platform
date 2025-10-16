@@ -1,0 +1,137 @@
+.membership {
+  padding: 24px;
+  background: #f5f7fa;
+  min-height: calc(100vh - 64px);
+
+  .statusCard {
+    margin-bottom: 24px;
+    border-radius: 8px;
+
+    .statusContent {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .levelInfo {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        .icon {
+          font-size: 48px;
+          color: #faad14;
+        }
+
+        h3 {
+          margin: 0 0 8px 0;
+          font-size: 16px;
+          color: #666;
+        }
+
+        .level {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          .expireTime {
+            color: #999;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .plans {
+    margin-bottom: 48px;
+
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 48px;
+
+      h2 {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      p {
+        font-size: 16px;
+        color: #666;
+      }
+    }
+  }
+
+  .comparison {
+    margin-bottom: 24px;
+
+    .comparisonTable {
+      .header,
+      .row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        padding: 16px 0;
+        border-bottom: 1px solid #f0f0f0;
+
+        > div {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .featureCol {
+          justify-content: flex-start;
+          gap: 8px;
+          font-weight: 500;
+        }
+      }
+
+      .header {
+        font-weight: 600;
+        background: #fafafa;
+      }
+    }
+  }
+
+  .faq {
+    .faqItem {
+      h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      p {
+        color: #666;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .membership {
+    padding: 16px;
+
+    .statusCard {
+      .statusContent {
+        flex-direction: column;
+        gap: 16px;
+
+        .actions {
+          width: 100%;
+
+          button {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .comparison {
+      .comparisonTable {
+        overflow-x: auto;
+      }
+    }
+  }
+}

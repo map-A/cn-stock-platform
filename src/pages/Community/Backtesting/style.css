@@ -1,0 +1,123 @@
+.backtesting-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.backtesting-page h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.backtest-config {
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.config-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.config-section label {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.config-section input {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.backtest-config button {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  grid-column: span 2;
+}
+
+.backtest-results {
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.results-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+.metric label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.metric span {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.metric span.positive {
+  color: #22c55e;
+}
+
+.metric span.negative {
+  color: #ef4444;
+}
+
+.trades-list {
+  margin-top: 2rem;
+}
+
+.trades-list h3 {
+  margin-bottom: 1rem;
+}
+
+.trades-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.trades-list th,
+.trades-list td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.trades-list th {
+  background: var(--bg-tertiary);
+  font-weight: 600;
+}
+
+.trades-list td.positive {
+  color: #22c55e;
+}
+
+.trades-list td.negative {
+  color: #ef4444;
+}

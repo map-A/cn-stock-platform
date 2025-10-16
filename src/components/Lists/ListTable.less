@@ -1,0 +1,49 @@
+.listTable {
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: #fafafa;
+    border-radius: 4px;
+
+    .total {
+      font-size: 14px;
+      color: #666;
+    }
+  }
+
+  .stockLink {
+    font-weight: 500;
+
+    &:hover {
+      color: #1890ff;
+    }
+  }
+
+  .watchlistIcon {
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  :global {
+    .ant-table {
+      font-size: 13px;
+    }
+
+    .ant-table-thead > tr > th {
+      background: #fafafa;
+      font-weight: 600;
+    }
+
+    .ant-table-tbody > tr:hover {
+      cursor: pointer;
+    }
+  }
+}

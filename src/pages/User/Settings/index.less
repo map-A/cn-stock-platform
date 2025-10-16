@@ -1,0 +1,28 @@
+.settings {
+  padding: 24px;
+  background: #f5f7fa;
+  min-height: calc(100vh - 64px);
+
+  .section {
+    margin-bottom: 32px;
+
+    .sectionHeader {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+
+      > span:first-child {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .settings {
+    padding: 16px;
+  }
+}

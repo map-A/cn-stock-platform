@@ -1,0 +1,44 @@
+.stockCard {
+  height: 100%;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.name {
+  font-size: 16px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.symbol {
+  font-size: 12px;
+}
+
+.price {
+  margin: 8px 0;
+}
+
+.change {
+  display: flex;
+  align-items: center;
+}
+
+.industry {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  display: inline-block;
+}
