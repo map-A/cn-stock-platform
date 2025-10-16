@@ -61,3 +61,17 @@ export async function getCapitalFlow(date?: string): Promise<any> {
 export async function getIndustryFlow(): Promise<any[]> {
   return get('/market/industry-flow');
 }
+
+/**
+ * 获取恐慌贪婪指数
+ */
+export async function getFearGreedIndex(): Promise<any> {
+  return get('/market/fear-greed-index');
+}
+
+/**
+ * 获取板块轮动数据
+ */
+export async function getSectorRotation(): Promise<any> {
+  return get('/market/sector-rotation');
+}

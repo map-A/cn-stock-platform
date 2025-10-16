@@ -252,3 +252,15 @@ export const formatCurrency = (amount: number | undefined, decimal: number = 2):
 
   return `¥${formatNumber(amount, decimal)}`;
 };
+
+/**
+ * 格式化时间
+ * @param date 日期
+ * @param format 格式
+ */
+export const formatTime = (date: string | number | Date, format: string = 'HH:mm:ss'): string => {
+  if (!date) {
+    return '--';
+  }
+  return dayjs(date).format(format);
+};

@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Card, Row, Col, Tag, Alert, Space, Statistic } from 'antml';
+import { Card, Row, Col, Tag, Alert, Space, Statistic } from 'antd';
 import { SyncOutlined, RiseOutlined, FallOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { getSectorRotation } from '@/services/market';

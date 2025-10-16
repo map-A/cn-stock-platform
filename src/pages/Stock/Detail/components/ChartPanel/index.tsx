@@ -2,7 +2,7 @@
  * 图表面板组件
  */
 import React, { useState } from 'react';
-import { Radio, Space, Spin } from 'antml:function_calls';
+import { Radio, Space, Spin } from 'antd';
 import { useRequest } from 'ahooks';
 import { getStockChart, getTimeShareData } from '@/services/stock';
 import { TIME_PERIODS } from '@/constants/market';

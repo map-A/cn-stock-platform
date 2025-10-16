@@ -6,16 +6,22 @@
 
 本项目是对 [Stocknear Frontend](https://github.com/stocknear/frontend) 的全面重构，采用最新的技术栈，并适配中国A股市场特色功能。
 
+**项目状态**: ✅ 依赖安装成功，开发环境就绪
+
 ### 核心技术栈
 
-- **前端框架**: React 18 + Ant Design Pro v5
-- **框架内核**: Umi 4 (基于 Vite)
-- **UI 组件**: Ant Design v5 (Token 化主题)
-- **状态管理**: Zustand + React Query
-- **数据可视化**: AntV G2Plot
+- **前端框架**: React 18.3.1
+- **框架内核**: Umi 4.3.24 (基于 esbuild)
+- **UI 组件库**: Ant Design 5.21.6 (Token 化主题)
+- **状态管理**: Zustand 4.5.5 + @tanstack/react-query 5.59.0
+- **数据可视化**: AntV G2Plot 2.4.32
 - **样式方案**: Less + CSS Modules
-- **工程化**: pnpm + ESLint + Prettier + Husky
-- **测试**: Vitest + Playwright
+- **请求库**: umi-request 1.4.0
+- **工具库**: ahooks 3.8.1 + lodash-es 4.17.21 + dayjs 1.11.13
+- **包管理**: pnpm (支持 Node.js >= 18.0.0)
+- **代码规范**: ESLint 8.57.1 + Prettier 3.3.3 + Husky 9.1.6
+- **测试**: Vitest 2.1.3 + Playwright 1.48.2
+- **TypeScript**: 5.6.3
 
 ## 🚀 快速开始
 
@@ -27,7 +33,11 @@
 ### 安装依赖
 
 ```bash
+# 安装依赖
 pnpm install
+
+# 如果遇到配置错误，请确保已安装 Umi 4 插件
+pnpm add @umijs/plugins -D
 ```
 
 ### 开发

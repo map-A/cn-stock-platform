@@ -8,6 +8,7 @@ import { getMarketStatus } from '@/models/stock';
 // 全局初始化
 export async function getInitialState(): Promise<{
   currentUser?: any;
+  settings?: any;
   isMarketOpen: boolean;
 }> {
   // 获取用户信息
@@ -33,11 +34,14 @@ export async function getInitialState(): Promise<{
 
   return {
     currentUser,
+    settings: {},
     isMarketOpen,
   };
 }
 
-// 请求配置
+/**
+ * 请求配置
+ */
 export const request: RequestConfig = {
   timeout: 10000,
   errorConfig: {
@@ -80,6 +84,12 @@ export const request: RequestConfig = {
         };
       }
       return { url, options };
+    },
+  ],
+  responseInterceptors: [
+    (response: any) => {
+      // 响应拦截器
+      return response;
     },
   ],
 };
