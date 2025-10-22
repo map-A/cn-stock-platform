@@ -264,3 +264,15 @@ export const formatTime = (date: string | number | Date, format: string = 'HH:mm
   }
   return dayjs(date).format(format);
 };
+
+/**
+ * 格式化日期时间
+ * @param date 日期
+ * @param format 格式
+ */
+export const formatDateTime = (date: string | number | Date, format: string = 'YYYY-MM-DD HH:mm:ss'): string => {
+  if (!date) {
+    return '--';
+  }
+  return dayjs(date).format(format);
+};

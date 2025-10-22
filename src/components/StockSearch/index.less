@@ -1,0 +1,151 @@
+.stock-search {
+  position: relative;
+  
+  .ant-select-dropdown {
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+  
+  .search-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    transition: all 0.2s;
+    
+    &:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .stock-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      
+      .industry {
+        font-size: 12px;
+      }
+    }
+    
+    .favorite-action {
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      
+      &:hover {
+        background-color: #e6f7ff;
+      }
+      
+      .anticon {
+        font-size: 16px;
+      }
+    }
+  }
+  
+  .search-loading {
+    text-align: center;
+    padding: 16px;
+    color: #999;
+  }
+  
+  // 高亮匹配文本
+  .highlight {
+    background-color: #fffb8f;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  
+  // 不同匹配类型的样式
+  .match-code {
+    .ant-tag {
+      background-color: #e6f7ff;
+      color: #1890ff;
+      border-color: #91d5ff;
+    }
+  }
+  
+  .match-name {
+    .ant-tag {
+      background-color: #f6ffed;
+      color: #52c41a;
+      border-color: #b7eb8f;
+    }
+  }
+  
+  .match-industry {
+    .ant-tag {
+      background-color: #fff7e6;
+      color: #fa8c16;
+      border-color: #ffd591;
+    }
+  }
+  
+  .match-concept {
+    .ant-tag {
+      background-color: #f9f0ff;
+      color: #722ed1;
+      border-color: #d3adf7;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .stock-search {
+    .search-result-item {
+      padding: 12px;
+      
+      .stock-info {
+        gap: 6px;
+      }
+      
+      .favorite-action {
+        padding: 8px;
+        
+        .anticon {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}
+
+// 小尺寸样式
+.stock-search-small {
+  .search-result-item {
+    padding: 6px 8px;
+    
+    .stock-info {
+      gap: 2px;
+    }
+    
+    .favorite-action {
+      padding: 2px;
+      
+      .anticon {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// 大尺寸样式
+.stock-search-large {
+  .search-result-item {
+    padding: 12px 16px;
+    
+    .stock-info {
+      gap: 6px;
+    }
+    
+    .favorite-action {
+      padding: 6px;
+      
+      .anticon {
+        font-size: 18px;
+      }
+    }
+  }
+}

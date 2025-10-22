@@ -68,4 +68,58 @@ export default {
   'pages.searchTable.tenThousand': '万',
   'pages.searchTable.batchDeletion': '批量删除',
   'pages.searchTable.batchApproval': '批量审批',
+
+  // Trade Page
+  'pages.trade.title': '交易记录',
+  'pages.trade.tradeHistory': '交易历史',
+  'pages.trade.tradeAnalysis': '交易分析',
+  'pages.trade.profitLoss': '盈亏报表',
+  'pages.trade.performance': '绩效评估',
+  'pages.trade.totalTrades': '总交易笔数',
+  'pages.trade.totalVolume': '总成交金额',
+  'pages.trade.totalProfitLoss': '总盈亏',
+  'pages.trade.winRate': '胜率',
+
+  // Backtest Page
+  'pages.backtest.title': '回测系统',
+  'pages.backtest.config': '回测配置',
+  'pages.backtest.history': '回测历史',
+  'pages.backtest.results': '回测结果',
+  'pages.backtest.report': '回测报告',
+
+  // NewsAnalysis Page
+  'pages.newsAnalysis.title': '新闻分析',
+  'pages.newsAnalysis.newsList': '新闻列表',
+  'pages.newsAnalysis.sentiment': '情绪分析',
+  'pages.newsAnalysis.keywordCloud': '关键词云',
+  'pages.newsAnalysis.marketSentiment': '市场情绪',
+
+  // Risk Page
+  'pages.risk.title': '风险分析',
+  'pages.risk.riskAnalysis': '风险分析',
+  'pages.risk.riskAssessment': '风险评估',
+  'pages.risk.positionManagement': '头寸管理',
+
+  // Account Page
+  'pages.account.title': '账户管理',
+  'pages.account.accountInfo': '账户信息',
+  'pages.account.assetAllocation': '资产配置',
+  'pages.account.fundManagement': '资金管理',
+
+  // SystemSettings Page
+  'pages.systemSettings.title': '系统设置',
+  'pages.systemSettings.taskSchedule': '任务调度',
+  'pages.systemSettings.dataSource': '数据源配置',
+  'pages.systemSettings.monitor': '系统监控',
+
+  // UserSettings Page
+  'pages.userSettings.title': '个人设置',
+  'pages.userSettings.theme': '主题设置',
+  'pages.userSettings.preference': '个性化偏好',
+  'pages.userSettings.activity': '活动日志',
+
+  // Settings Module
+  'pages.settings.title': '设置',
+  'pages.settings.system': '系统设置',
+  'pages.settings.user': '个人设置',
 };

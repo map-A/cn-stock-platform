@@ -2,7 +2,7 @@ export default {
   'menu.home': '首页',
   'menu.chat': 'AI 股票助手',
   
-  // 市场
+  // 市场行情
   'menu.market': '行情',
   'menu.market.mover': '涨跌榜',
   'menu.market.heatmap': '热力图',
@@ -31,12 +31,36 @@ export default {
   
   // 策略
   'menu.strategy': 'AI策略',
-  
+  'menu.strategy.list': '策略列表',
+  'menu.strategy.backtest': '回测系统',
+
+  // 交易
+  'menu.trade': '交易记录',
+
   // 风险管理
   'menu.risk': '风险管理',
-  
+  'menu.risk.management': '风险工具',
+  'menu.risk.analysis': '风险分析',
+
+  // 账户
+  'menu.account': '账户管理',
+
+  // 新闻分析
+  'menu.newsAnalysis': '新闻分析',
+
+  // 系统设置
+  'menu.systemSettings': '系统设置',
+
+  // 用户设置
+  'menu.userSettings': '个人设置',
+
   // 任务
   'menu.tasks': '任务管理',
+
+  // 设置
+  'menu.settings': '设置',
+  'menu.settings.system': '系统设置',
+  'menu.settings.user': '个人设置',
   
   // 中国特色
   'menu.china': '中国特色',
@@ -62,11 +86,11 @@ export default {
   'home.search.placeholder': '搜索股票代码或名称...',
   'home.quickCard.aiAgent': 'AI 股票助手',
   'home.quickCard.movers': '涨跌榜',
-  'home.quickCard.screener': '选股器',
+  'home.quickCard.screener': '筛选器',
   'home.quickCard.options': '期权',
   'home.quickCard.calendar': '日历',
   'home.quickCard.watchlist': '自选股',
-  'home.market.title': '市场行情',
+  'home.market.title': '市场概览',
   'home.market.gainers': '涨幅榜',
   'home.market.losers': '跌幅榜',
   'home.news.title': '市场新闻',

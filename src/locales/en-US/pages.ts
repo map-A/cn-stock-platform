@@ -73,4 +73,58 @@ export default {
   'pages.searchTable.tenThousand': '0000',
   'pages.searchTable.batchDeletion': 'batch deletion',
   'pages.searchTable.batchApproval': 'batch approval',
+
+  // Trade Page
+  'pages.trade.title': 'Trade Records',
+  'pages.trade.tradeHistory': 'Trade History',
+  'pages.trade.tradeAnalysis': 'Trade Analysis',
+  'pages.trade.profitLoss': 'Profit & Loss Report',
+  'pages.trade.performance': 'Performance Evaluation',
+  'pages.trade.totalTrades': 'Total Trades',
+  'pages.trade.totalVolume': 'Total Volume',
+  'pages.trade.totalProfitLoss': 'Total P&L',
+  'pages.trade.winRate': 'Win Rate',
+
+  // Backtest Page
+  'pages.backtest.title': 'Backtesting System',
+  'pages.backtest.config': 'Backtest Config',
+  'pages.backtest.history': 'Backtest History',
+  'pages.backtest.results': 'Backtest Results',
+  'pages.backtest.report': 'Backtest Report',
+
+  // NewsAnalysis Page
+  'pages.newsAnalysis.title': 'News Analysis',
+  'pages.newsAnalysis.newsList': 'News List',
+  'pages.newsAnalysis.sentiment': 'Sentiment Analysis',
+  'pages.newsAnalysis.keywordCloud': 'Keyword Cloud',
+  'pages.newsAnalysis.marketSentiment': 'Market Sentiment',
+
+  // Risk Page
+  'pages.risk.title': 'Risk Analysis',
+  'pages.risk.riskAnalysis': 'Risk Analysis',
+  'pages.risk.riskAssessment': 'Risk Assessment',
+  'pages.risk.positionManagement': 'Position Management',
+
+  // Account Page
+  'pages.account.title': 'Account Management',
+  'pages.account.accountInfo': 'Account Info',
+  'pages.account.assetAllocation': 'Asset Allocation',
+  'pages.account.fundManagement': 'Fund Management',
+
+  // SystemSettings Page
+  'pages.systemSettings.title': 'System Settings',
+  'pages.systemSettings.taskSchedule': 'Task Schedule',
+  'pages.systemSettings.dataSource': 'Data Source Config',
+  'pages.systemSettings.monitor': 'System Monitor',
+
+  // UserSettings Page
+  'pages.userSettings.title': 'Personal Settings',
+  'pages.userSettings.theme': 'Theme Settings',
+  'pages.userSettings.preference': 'Preferences',
+  'pages.userSettings.activity': 'Activity Log',
+
+  // Settings Module
+  'pages.settings.title': 'Settings',
+  'pages.settings.system': 'System Settings',
+  'pages.settings.user': 'Personal Settings',
 };

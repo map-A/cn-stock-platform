@@ -31,12 +31,36 @@ export default {
   
   // Strategy
   'menu.strategy': 'AI Strategy',
-  
+  'menu.strategy.list': 'Strategy List',
+  'menu.strategy.backtest': 'Backtesting System',
+
+  // Trading
+  'menu.trade': 'Trade Records',
+
   // Risk Management
   'menu.risk': 'Risk Management',
-  
+  'menu.risk.management': 'Risk Tools',
+  'menu.risk.analysis': 'Risk Analysis',
+
+  // Account
+  'menu.account': 'Account Management',
+
+  // News Analysis
+  'menu.newsAnalysis': 'News Analysis',
+
+  // System Settings
+  'menu.systemSettings': 'System Settings',
+
+  // User Settings
+  'menu.userSettings': 'Personal Settings',
+
   // Tasks
   'menu.tasks': 'Task Management',
+
+  // Settings
+  'menu.settings': 'Settings',
+  'menu.settings.system': 'System Settings',
+  'menu.settings.user': 'Personal Settings',
   
   // China Features
   'menu.china': 'China Features',

@@ -1,0 +1,218 @@
+.backtest-page {
+  .backtest-header {
+    margin-bottom: 24px;
+    
+    .title {
+      margin-bottom: 16px;
+    }
+    
+    .stats-row {
+      margin-bottom: 16px;
+    }
+  }
+  
+  .backtest-content {
+    .content-tabs {
+      .ant-tabs-content-holder {
+        padding: 24px 0;
+      }
+    }
+  }
+  
+  .backtest-table {
+    .status-tag {
+      &.running {
+        color: #1890ff;
+        border-color: #1890ff;
+      }
+      
+      &.completed {
+        color: #52c41a;
+        border-color: #52c41a;
+      }
+      
+      &.failed {
+        color: #ff4d4f;
+        border-color: #ff4d4f;
+      }
+      
+      &.pending {
+        color: #faad14;
+        border-color: #faad14;
+      }
+    }
+    
+    .progress-cell {
+      min-width: 120px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+  }
+  
+  .backtest-modal {
+    .ant-modal-body {
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+  }
+  
+  .empty-state {
+    padding: 48px 24px;
+    text-align: center;
+    
+    .empty-description {
+      margin-top: 16px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+  }
+}
+
+.backtest-config {
+  .config-form {
+    .ant-form-item {
+      margin-bottom: 16px;
+    }
+  }
+  
+  .config-section {
+    margin-bottom: 24px;
+    
+    .section-title {
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+  }
+}
+
+.backtest-results {
+  .results-overview {
+    margin-bottom: 24px;
+    
+    .metrics-grid {
+      .metric-card {
+        text-align: center;
+        padding: 16px;
+        border: 1px solid #f0f0f0;
+        border-radius: 6px;
+        
+        .metric-value {
+          font-size: 24px;
+          font-weight: 600;
+          margin-bottom: 4px;
+          
+          &.positive {
+            color: #52c41a;
+          }
+          
+          &.negative {
+            color: #ff4d4f;
+          }
+        }
+        
+        .metric-label {
+          color: rgba(0, 0, 0, 0.65);
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  
+  .results-charts {
+    .chart-section {
+      margin-bottom: 24px;
+      
+      .chart-title {
+        margin-bottom: 16px;
+      }
+      
+      .chart-container {
+        height: 400px;
+      }
+    }
+  }
+}
+
+.backtest-report {
+  .report-header {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 6px;
+    
+    .report-title {
+      margin-bottom: 8px;
+    }
+    
+    .report-meta {
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 14px;
+    }
+  }
+  
+  .report-section {
+    margin-bottom: 32px;
+    
+    .section-title {
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .section-content {
+      padding: 16px 0;
+    }
+  }
+  
+  .trade-list {
+    .trade-item {
+      padding: 12px;
+      border: 1px solid #f0f0f0;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      
+      &.profit {
+        border-left: 4px solid #52c41a;
+      }
+      
+      &.loss {
+        border-left: 4px solid #ff4d4f;
+      }
+      
+      .trade-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        
+        .trade-symbol {
+          font-weight: 600;
+        }
+        
+        .trade-pnl {
+          font-weight: 600;
+          
+          &.positive {
+            color: #52c41a;
+          }
+          
+          &.negative {
+            color: #ff4d4f;
+          }
+        }
+      }
+      
+      .trade-details {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.65);
+        
+        .detail-item {
+          margin-right: 16px;
+        }
+      }
+    }
+  }
+}

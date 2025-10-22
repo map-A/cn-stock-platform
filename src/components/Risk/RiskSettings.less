@@ -1,0 +1,50 @@
+/**
+ * 风险设置组件样式
+ */
+
+.risk-settings {
+  .settings-form {
+    .ant-tabs-content {
+      padding-top: 16px;
+    }
+
+    .ant-card {
+      margin-bottom: 16px;
+
+      .ant-card-head {
+        min-height: 40px;
+
+        .ant-card-head-title {
+          font-size: 14px;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .form-actions {
+      text-align: center;
+      padding: 16px 0;
+      border-top: 1px solid #f0f0f0;
+      margin-top: 24px;
+    }
+  }
+
+  .ant-form-item {
+    margin-bottom: 16px;
+  }
+
+  .ant-form-item-label > label {
+    font-weight: 500;
+  }
+}
+
+/* 深色主题适配 */
+[data-theme='dark'] {
+  .risk-settings {
+    .settings-form {
+      .form-actions {
+        border-top-color: #303030;
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+/**
+ * 压力测试分析组件样式
+ */
+
+.stress-test-analysis {
+  .control-panel {
+    margin-bottom: 16px;
+  }
+
+  .scenario-info {
+    margin-bottom: 16px;
+  }
+
+  .result-tabs {
+    .ant-tabs-content-holder {
+      padding-top: 0;
+    }
+  }
+
+  .negative {
+    color: #ff4d4f;
+  }
+
+  .positive {
+    color: #52c41a;
+  }
+
+  // 表格中的数值格式化
+  .ant-table {
+    .negative {
+      font-weight: 500;
+    }
+
+    .positive {
+      font-weight: 500;
+    }
+  }
+}
+
+/* 深色主题适配 */
+[data-theme='dark'] {
+  .stress-test-analysis {
+    .negative {
+      color: #ff7875;
+    }
+
+    .positive {
+      color: #73d13d;
+    }
+  }
+}

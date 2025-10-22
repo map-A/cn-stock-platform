@@ -1,0 +1,110 @@
+/* 实时行情组件样式 */
+.quoteCard {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &.small {
+    .header {
+      margin-bottom: 4px;
+    }
+    
+    .priceSection {
+      margin-bottom: 4px;
+    }
+    
+    .stockCode {
+      font-size: 12px;
+    }
+    
+    .stockName {
+      font-size: 10px;
+    }
+  }
+
+  &.large {
+    .header {
+      margin-bottom: 12px;
+    }
+    
+    .priceSection {
+      margin-bottom: 12px;
+    }
+    
+    .stockCode {
+      font-size: 16px;
+    }
+    
+    .stockName {
+      font-size: 14px;
+    }
+  }
+}
+
+.header {
+  margin-bottom: 8px;
+  
+  .stockCode {
+    color: #1890ff;
+    font-weight: 600;
+  }
+  
+  .stockName {
+    color: #666;
+    font-size: 12px;
+  }
+}
+
+.priceSection {
+  margin-bottom: 8px;
+  
+  .changeInfo {
+    text-align: right;
+  }
+}
+
+.detailsSection {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.updateTime {
+  margin-top: 4px;
+  text-align: right;
+}
+
+.errorCard {
+  .ant-card-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .quoteCard {
+    .priceSection {
+      .ant-space {
+        flex-direction: column;
+        align-items: flex-start;
+        
+        .changeInfo {
+          text-align: left;
+        }
+      }
+    }
+    
+    .detailsSection {
+      .ant-space {
+        justify-content: flex-start;
+      }
+    }
+  }
+}

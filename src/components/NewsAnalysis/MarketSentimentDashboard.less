@@ -1,0 +1,124 @@
+.market-sentiment-dashboard {
+  .sentiment-actions {
+    .sentiment-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      
+      &:hover {
+        background-color: #f5f5f5;
+      }
+      
+      &.positive {
+        color: #52c41a;
+        
+        &:hover {
+          background-color: #f6ffed;
+        }
+      }
+      
+      &.neutral {
+        color: #faad14;
+        
+        &:hover {
+          background-color: #fffbe6;
+        }
+      }
+      
+      &.negative {
+        color: #ff4d4f;
+        
+        &:hover {
+          background-color: #fff2f0;
+        }
+      }
+      
+      .anticon {
+        margin-right: 8px;
+        font-size: 14px;
+      }
+    }
+  }
+  
+  .ant-statistic {
+    .ant-statistic-title {
+      font-size: 12px;
+      color: #8c8c8c;
+      margin-bottom: 4px;
+    }
+    
+    .ant-statistic-content {
+      font-size: 18px;
+      line-height: 1.2;
+    }
+  }
+  
+  .ant-progress {
+    margin-top: 8px;
+    
+    .ant-progress-text {
+      font-size: 11px;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .market-sentiment-dashboard {
+    .ant-col {
+      margin-bottom: 8px;
+    }
+    
+    .sentiment-actions {
+      .sentiment-item {
+        padding: 6px 8px;
+        font-size: 12px;
+        
+        .anticon {
+          font-size: 12px;
+        }
+      }
+    }
+    
+    .ant-statistic {
+      .ant-statistic-content {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// 图表容器样式
+.market-sentiment-dashboard {
+  .ant-card-body {
+    padding: 16px;
+  }
+  
+  .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+    min-height: auto;
+    
+    .ant-card-head-title {
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 0;
+    }
+  }
+}
+
+// 加载状态样式
+.market-sentiment-dashboard .ant-skeleton {
+  .ant-skeleton-content {
+    .ant-skeleton-title {
+      margin-top: 0;
+    }
+    
+    .ant-skeleton-paragraph {
+      margin-top: 16px;
+    }
+  }
+}

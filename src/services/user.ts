@@ -1,36 +1,42 @@
 /**
- * 用户相关API服务
- * Phase 5: 用户系统
+ * 用户设置相关API服务
+ * 
+ * 功能覆盖:
+ * - 用户认证与登录
+ * - 个人信息管理
+ * - 设置配置管理
+ * - 安全管理
+ * - 设备管理
+ * - 数据导出
  */
 
-import { get, post, put, del } from './request';
-import DevStorage from '@/utils/devStorage';
+import { request } from '@umijs/max';
 import type {
-  UserInfo,
-  UserSettings,
-  Notification,
-  PriceAlert,
-  SubscriptionStatus,
-  PaymentOrder,
-  LoginForm,
-  RegisterForm,
-  ResetPasswordForm,
-  UserStats,
-  MembershipPlan,
-  OAuthLoginParams,
-} from '@/typings/user';
+  LoginRequest,
+  LoginResponse,
+  UserProfile,
+  UserSettingsResponse,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
+  UpdateSettingsRequest,
+  ThemeSettings,
+  NotificationSettings,
+  SecuritySettings,
+  PreferenceSettings,
+  UserDevice,
+  UserActivityLog,
+  ExportUserDataRequest,
+} from '@/types/user';
+import DevStorage from '@/utils/devStorage';
 
-// ============= 认证相关 =============
-
-/**
- * 用户登录
- */
-export async function login(data: LoginForm): Promise<{ token: string; user: UserInfo }> {
+// 用户登录
+export async function login(data: LoginRequest): Promise<LoginResponse> {
   // 开发环境模拟登录
   if (process.env.NODE_ENV === 'development') {
+    // 模拟登录验证
     const { username, password } = data;
     
-    // 模拟用户验证
+    // 简单的用户验证逻辑
     const validUsers = [
       { username: 'admin', password: 'admin123', role: 'admin', name: '系统管理员' },
       { username: 'trader', password: 'trader123', role: 'trader', name: '交易员' },
@@ -45,319 +51,301 @@ export async function login(data: LoginForm): Promise<{ token: string; user: Use
     }
     
     // 模拟用户信息
-    const mockUserInfo: UserInfo = {
+    const mockUserProfile: UserProfile = {
       id: `user_${Date.now()}`,
       username: user.username,
       email: `${user.username}@example.com`,
-      displayName: user.name,
+      nickname: user.name,
       avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-      tier: 'Free',
-      isPro: false,
+      department: '股票交易部',
+      position: user.name,
+      timezone: 'Asia/Shanghai',
+      language: 'zh-CN',
       createdAt: '2024-01-01T00:00:00Z',
-      lastLoginAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      lastLoginTime: new Date().toISOString(),
+      loginCount: Math.floor(Math.random() * 100) + 1,
+      status: 'active',
     };
     
     const mockToken = `mock_token_${Date.now()}_${user.username}`;
     
     // 保存登录状态到开发环境存储
     DevStorage.saveLoginState(mockToken, {
-      ...mockUserInfo,
+      ...mockUserProfile,
       role: user.role,
       role_name: user.name,
       display_name: user.name,
-      user_id: mockUserInfo.id,
-      avatar_url: mockUserInfo.avatar,
+      user_id: mockUserProfile.id,
+      avatar_url: mockUserProfile.avatar,
     });
     
     return {
       token: mockToken,
-      user: mockUserInfo,
+      user: mockUserProfile,
+      expiresIn: 7 * 24 * 60 * 60, // 7天
     };
   }
   
   // 生产环境调用真实API
-  return post('/auth/login', data);
+  return request('/api/v1/auth/login', {
+    method: 'POST',
+    data,
+  });
 }
 
-/**
- * 用户注册
- */
-export async function register(data: RegisterForm): Promise<{ token: string; user: UserInfo }> {
-  return post('/auth/register', data);
-}
-
-/**
- * 用户登出
- */
+// 用户登出
 export async function logout(): Promise<void> {
   // 清理本地存储
   DevStorage.clearLoginState();
   
   // 如果是生产环境，调用后端登出API
   if (process.env.NODE_ENV !== 'development') {
-    return post('/auth/logout');
+    return request('/api/v1/auth/logout', {
+      method: 'POST',
+    });
   }
 }
 
-/**
- * 获取当前用户信息
- */
-export async function getCurrentUser(): Promise<UserInfo> {
-  // 开发环境下，优先从缓存恢复用户信息
-  if (process.env.NODE_ENV === 'development') {
-    const { token, userInfo } = DevStorage.getLoginState();
-    
-    if (token && userInfo) {
-      console.log('🔄 开发环境恢复用户信息');
-      return {
-        id: userInfo.user_id || userInfo.id,
-        username: userInfo.username,
-        email: userInfo.email,
-        displayName: userInfo.display_name || userInfo.username,
-        avatar: userInfo.avatar_url || userInfo.avatar,
-        tier: 'Free',
-        isPro: false,
-        createdAt: userInfo.createdAt || '2024-01-01T00:00:00Z',
-        lastLoginAt: userInfo.lastLoginAt || new Date().toISOString(),
-      };
-    }
-  }
-  
-  // 生产环境从API获取
-  return get('/auth/me');
+// 获取用户完整设置信息
+export async function getUserSettings(): Promise<UserSettingsResponse> {
+  return request('/api/v1/user/settings', {
+    method: 'GET',
+  });
 }
 
-/**
- * OAuth 登录
- */
-export async function oauthLogin(
-  params: OAuthLoginParams,
-): Promise<{ token: string; user: UserInfo }> {
-  return post('/auth/oauth', params);
+// 获取用户个人信息
+export async function getUserProfile(): Promise<UserProfile> {
+  return request('/api/v1/user/profile', {
+    method: 'GET',
+  });
 }
 
-/**
- * 发送重置密码邮件
- */
-export async function sendResetPasswordEmail(email: string): Promise<void> {
-  return post('/auth/reset-password/send', { email });
+// 更新用户个人信息
+export async function updateUserProfile(data: UpdateProfileRequest): Promise<UserProfile> {
+  return request('/api/v1/user/profile', {
+    method: 'PUT',
+    data,
+  });
 }
 
-/**
- * 重置密码
- */
-export async function resetPassword(data: ResetPasswordForm): Promise<void> {
-  return post('/auth/reset-password', data);
-}
-
-/**
- * 修改密码
- */
-export async function changePassword(oldPassword: string, newPassword: string): Promise<void> {
-  return post('/auth/change-password', { oldPassword, newPassword });
-}
-
-// ============= 用户信息管理 =============
-
-/**
- * 更新用户信息
- */
-export async function updateUserInfo(data: Partial<UserInfo>): Promise<UserInfo> {
-  return put('/user/profile', data);
-}
-
-/**
- * 上传用户头像
- */
+// 上传用户头像
 export async function uploadAvatar(file: File): Promise<{ url: string }> {
   const formData = new FormData();
-  formData.append('file', file);
-  return post('/user/avatar', formData);
+  formData.append('avatar', file);
+  
+  return request('/api/v1/user/avatar', {
+    method: 'POST',
+    data: formData,
+  });
 }
 
-/**
- * 获取用户统计
- */
-export async function getUserStats(): Promise<UserStats> {
-  return get('/user/stats');
+// 修改密码
+export async function changePassword(data: ChangePasswordRequest): Promise<void> {
+  return request('/api/v1/user/password', {
+    method: 'PUT',
+    data,
+  });
 }
 
-// ============= 用户设置 =============
-
-/**
- * 获取用户设置
- */
-export async function getUserSettings(): Promise<UserSettings> {
-  return get('/user/settings');
+// 获取主题设置
+export async function getThemeSettings(): Promise<ThemeSettings> {
+  return request('/api/v1/user/settings/theme', {
+    method: 'GET',
+  });
 }
 
-/**
- * 更新用户设置
- */
-export async function updateUserSettings(settings: Partial<UserSettings>): Promise<UserSettings> {
-  return put('/user/settings', settings);
+// 更新主题设置
+export async function updateThemeSettings(data: Partial<ThemeSettings>): Promise<ThemeSettings> {
+  return request('/api/v1/user/settings/theme', {
+    method: 'PUT',
+    data,
+  });
 }
 
-// ============= 通知管理 =============
+// 获取通知设置
+export async function getNotificationSettings(): Promise<NotificationSettings> {
+  return request('/api/v1/user/settings/notification', {
+    method: 'GET',
+  });
+}
 
-/**
- * 获取通知列表
- */
-export async function getNotifications(params?: {
+// 更新通知设置
+export async function updateNotificationSettings(data: Partial<NotificationSettings>): Promise<NotificationSettings> {
+  return request('/api/v1/user/settings/notification', {
+    method: 'PUT',
+    data,
+  });
+}
+
+// 测试通知设置
+export async function testNotification(type: 'email' | 'browser' | 'mobile'): Promise<void> {
+  return request('/api/v1/user/settings/notification/test', {
+    method: 'POST',
+    data: { type },
+  });
+}
+
+// 获取安全设置
+export async function getSecuritySettings(): Promise<SecuritySettings> {
+  return request('/api/v1/user/settings/security', {
+    method: 'GET',
+  });
+}
+
+// 更新安全设置
+export async function updateSecuritySettings(data: Partial<SecuritySettings>): Promise<SecuritySettings> {
+  return request('/api/v1/user/settings/security', {
+    method: 'PUT',
+    data,
+  });
+}
+
+// 启用两步验证
+export async function enableTwoFactorAuth(method: 'sms' | 'email' | 'authenticator'): Promise<{
+  secret?: string;
+  qrCode?: string;
+  backupCodes: string[];
+}> {
+  return request('/api/v1/user/security/2fa/enable', {
+    method: 'POST',
+    data: { method },
+  });
+}
+
+// 验证两步验证码
+export async function verifyTwoFactorAuth(code: string): Promise<void> {
+  return request('/api/v1/user/security/2fa/verify', {
+    method: 'POST',
+    data: { code },
+  });
+}
+
+// 禁用两步验证
+export async function disableTwoFactorAuth(password: string): Promise<void> {
+  return request('/api/v1/user/security/2fa/disable', {
+    method: 'POST',
+    data: { password },
+  });
+}
+
+// 获取备用验证码
+export async function getBackupCodes(): Promise<{ codes: string[] }> {
+  return request('/api/v1/user/security/2fa/backup-codes', {
+    method: 'GET',
+  });
+}
+
+// 重新生成备用验证码
+export async function regenerateBackupCodes(): Promise<{ codes: string[] }> {
+  return request('/api/v1/user/security/2fa/backup-codes', {
+    method: 'POST',
+  });
+}
+
+// 获取偏好设置
+export async function getPreferenceSettings(): Promise<PreferenceSettings> {
+  return request('/api/v1/user/settings/preference', {
+    method: 'GET',
+  });
+}
+
+// 更新偏好设置
+export async function updatePreferenceSettings(data: Partial<PreferenceSettings>): Promise<PreferenceSettings> {
+  return request('/api/v1/user/settings/preference', {
+    method: 'PUT',
+    data,
+  });
+}
+
+// 获取用户设备列表
+export async function getUserDevices(): Promise<UserDevice[]> {
+  return request('/api/v1/user/devices', {
+    method: 'GET',
+  });
+}
+
+// 信任设备
+export async function trustDevice(deviceId: string): Promise<void> {
+  return request(`/api/v1/user/devices/${deviceId}/trust`, {
+    method: 'POST',
+  });
+}
+
+// 移除设备信任
+export async function untrustDevice(deviceId: string): Promise<void> {
+  return request(`/api/v1/user/devices/${deviceId}/trust`, {
+    method: 'DELETE',
+  });
+}
+
+// 登出指定设备
+export async function logoutDevice(deviceId: string): Promise<void> {
+  return request(`/api/v1/user/devices/${deviceId}/logout`, {
+    method: 'POST',
+  });
+}
+
+// 登出所有其他设备
+export async function logoutAllOtherDevices(): Promise<void> {
+  return request('/api/v1/user/devices/logout-others', {
+    method: 'POST',
+  });
+}
+
+// 获取用户活动日志
+export async function getUserActivityLog(params: {
   page?: number;
   pageSize?: number;
-  type?: string;
-  read?: boolean;
+  startDate?: string;
+  endDate?: string;
+  action?: string;
 }): Promise<{
-  list: Notification[];
+  list: UserActivityLog[];
   total: number;
+  page: number;
+  pageSize: number;
 }> {
-  return get('/user/notifications', params);
+  return request('/api/v1/user/activity-log', {
+    method: 'GET',
+    params,
+  });
 }
 
-/**
- * 标记通知为已读
- */
-export async function markNotificationRead(id: string): Promise<void> {
-  return put(`/user/notifications/${id}/read`);
+// 导出用户数据
+export async function exportUserData(data: ExportUserDataRequest): Promise<{ downloadUrl: string }> {
+  return request('/api/v1/user/export', {
+    method: 'POST',
+    data,
+  });
 }
 
-/**
- * 标记所有通知为已读
- */
-export async function markAllNotificationsRead(): Promise<void> {
-  return put('/user/notifications/read-all');
+// 删除用户账户
+export async function deleteUserAccount(password: string, reason?: string): Promise<void> {
+  return request('/api/v1/user/account', {
+    method: 'DELETE',
+    data: { password, reason },
+  });
 }
 
-/**
- * 删除通知
- */
-export async function deleteNotification(id: string): Promise<void> {
-  return del(`/user/notifications/${id}`);
+// 重置用户设置到默认值
+export async function resetUserSettings(type: 'theme' | 'notification' | 'security' | 'preference' | 'all'): Promise<void> {
+  return request('/api/v1/user/settings/reset', {
+    method: 'POST',
+    data: { type },
+  });
 }
 
-/**
- * 获取未读通知数量
- */
-export async function getUnreadCount(): Promise<number> {
-  return get('/user/notifications/unread-count');
-}
-
-// ============= 价格提醒 =============
-
-/**
- * 获取价格提醒列表
- */
-export async function getPriceAlerts(): Promise<PriceAlert[]> {
-  return get('/user/alerts');
-}
-
-/**
- * 创建价格提醒
- */
-export async function createPriceAlert(
-  data: Omit<PriceAlert, 'id' | 'createTime' | 'triggerTime'>,
-): Promise<PriceAlert> {
-  return post('/user/alerts', data);
-}
-
-/**
- * 更新价格提醒
- */
-export async function updatePriceAlert(id: string, data: Partial<PriceAlert>): Promise<PriceAlert> {
-  return put(`/user/alerts/${id}`, data);
-}
-
-/**
- * 删除价格提醒
- */
-export async function deletePriceAlert(id: string): Promise<void> {
-  return del(`/user/alerts/${id}`);
-}
-
-/**
- * 启用/禁用价格提醒
- */
-export async function togglePriceAlert(id: string, enabled: boolean): Promise<void> {
-  return put(`/user/alerts/${id}/toggle`, { enabled });
-}
-
-// ============= 会员与订阅 =============
-
-/**
- * 获取会员计划列表
- */
-export async function getMembershipPlans(): Promise<MembershipPlan[]> {
-  return get('/membership/plans');
-}
-
-/**
- * 获取订阅状态
- */
-export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
-  return get('/membership/status');
-}
-
-/**
- * 创建支付订单
- */
-export async function createPaymentOrder(planId: string): Promise<PaymentOrder> {
-  return post('/membership/order', { planId });
-}
-
-/**
- * 查询订单状态
- */
-export async function getOrderStatus(orderId: string): Promise<PaymentOrder> {
-  return get(`/membership/order/${orderId}`);
-}
-
-/**
- * 取消订单
- */
-export async function cancelOrder(orderId: string): Promise<void> {
-  return post(`/membership/order/${orderId}/cancel`);
-}
-
-/**
- * 获取订单历史
- */
-export async function getOrderHistory(params?: {
-  page?: number;
-  pageSize?: number;
-}): Promise<{
-  list: PaymentOrder[];
-  total: number;
+// 获取账户统计信息
+export async function getUserStatistics(): Promise<{
+  loginCount: number;
+  lastLoginTime: string;
+  accountAge: number; // days
+  dataUsage: number; // MB
+  deviceCount: number;
+  securityScore: number; // 0-100
 }> {
-  return get('/membership/orders', params);
-}
-
-/**
- * 设置自动续费
- */
-export async function setAutoRenew(enabled: boolean): Promise<void> {
-  return put('/membership/auto-renew', { enabled });
-}
-
-// ============= 推送订阅 =============
-
-/**
- * 订阅推送
- */
-export async function subscribePush(subscription: PushSubscription): Promise<{ success: boolean }> {
-  return post('/user/push/subscribe', { subscription: subscription.toJSON() });
-}
-
-/**
- * 取消推送订阅
- */
-export async function unsubscribePush(): Promise<void> {
-  return post('/user/push/unsubscribe');
-}
-
-/**
- * 检查推送订阅状态
- */
-export async function checkPushSubscription(): Promise<boolean> {
-  return get('/user/push/status');
+  return request('/api/v1/user/statistics', {
+    method: 'GET',
+  });
 }

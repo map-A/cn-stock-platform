@@ -16,7 +16,6 @@
     "jest": "jest",
     "lint": "npm run biome:lint && npm run tsc",
     "lint-staged": "lint-staged",
-    "openapi": "max openapi",
     "prepare": "husky",
     "preview": "npm run build && max preview --port 8000",
     "record": "cross-env NODE_ENV=development UMI_ENV=test max record --scene=login",
@@ -43,8 +42,10 @@
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
+    "echarts": "^6.0.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "recharts": "^3.3.0"
   },
   "devDependencies": {
     "@ant-design/plots": "^2.6.6",

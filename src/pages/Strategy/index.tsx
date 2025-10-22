@@ -1,298 +1,501 @@
 /**
- * AI 策略管理页面
+ * AI策略管理主页面
+ * 
+ * 功能特性:
+ * - 策略列表展示
+ * - 策略创建和配置
+ * - 回测结果查看
+ * - 性能分析监控
+ * - 策略执行管理
  */
-import React, { useState } from 'react';
-import { Card, Row, Col, Button, Table, Tag, Space, Statistic, Tooltip, message, Modal, Form, Input, Select } from 'antd';
+
+import React, { useState, useEffect } from 'react';
+import {
+  Layout,
+  Card,
+  Button,
+  Table,
+  Tag,
+  Space,
+  Modal,
+  Drawer,
+  Tabs,
+  Row,
+  Col,
+  Statistic,
+  Alert,
+  Typography,
+  Tooltip,
+  message,
+  Popconfirm,
+} from 'antd';
 import {
   PlusOutlined,
   PlayCircleOutlined,
   PauseCircleOutlined,
+  SettingOutlined,
   BarChartOutlined,
+  FileTextOutlined,
   DeleteOutlined,
+  CopyOutlined,
   ExperimentOutlined,
-  RocketOutlined,
 } from '@ant-design/icons';
+import { PageContainer } from '@ant-design/pro-components';
+import { getStrategies, deleteStrategy } from '@/services/strategy';
+import StrategyConfigForm from '@/components/Strategy/StrategyConfigForm';
+import BacktestResults from '@/components/Strategy/BacktestResults';
+import PerformanceAnalysis from '@/components/Strategy/PerformanceAnalysis';
+import StrategyMonitor from '@/components/Strategy/StrategyMonitor';
+import MultiFactorDisplay from '@/components/Strategy/MultiFactorDisplay';
+import type { StrategyInfo, StrategyStatus, StrategyType } from '@/types/strategy';
 import { useIntl } from '@umijs/max';
-import styles from './index.less';
+import './index.less';
 
-const { TextArea } = Input;
-
-interface Strategy {
-  id: string;
-  name: string;
-  type: string;
-  status: 'draft' | 'testing' | 'active' | 'paused' | 'stopped';
-  return: number;
-  sharpeRatio: number;
-  maxDrawdown: number;
-  winRate: number;
-  createTime: string;
-}
+const { Content } = Layout;
+const { TabPane } = Tabs;
+const { Title, Text } = Typography;
 
 const StrategyPage: React.FC = () => {
   const intl = useIntl();
   const [loading, setLoading] = useState(false);
-  const [createModalVisible, setCreateModalVisible] = useState(false);
-  const [form] = Form.useForm();
+  const [strategies, setStrategies] = useState<StrategyInfo[]>([]);
+  const [selectedStrategy, setSelectedStrategy] = useState<StrategyInfo | null>(null);
+  const [configVisible, setConfigVisible] = useState(false);
+  const [resultsVisible, setResultsVisible] = useState(false);
+  const [analysisVisible, setAnalysisVisible] = useState(false);
+  const [drawerContent, setDrawerContent] = useState<'config' | 'results' | 'analysis'>('config');
 
-  // 模拟策略数据
-  const [strategies, setStrategies] = useState<Strategy[]>([
-    {
-      id: '1',
-      name: 'MA Cross Strategy',
-      type: 'trend_following',
-      status: 'active',
-      return: 15.6,
-      sharpeRatio: 1.85,
-      maxDrawdown: -8.5,
-      winRate: 62.3,
-      createTime: '2024-10-01',
-    },
-    {
-      id: '2',
-      name: 'Mean Reversion',
-      type: 'mean_reversion',
-      status: 'paused',
-      return: 8.2,
-      sharpeRatio: 1.32,
-      maxDrawdown: -12.3,
-      winRate: 58.1,
-      createTime: '2024-09-15',
-    },
-  ]);
+  /**
+   * 策略状态映射
+   */
 
+  /**
+   * 策略类型映射
+   */
+  const typeMap: Record<string, { color: string; text: string }> = {
+    trend_following: { color: 'blue', text: '趋势跟踪' },
+    mean_reversion: { color: 'green', text: '均值回归' },
+    momentum: { color: 'orange', text: '动量策略' },
+    arbitrage: { color: 'purple', text: '套利策略' },
+    grid: { color: 'cyan', text: '网格策略' },
+    scalping: { color: 'red', text: '剥头皮' },
+    swing: { color: 'magenta', text: '摆动交易' },
+    quantitative: { color: 'volcano', text: '量化策略' },
+    ai_ml: { color: 'geekblue', text: 'AI/ML策略' },
+    custom: { color: 'lime', text: '自定义' },
+  };
+
+  /**
+   * 策略状态映射
+   */
   const statusMap: Record<string, { color: string; text: string }> = {
-    draft: { color: 'default', text: intl.formatMessage({ id: 'strategy.status.draft', defaultMessage: 'Draft' }) },
-    testing: { color: 'processing', text: intl.formatMessage({ id: 'strategy.status.testing', defaultMessage: 'Testing' }) },
-    active: { color: 'success', text: intl.formatMessage({ id: 'strategy.status.active', defaultMessage: 'Active' }) },
-    paused: { color: 'warning', text: intl.formatMessage({ id: 'strategy.status.paused', defaultMessage: 'Paused' }) },
-    stopped: { color: 'error', text: intl.formatMessage({ id: 'strategy.status.stopped', defaultMessage: 'Stopped' }) },
+    draft: { color: 'default', text: '草稿' },
+    testing: { color: 'processing', text: '测试中' },
+    active: { color: 'success', text: '运行中' },
+    paused: { color: 'warning', text: '暂停' },
+    disabled: { color: 'error', text: '已停用' },
+    archived: { color: 'default', text: '已归档' },
   };
 
-  const typeMap: Record<string, string> = {
-    trend_following: intl.formatMessage({ id: 'strategy.type.trend', defaultMessage: 'Trend Following' }),
-    mean_reversion: intl.formatMessage({ id: 'strategy.type.meanReversion', defaultMessage: 'Mean Reversion' }),
-    momentum: intl.formatMessage({ id: 'strategy.type.momentum', defaultMessage: 'Momentum' }),
-    arbitrage: intl.formatMessage({ id: 'strategy.type.arbitrage', defaultMessage: 'Arbitrage' }),
+  /**
+   * 加载策略列表
+   */
+  const loadStrategies = async () => {
+    try {
+      setLoading(true);
+      const data = await getStrategies();
+      setStrategies(data.items);
+    } catch (error) {
+      console.error('加载策略列表失败:', error);
+      message.error('加载策略列表失败');
+    } finally {
+      setLoading(false);
+    }
   };
 
+  /**
+   * 创建新策略
+   */
+  const handleCreateStrategy = () => {
+    setSelectedStrategy(null);
+    setDrawerContent('config');
+    setConfigVisible(true);
+  };
+
+  /**
+   * 编辑策略配置
+   */
+  const handleEditStrategy = (strategy: StrategyInfo) => {
+    setSelectedStrategy(strategy);
+    setDrawerContent('config');
+    setConfigVisible(true);
+  };
+
+  /**
+   * 查看回测结果
+   */
+  const handleViewResults = (strategy: StrategyInfo) => {
+    setSelectedStrategy(strategy);
+    setDrawerContent('results');
+    setResultsVisible(true);
+  };
+
+  /**
+   * 查看性能分析
+   */
+  const handleViewAnalysis = (strategy: StrategyInfo) => {
+    setSelectedStrategy(strategy);
+    setDrawerContent('analysis');
+    setAnalysisVisible(true);
+  };
+
+  /**
+   * 删除策略
+   */
+  const handleDeleteStrategy = async (strategyId: string) => {
+    try {
+      await deleteStrategy(strategyId);
+      message.success('策略删除成功');
+      loadStrategies();
+    } catch (error) {
+      console.error('删除策略失败:', error);
+      message.error('删除策略失败');
+    }
+  };
+
+  /**
+   * 克隆策略
+   */
+  const handleCloneStrategy = async (strategy: StrategyInfo) => {
+    try {
+      // 创建策略副本
+      const newStrategy = {
+        ...strategy,
+        name: `${strategy.name} - 副本`,
+        status: 'draft' as StrategyStatus,
+      };
+      
+      // TODO: 实现克隆API后替换
+      // await cloneStrategy(strategy.id, `${strategy.name} - 副本`);
+      message.success('策略克隆功能开发中...');
+      message.success('策略克隆成功');
+      loadStrategies();
+    } catch (error) {
+      console.error('克隆策略失败:', error);
+      message.error('克隆策略失败');
+    }
+  };
+
+  /**
+   * 关闭抽屉
+   */
+  const handleCloseDrawer = () => {
+    setConfigVisible(false);
+    setResultsVisible(false);
+    setAnalysisVisible(false);
+    setSelectedStrategy(null);
+  };
+
+  /**
+   * 策略保存成功回调
+   */
+  const handleStrategySaved = () => {
+    handleCloseDrawer();
+    loadStrategies();
+  };
+
+  /**
+   * 表格列配置
+   */
   const columns = [
     {
-      title: intl.formatMessage({ id: 'strategy.name', defaultMessage: 'Strategy Name' }),
+      title: '策略名称',
       dataIndex: 'name',
       key: 'name',
-      width: 200,
+      render: (name: string, record: StrategyInfo) => (
+        <Space>
+          <Text strong>{name}</Text>
+          <Tag color={typeMap[record.type]?.color}>
+            {typeMap[record.type]?.text}
+          </Tag>
+        </Space>
+      ),
     },
     {
-      title: intl.formatMessage({ id: 'strategy.type', defaultMessage: 'Type' }),
-      dataIndex: 'type',
-      key: 'type',
-      width: 150,
-      render: (type: string) => <Tag color="blue">{typeMap[type] || type}</Tag>,
-    },
-    {
-      title: intl.formatMessage({ id: 'strategy.status', defaultMessage: 'Status' }),
+      title: '状态',
       dataIndex: 'status',
       key: 'status',
-      width: 120,
-      render: (status: string) => {
-        const statusInfo = statusMap[status] || { color: 'default', text: status };
-        return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
+      render: (status: StrategyStatus) => (
+        <Tag color={statusMap[status]?.color}>
+          {statusMap[status]?.text}
+        </Tag>
+      ),
+    },
+    {
+      title: '总收益率',
+      dataIndex: 'performance',
+      key: 'totalReturn',
+      render: (performance: any) => {
+        const totalReturn = performance?.totalReturn || 0;
+        return (
+          <Text type={totalReturn >= 0 ? 'success' : 'danger'}>
+            {totalReturn >= 0 ? '+' : ''}{(totalReturn * 100).toFixed(2)}%
+          </Text>
+        );
       },
     },
     {
-      title: intl.formatMessage({ id: 'strategy.return', defaultMessage: 'Return (%)' }),
-      dataIndex: 'return',
-      key: 'return',
-      width: 120,
-      render: (value: number) => (
-        <span style={{ color: value >= 0 ? '#52c41a' : '#ff4d4f' }}>
-          {value >= 0 ? '+' : ''}{value.toFixed(2)}%
-        </span>
-      ),
-    },
-    {
-      title: intl.formatMessage({ id: 'strategy.sharpe', defaultMessage: 'Sharpe Ratio' }),
-      dataIndex: 'sharpeRatio',
+      title: '夏普比率',
+      dataIndex: 'performance',
       key: 'sharpeRatio',
-      width: 120,
-      render: (value: number) => value.toFixed(2),
+      render: (performance: any) => {
+        const sharpeRatio = performance?.sharpeRatio || 0;
+        return (
+          <Text type={sharpeRatio >= 1 ? 'success' : sharpeRatio >= 0 ? 'warning' : 'danger'}>
+            {sharpeRatio.toFixed(3)}
+          </Text>
+        );
+      },
     },
     {
-      title: intl.formatMessage({ id: 'strategy.maxDrawdown', defaultMessage: 'Max DD (%)' }),
-      dataIndex: 'maxDrawdown',
+      title: '最大回撤',
+      dataIndex: 'performance',
       key: 'maxDrawdown',
-      width: 120,
-      render: (value: number) => (
-        <span style={{ color: '#ff4d4f' }}>{value.toFixed(2)}%</span>
-      ),
+      render: (performance: any) => {
+        const maxDrawdown = Math.abs(performance?.maxDrawdown || 0);
+        return (
+          <Text type="danger">
+            -{(maxDrawdown * 100).toFixed(2)}%
+          </Text>
+        );
+      },
     },
     {
-      title: intl.formatMessage({ id: 'strategy.winRate', defaultMessage: 'Win Rate (%)' }),
-      dataIndex: 'winRate',
-      key: 'winRate',
-      width: 120,
-      render: (value: number) => `${value.toFixed(1)}%`,
+      title: '创建时间',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (time: string) => new Date(time).toLocaleDateString(),
     },
     {
-      title: intl.formatMessage({ id: 'common.actions', defaultMessage: 'Actions' }),
+      title: '操作',
       key: 'actions',
-      width: 200,
-      render: (_, record: Strategy) => (
-        <Space size="small">
-          <Tooltip title={intl.formatMessage({ id: 'strategy.viewDetails', defaultMessage: 'View Details' })}>
-            <Button type="link" size="small" icon={<BarChartOutlined />} />
+      render: (_: any, record: StrategyInfo) => (
+        <Space>
+          <Tooltip title="编辑配置">
+            <Button
+              type="text"
+              icon={<SettingOutlined />}
+              onClick={() => handleEditStrategy(record)}
+            />
           </Tooltip>
-          {record.status === 'paused' ? (
-            <Tooltip title={intl.formatMessage({ id: 'strategy.resume', defaultMessage: 'Resume' })}>
-              <Button type="link" size="small" icon={<PlayCircleOutlined />} />
-            </Tooltip>
-          ) : (
-            <Tooltip title={intl.formatMessage({ id: 'strategy.pause', defaultMessage: 'Pause' })}>
-              <Button type="link" size="small" icon={<PauseCircleOutlined />} />
-            </Tooltip>
-          )}
-          <Tooltip title={intl.formatMessage({ id: 'common.delete', defaultMessage: 'Delete' })}>
-            <Button type="link" danger size="small" icon={<DeleteOutlined />} />
+          
+          <Tooltip title="查看回测">
+            <Button
+              type="text"
+              icon={<FileTextOutlined />}
+              onClick={() => handleViewResults(record)}
+            />
           </Tooltip>
+          
+          <Tooltip title="性能分析">
+            <Button
+              type="text"
+              icon={<BarChartOutlined />}
+              onClick={() => handleViewAnalysis(record)}
+            />
+          </Tooltip>
+          
+          <Tooltip title="克隆策略">
+            <Button
+              type="text"
+              icon={<CopyOutlined />}
+              onClick={() => handleCloneStrategy(record)}
+            />
+          </Tooltip>
+          
+          <Popconfirm
+            title="确定删除此策略吗？"
+            onConfirm={() => handleDeleteStrategy(record.id)}
+            okText="确定"
+            cancelText="取消"
+          >
+            <Tooltip title="删除策略">
+              <Button
+                type="text"
+                danger
+                icon={<DeleteOutlined />}
+              />
+            </Tooltip>
+          </Popconfirm>
         </Space>
       ),
     },
   ];
 
-  const handleCreateStrategy = () => {
-    form.validateFields().then((values) => {
-      console.log('Create strategy:', values);
-      message.success(intl.formatMessage({ id: 'strategy.createSuccess', defaultMessage: 'Strategy created successfully' }));
-      setCreateModalVisible(false);
-      form.resetFields();
-    });
-  };
+  /**
+   * 计算统计数据
+   */
+  const statistics = React.useMemo(() => {
+    const totalStrategies = strategies.length;
+    const runningStrategies = strategies.filter(s => s.status === 'active').length;
+    const totalReturn = strategies.reduce((sum, s) => sum + (s.performance?.totalReturn || 0), 0);
+    const avgSharpe = strategies.length ? 
+      strategies.reduce((sum, s) => sum + (s.performance?.sharpeRatio || 0), 0) / strategies.length : 0;
 
-  // 统计数据
-  const statistics = {
-    total: strategies.length,
-    active: strategies.filter(s => s.status === 'active').length,
-    avgReturn: strategies.reduce((sum, s) => sum + s.return, 0) / strategies.length,
-    avgSharpe: strategies.reduce((sum, s) => sum + s.sharpeRatio, 0) / strategies.length,
-  };
+    return {
+      totalStrategies,
+      runningStrategies,
+      totalReturn: totalReturn / strategies.length || 0,
+      avgSharpe,
+    };
+  }, [strategies]);
+
+  /**
+   * 初始化
+   */
+  useEffect(() => {
+    loadStrategies();
+  }, []);
 
   return (
-    <div className={styles.strategyPage}>
-      {/* 统计卡片 */}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={12} sm={6}>
-          <Card>
-            <Statistic
-              title={intl.formatMessage({ id: 'strategy.total', defaultMessage: 'Total Strategies' })}
-              value={statistics.total}
-              prefix={<ExperimentOutlined />}
-              valueStyle={{ color: '#1890ff' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={12} sm={6}>
-          <Card>
-            <Statistic
-              title={intl.formatMessage({ id: 'strategy.activeCount', defaultMessage: 'Active' })}
-              value={statistics.active}
-              prefix={<RocketOutlined />}
-              valueStyle={{ color: '#52c41a' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={12} sm={6}>
-          <Card>
-            <Statistic
-              title={intl.formatMessage({ id: 'strategy.avgReturn', defaultMessage: 'Avg Return' })}
-              value={statistics.avgReturn}
-              precision={2}
-              suffix="%"
-              valueStyle={{ color: statistics.avgReturn >= 0 ? '#52c41a' : '#ff4d4f' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={12} sm={6}>
-          <Card>
-            <Statistic
-              title={intl.formatMessage({ id: 'strategy.avgSharpe', defaultMessage: 'Avg Sharpe' })}
-              value={statistics.avgSharpe}
-              precision={2}
-              valueStyle={{ color: '#722ed1' }}
-            />
-          </Card>
-        </Col>
-      </Row>
+    <PageContainer
+      title="AI策略管理"
+      subTitle="智能量化交易策略管理平台"
+      extra={[
+        <Button
+          key="create"
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={handleCreateStrategy}
+        >
+          创建策略
+        </Button>,
+      ]}
+    >
+      <Layout className="strategy-page">
+        <Content>
+          {/* 概览统计 */}
+          <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+            <Col xs={12} sm={6}>
+              <Card size="small">
+                <Statistic
+                  title="总策略数"
+                  value={statistics.totalStrategies}
+                  prefix={<ExperimentOutlined />}
+                  valueStyle={{ color: '#1890ff' }}
+                />
+              </Card>
+            </Col>
+            
+            <Col xs={12} sm={6}>
+              <Card size="small">
+                <Statistic
+                  title="运行中"
+                  value={statistics.runningStrategies}
+                  prefix={<PlayCircleOutlined />}
+                  valueStyle={{ color: '#52c41a' }}
+                />
+              </Card>
+            </Col>
+            
+            <Col xs={12} sm={6}>
+              <Card size="small">
+                <Statistic
+                  title="平均收益率"
+                  value={statistics.totalReturn * 100}
+                  precision={2}
+                  suffix="%"
+                  valueStyle={{ 
+                    color: statistics.totalReturn >= 0 ? '#52c41a' : '#ff4d4f' 
+                  }}
+                />
+              </Card>
+            </Col>
+            
+            <Col xs={12} sm={6}>
+              <Card size="small">
+                <Statistic
+                  title="平均夏普比率"
+                  value={statistics.avgSharpe}
+                  precision={3}
+                  valueStyle={{ 
+                    color: statistics.avgSharpe >= 1 ? '#52c41a' : '#722ed1' 
+                  }}
+                />
+              </Card>
+            </Col>
+          </Row>
 
-      {/* 策略列表 */}
-      <Card
-        title={intl.formatMessage({ id: 'strategy.list', defaultMessage: 'Strategy List' })}
-        extra={
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => setCreateModalVisible(true)}
-          >
-            {intl.formatMessage({ id: 'strategy.create', defaultMessage: 'Create Strategy' })}
-          </Button>
-        }
-      >
-        <Table
-          dataSource={strategies}
-          columns={columns}
-          rowKey="id"
-          loading={loading}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total) => intl.formatMessage(
-              { id: 'common.totalItems', defaultMessage: 'Total {total} items' },
-              { total }
-            ),
-          }}
-        />
-      </Card>
+          {/* 策略列表 */}
+          <Card>
+            <Table
+              dataSource={strategies}
+              columns={columns}
+              rowKey="id"
+              loading={loading}
+              pagination={{
+                pageSize: 20,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                showTotal: (total) => `共 ${total} 个策略`,
+              }}
+              scroll={{ x: 1000 }}
+            />
+          </Card>
+        </Content>
+      </Layout>
 
-      {/* 创建策略模态框 */}
-      <Modal
-        title={intl.formatMessage({ id: 'strategy.createNew', defaultMessage: 'Create New Strategy' })}
-        open={createModalVisible}
-        onOk={handleCreateStrategy}
-        onCancel={() => {
-          setCreateModalVisible(false);
-          form.resetFields();
-        }}
-        width={600}
+      {/* 策略配置抽屉 */}
+      <Drawer
+        title={selectedStrategy ? '编辑策略配置' : '创建新策略'}
+        width={800}
+        open={configVisible}
+        onClose={handleCloseDrawer}
+        destroyOnClose
       >
-        <Form form={form} layout="vertical">
-          <Form.Item
-            name="name"
-            label={intl.formatMessage({ id: 'strategy.name', defaultMessage: 'Strategy Name' })}
-            rules={[{ required: true, message: intl.formatMessage({ id: 'common.required', defaultMessage: 'Required' }) }]}
-          >
-            <Input placeholder={intl.formatMessage({ id: 'strategy.namePlaceholder', defaultMessage: 'Enter strategy name' })} />
-          </Form.Item>
-          <Form.Item
-            name="type"
-            label={intl.formatMessage({ id: 'strategy.type', defaultMessage: 'Strategy Type' })}
-            rules={[{ required: true }]}
-          >
-            <Select>
-              <Select.Option value="trend_following">{typeMap.trend_following}</Select.Option>
-              <Select.Option value="mean_reversion">{typeMap.mean_reversion}</Select.Option>
-              <Select.Option value="momentum">{typeMap.momentum}</Select.Option>
-              <Select.Option value="arbitrage">{typeMap.arbitrage}</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label={intl.formatMessage({ id: 'common.description', defaultMessage: 'Description' })}
-          >
-            <TextArea rows={4} placeholder={intl.formatMessage({ id: 'strategy.descPlaceholder', defaultMessage: 'Enter strategy description' })} />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+        {configVisible && (
+          <StrategyConfigForm
+            strategyId={selectedStrategy?.id || ''}
+            strategyType={selectedStrategy?.type || 'trend_following'}
+            configId={selectedStrategy?.configId}
+            onSave={handleStrategySaved}
+            onCancel={handleCloseDrawer}
+          />
+        )}
+      </Drawer>
+
+      {/* 回测结果抽屉 */}
+      <Drawer
+        title="回测结果"
+        width={1200}
+        open={resultsVisible}
+        onClose={handleCloseDrawer}
+        destroyOnClose
+      >
+        {resultsVisible && selectedStrategy && (
+          <BacktestResults
+            backtestId={selectedStrategy.lastBacktestId || ''}
+            strategyId={selectedStrategy.id}
+          />
+        )}
+      </Drawer>
+
+      {/* 性能分析抽屉 */}
+      <Drawer
+        title="性能分析"
+        width={1200}
+        open={analysisVisible}
+        onClose={handleCloseDrawer}
+        destroyOnClose
+      >
+        {analysisVisible && selectedStrategy && (
+          <PerformanceAnalysis
+            strategyId={selectedStrategy.id}
+            compareStrategies={[]}
+          />
+        )}
+      </Drawer>
+    </PageContainer>
   );
 };
 

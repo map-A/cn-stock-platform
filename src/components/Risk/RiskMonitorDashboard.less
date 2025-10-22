@@ -1,0 +1,220 @@
+.risk-monitor-dashboard {
+  .overall-risk-score {
+    text-align: center;
+    
+    .score-container {
+      margin-bottom: 12px;
+      
+      .score-content {
+        .score-value {
+          font-size: 20px;
+          font-weight: bold;
+          line-height: 1;
+        }
+        
+        .score-label {
+          font-size: 10px;
+          color: #666;
+          margin-top: 2px;
+        }
+      }
+    }
+    
+    .risk-level {
+      .ant-badge {
+        .ant-badge-status-text {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  
+  .risk-metric-card {
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      
+      .metric-name {
+        font-size: 12px;
+        font-weight: 500;
+        color: #333;
+      }
+    }
+    
+    .metric-value {
+      margin-bottom: 8px;
+      
+      .value {
+        font-size: 18px;
+        font-weight: bold;
+        display: block;
+        line-height: 1.2;
+      }
+      
+      .threshold {
+        font-size: 10px;
+        color: #999;
+        margin-top: 2px;
+      }
+    }
+    
+    .metric-trend {
+      margin-bottom: 8px;
+    }
+  }
+  
+  .risk-events-summary {
+    .event-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .event-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+        
+        .event-time {
+          font-size: 10px;
+          color: #999;
+        }
+      }
+      
+      .event-title {
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 2px;
+        color: #333;
+      }
+      
+      .event-description {
+        font-size: 11px;
+        color: #666;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+      }
+    }
+  }
+  
+  .ant-statistic {
+    .ant-statistic-title {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .ant-statistic-content {
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+  
+  .ant-table {
+    .ant-table-thead > tr > th {
+      font-weight: 500;
+      background: #fafafa;
+      font-size: 12px;
+    }
+
+    .ant-table-tbody > tr > td {
+      font-size: 12px;
+      padding: 8px;
+    }
+
+    .ant-table-tbody > tr:hover > td {
+      background: #f5f5f5;
+    }
+  }
+  
+  // 响应式设计
+  @media (max-width: 1400px) {
+    .ant-row {
+      .ant-col {
+        margin-bottom: 8px;
+        
+        &[span="4"] {
+          width: 33.333% !important;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .ant-row {
+      .ant-col {
+        &[span="4"] {
+          width: 50% !important;
+        }
+        
+        &[span="16"] {
+          width: 100% !important;
+          margin-bottom: 16px;
+        }
+        
+        &[span="8"] {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ant-row {
+      .ant-col {
+        width: 100% !important;
+        margin-bottom: 12px;
+      }
+    }
+
+    .risk-metric-card {
+      .metric-value {
+        text-align: center;
+        
+        .value {
+          font-size: 16px;
+        }
+      }
+    }
+
+    #risk-trend-chart {
+      height: 250px !important;
+    }
+
+    .ant-table {
+      .ant-table-thead > tr > th,
+      .ant-table-tbody > tr > td {
+        padding: 6px 4px;
+        font-size: 11px;
+      }
+    }
+
+    .ant-statistic {
+      text-align: center;
+
+      .ant-statistic-content {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// 图表容器样式
+#risk-trend-chart {
+  border-radius: 6px;
+  background: #fff;
+  
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+}

@@ -1,0 +1,119 @@
+.news-list {
+  .news-item {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #fafafa;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .news-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .news-meta {
+      .news-info {
+        margin-bottom: 4px;
+      }
+
+      .related-stocks {
+        .ant-tag {
+          margin-right: 4px;
+          margin-bottom: 4px;
+          font-size: 11px;
+          padding: 2px 6px;
+          height: auto;
+          line-height: 1.2;
+        }
+      }
+    }
+
+    .news-actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      min-width: 40px;
+    }
+
+    .ant-list-item-meta {
+      align-items: flex-start;
+    }
+
+    .ant-list-item-meta-avatar {
+      margin-right: 16px;
+    }
+
+    .ant-list-item-meta-content {
+      flex: 1;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .news-list {
+    .news-item {
+      padding: 12px;
+
+      .ant-list-item-meta-avatar {
+        margin-right: 12px;
+      }
+
+      .news-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .news-actions {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 4px;
+        padding: 4px;
+      }
+    }
+  }
+}
+
+// 骨架屏样式
+.news-list .ant-skeleton {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// 情感标签样式
+.ant-tag {
+  &.ant-tag-success {
+    background-color: #f6ffed;
+    border-color: #b7eb8f;
+    color: #52c41a;
+  }
+
+  &.ant-tag-error {
+    background-color: #fff2f0;
+    border-color: #ffccc7;
+    color: #ff4d4f;
+  }
+}
+
+// 加载更多按钮
+.news-list .ant-list-footer {
+  border-top: 1px solid #f0f0f0;
+  margin-top: 16px;
+  padding-top: 16px;
+}
