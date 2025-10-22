@@ -3,7 +3,7 @@
  * 提供现金流折现模型计算功能
  */
 
-import { request } from '@umijs/max';
+import request from 'umi-request';
 
 export interface DCFInputs {
   // 自由现金流预测

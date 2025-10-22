@@ -3,7 +3,7 @@ import { Card, Tabs, DatePicker, Table, Tag, Space, Typography, Statistic, Row, 
 import { RiseOutlined, FallOutlined, FireOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { getLongHuBangList } from '@/services/china-features';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import { formatCurrency, formatPercent } from '@/utils/format';
 import type { LongHuBangRecord } from '@/typings/china-features';
 import dayjs, { Dayjs } from 'dayjs';

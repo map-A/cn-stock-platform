@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { AutoComplete, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import { useDebounceFn } from 'ahooks';
 import { searchStock } from '@/services/stock';
 import type { StockInfo } from '@/typings/stock';

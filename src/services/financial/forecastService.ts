@@ -3,7 +3,7 @@
  * 提供分析师预测和AI预测功能
  */
 
-import { request } from '@umijs/max';
+import { request } from 'umi-request';
 
 // 分析师预测
 export interface AnalystRating {

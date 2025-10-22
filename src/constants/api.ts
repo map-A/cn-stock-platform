@@ -24,7 +24,7 @@ export const MARKET_API = {
   CAPITAL_FLOW: '/market/capital-flow',
 } as const;
 
-/** 中国特色功能接口 */
+/** cn特色功能接口 */
 export const CHINA_FEATURES_API = {
   DRAGON_TIGER: '/china-features/dragon-tiger',
   NORTHBOUND: '/china-features/northbound',

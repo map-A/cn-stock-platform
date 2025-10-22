@@ -27,7 +27,7 @@ import {
   FallOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons';
-import { useParams } from '@umijs/max';
+import { useParams } from 'umi';
 import {
   getAnalystDetail,
   getAnalystAccuracy,

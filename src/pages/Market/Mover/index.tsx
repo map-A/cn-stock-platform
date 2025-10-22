@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Card, Tabs, Table, Tag, Space, Typography } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import { getMarketMovers } from '@/services/market';
 import { formatPrice, formatPercent, formatVolume, formatAmount, getPriceColor } from '@/utils/format';
 import type { MarketMoverData } from '@/typings/stock';

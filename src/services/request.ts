@@ -3,7 +3,7 @@
  */
 import { extend, RequestOptionsInit } from 'umi-request';
 import { message } from 'antd';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 
 /** 响应数据结构 */
 interface ResponseData<T = any> {

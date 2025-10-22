@@ -25,7 +25,7 @@ import {
   PlusCircleOutlined,
   MinusCircleOutlined,
 } from '@ant-design/icons';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import {
   getLatestRatingChanges,
   type RatingChange,

@@ -3,7 +3,7 @@
  * 提供董监高交易数据获取和分析功能
  */
 
-import { request } from '@umijs/max';
+import { request } from 'umi-request';
 
 export type TransactionType = 'buy' | 'sell' | 'grant' | 'exercise';
 export type InsiderPosition = 'chairman' | 'ceo' | 'cfo' | 'director' | 'supervisor' | 'senior_manager';

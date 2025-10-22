@@ -76,7 +76,7 @@ export const EconomicCalendarPage: React.FC = () => {
         date: selectedDate,
         time: '10:00',
         event: 'PMI制造业',
-        country: '中国',
+        country: 'cn',
         importance: 'medium',
         actual: 51.2,
         forecast: 50.8,
@@ -195,7 +195,7 @@ export const EconomicCalendarPage: React.FC = () => {
             >
               <option value="all">全部</option>
               <option value="美国">美国</option>
-              <option value="中国">中国</option>
+              <option value="cn">cn</option>
               <option value="欧元区">欧元区</option>
               <option value="日本">日本</option>
             </Select>

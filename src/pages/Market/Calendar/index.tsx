@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { Card, Calendar, Badge, List, Typography, Space, Tag, DatePicker } from 'antd';
 import { useRequest } from 'ahooks';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import dayjs, { Dayjs } from 'dayjs';
 import { getEarningsCalendar } from '@/services/market';
 import { formatDate } from '@/utils/format';

@@ -3,7 +3,7 @@
  * 提供各类财务比率计算和分析功能
  */
 
-import { request } from '@umijs/max';
+import request from 'umi-request';
 
 // 盈利能力比率
 export interface ProfitabilityRatios {

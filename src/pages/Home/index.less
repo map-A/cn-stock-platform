@@ -1,65 +1,269 @@
-.home {
-  padding: 24px;
-  background: #f0f2f5;
-  min-height: calc(100vh - 64px);
+// 主容器
+.homeContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 16px;
 }
 
-.marketStatus {
+// Hero 区域 - 搜索和标题
+.heroSection {
+  border-bottom: 1px solid #2a2e39;
+  border-radius: 5px;
+  padding: 48px 0;
   margin-bottom: 24px;
+  background: #1e222d;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.statusIndicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.openDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #52c41a;
-  animation: blink 2s infinite;
-}
-
-.closedDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #d9d9d9;
-}
-
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.section {
-  margin-bottom: 24px;
-}
-
-.quickLink {
+.heroInner {
+  max-width: 850px;
+  margin: 0 auto;
   text-align: center;
+  padding: 0 16px;
+}
+
+.heroTextCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.heroTitle {
+  font-size: 42px !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  background: linear-gradient(90deg, #00fc50 0%, #ffa838 50%, #00fc50 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.heroSubtitle {
+  font-size: 22px !important;
+  color: #9ca3af !important;
+  margin: 0 !important;
+  line-height: 1.8;
+  font-weight: 400 !important;
+}
+
+// 搜索框
+.searchContainer {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 20px;
+}
+
+.searchInput {
+  background-color: #2a2e39 !important;
+  border-color: #3a3f4b !important;
+  color: #e5e7eb !important;
+  font-size: 16px !important;
+  padding: 12px 16px !important;
+  
+  &:hover {
+    border-color: #00fc50 !important;
+  }
+
+  &:focus {
+    border-color: #00fc50 !important;
+    box-shadow: 0 0 0 2px rgba(0, 252, 80, 0.2) !important;
+  }
+
+  input::placeholder {
+    color: #6b7280;
+  }
+}
+
+// 快速导航卡片网格
+.quickCardsWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+  margin-top: 24px;
+  position: relative;
+  z-index: 10;
+}
+
+.quickCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  max-width: 80%;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    max-width: 90%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}
+
+.quickCard {
+  border: 1px solid #2a2e39;
+  background: #1e222d;
+  border-radius: 5px;
+  padding: 16px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #00fc50;
+    box-shadow: 0 8px 16px rgba(0, 252, 80, 0.1);
+    background: linear-gradient(135deg, #1e222d 0%, rgba(0, 252, 80, 0.05) 100%);
   }
 }
 
-.quickLinkContent {
+.quickCardInner {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
 }
 
-.quickLinkIcon {
+.quickCardIcon {
   font-size: 32px;
+  line-height: 1;
+}
+
+.quickCardLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+  text-align: center;
+}
+
+// 主内容区 - 三列布局
+.mainContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding-bottom: 32px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// 卡片样式
+.section {
+  background: #1e222d;
+  border: 1px solid #2a2e39;
+  border-radius: 5px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #00fc50;
+    box-shadow: 0 4px 12px rgba(0, 252, 80, 0.1);
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+
+  h4 {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #e5e7eb !important;
+  }
+}
+
+// 新闻列表
+.newsSection {
+}
+
+.newsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.newsItem {
+  padding: 12px;
+  border-left: 3px solid #00fc50;
+  background: rgba(0, 252, 80, 0.05);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(0, 252, 80, 0.1);
+    padding-left: 16px;
+  }
+}
+
+.newsTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e5e7eb;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.newsTime {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+// 占位符内容
+.placeholderContent {
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.earningsItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 168, 56, 0.05);
+  border-left: 3px solid #ffa838;
+  border-radius: 3px;
+  margin-bottom: 8px;
+
+  &:hover {
+    background: rgba(255, 168, 56, 0.1);
+  }
+}
+
+.earningsCode {
+  font-weight: 600;
+  color: #ffa838;
+  font-size: 14px;
+}
+
+.earningsDate {
+  font-size: 12px;
+  color: #6b7280;
 }

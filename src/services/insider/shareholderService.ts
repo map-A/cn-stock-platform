@@ -3,7 +3,7 @@
  * 提供十大股东、股权结构等数据
  */
 
-import { request } from '@umijs/max';
+import { request } from 'umi-request';
 
 export type ShareholderType = 'state_owned' | 'institutional' | 'general_legal' | 'individual' | 'foreign';
 

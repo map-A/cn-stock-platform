@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { Card, Form, InputNumber, Button, Row, Col, Table, Tooltip, message } from 'antd';
 import { InfoCircleOutlined, CalculatorOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { useParams } from '@umijs/max';
+import { useParams } from 'umi';
 import { Heatmap } from '@ant-design/plots';
 import {
   calculateDCF,

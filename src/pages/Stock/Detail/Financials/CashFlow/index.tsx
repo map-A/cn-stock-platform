@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Card, Select, Table, Tag, Space, Button, Statistic, Row, Col } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined, DownloadOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { useParams } from '@umijs/max';
+import { useParams } from 'umi';
 import { Column } from '@ant-design/plots';
 import type { ColumnsType } from 'antd/es/table';
 import {

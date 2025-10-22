@@ -1,5 +1,5 @@
 /**
- * 中国特色功能 API
+ * cn特色功能 API
  */
 import request from './request';
 import type {

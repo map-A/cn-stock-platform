@@ -12,7 +12,7 @@ import {
   ThunderboltOutlined,
   BarChartOutlined,
 } from '@ant-design/icons';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import { PageContainer } from '@ant-design/pro-components';
 import styles from './index.less';
 

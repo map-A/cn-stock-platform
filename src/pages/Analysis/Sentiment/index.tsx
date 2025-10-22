@@ -24,7 +24,7 @@ import {
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { Line } from '@ant-design/plots';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import {
   getMarketSentiment,
   getSentimentHistory,

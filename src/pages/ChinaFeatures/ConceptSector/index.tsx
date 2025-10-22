@@ -3,7 +3,7 @@ import { Card, Row, Col, Table, Tag, Space, Typography, Statistic, Input, Tabs }
 import { FireOutlined, RiseOutlined, FallOutlined, SearchOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { getConceptList, getConceptDetail, getSectorList } from '@/services/china-features';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import { formatPercent, formatCurrency } from '@/utils/format';
 import type { Concept, ConceptStock, Sector } from '@/typings/china-features';
 import styles from './index.less';

@@ -3,7 +3,7 @@
  * 提供资产负债表数据获取和计算功能
  */
 
-import { request } from '@umijs/max';
+import request from 'umi-request';
 
 export interface BalanceSheetAssets {
   // 流动资产

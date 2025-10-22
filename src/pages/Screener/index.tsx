@@ -23,7 +23,7 @@ import {
 } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import screenerService, { type ScreenerResult, type ScreenerFilter } from '@/services/screener';
-import { useNavigate } from '@umijs/max';
+import { useNavigate } from 'umi';
 import type { ColumnsType } from 'antd/es/table';
 import styles from './index.less';
 

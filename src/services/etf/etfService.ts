@@ -269,7 +269,7 @@ export async function getETFsByStock(stockCode: string): Promise<
 }
 
 /**
- * 获取场内基金（中国特色）
+ * 获取场内基金（cn特色）
  */
 export async function getLOFList(params?: {
   type?: string;

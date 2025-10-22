@@ -17,7 +17,7 @@ import {
 } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined, SearchOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import dayjs, { Dayjs } from 'dayjs';
 import {
   getDarkPoolList,

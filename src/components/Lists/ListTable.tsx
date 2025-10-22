@@ -15,7 +15,7 @@ import {
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { ListItem, ColumnConfig } from '@/services/listService';
 import { formatNumber, formatPercent, formatCurrency } from '@/utils/format';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import styles from './ListTable.less';
 
 interface ListTableProps {

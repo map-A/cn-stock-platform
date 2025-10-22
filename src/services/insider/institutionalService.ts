@@ -3,7 +3,7 @@
  * 提供基金、QFII、社保等机构持仓数据
  */
 
-import { request } from '@umijs/max';
+import { request } from 'umi-request';
 
 export type InstitutionType = 'fund' | 'qfii' | 'social_security' | 'insurance' | 'trust' | 'private_equity';
 

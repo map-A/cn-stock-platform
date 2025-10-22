@@ -4,6 +4,7 @@
  */
 
 import { get, post, put, del } from './request';
+import DevStorage from '@/utils/devStorage';
 import type {
   UserInfo,
   UserSettings,
@@ -25,6 +26,56 @@ import type {
  * 用户登录
  */
 export async function login(data: LoginForm): Promise<{ token: string; user: UserInfo }> {
+  // 开发环境模拟登录
+  if (process.env.NODE_ENV === 'development') {
+    const { username, password } = data;
+    
+    // 模拟用户验证
+    const validUsers = [
+      { username: 'admin', password: 'admin123', role: 'admin', name: '系统管理员' },
+      { username: 'trader', password: 'trader123', role: 'trader', name: '交易员' },
+      { username: 'analyst', password: 'analyst123', role: 'analyst', name: '分析师' },
+      { username: 'guest', password: 'guest123', role: 'user', name: '访客用户' },
+    ];
+    
+    const user = validUsers.find(u => u.username === username && u.password === password);
+    
+    if (!user) {
+      throw new Error('用户名或密码错误');
+    }
+    
+    // 模拟用户信息
+    const mockUserInfo: UserInfo = {
+      id: `user_${Date.now()}`,
+      username: user.username,
+      email: `${user.username}@example.com`,
+      displayName: user.name,
+      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+      tier: 'Free',
+      isPro: false,
+      createdAt: '2024-01-01T00:00:00Z',
+      lastLoginAt: new Date().toISOString(),
+    };
+    
+    const mockToken = `mock_token_${Date.now()}_${user.username}`;
+    
+    // 保存登录状态到开发环境存储
+    DevStorage.saveLoginState(mockToken, {
+      ...mockUserInfo,
+      role: user.role,
+      role_name: user.name,
+      display_name: user.name,
+      user_id: mockUserInfo.id,
+      avatar_url: mockUserInfo.avatar,
+    });
+    
+    return {
+      token: mockToken,
+      user: mockUserInfo,
+    };
+  }
+  
+  // 生产环境调用真实API
   return post('/auth/login', data);
 }
 
@@ -39,13 +90,40 @@ export async function register(data: RegisterForm): Promise<{ token: string; use
  * 用户登出
  */
 export async function logout(): Promise<void> {
-  return post('/auth/logout');
+  // 清理本地存储
+  DevStorage.clearLoginState();
+  
+  // 如果是生产环境，调用后端登出API
+  if (process.env.NODE_ENV !== 'development') {
+    return post('/auth/logout');
+  }
 }
 
 /**
  * 获取当前用户信息
  */
 export async function getCurrentUser(): Promise<UserInfo> {
+  // 开发环境下，优先从缓存恢复用户信息
+  if (process.env.NODE_ENV === 'development') {
+    const { token, userInfo } = DevStorage.getLoginState();
+    
+    if (token && userInfo) {
+      console.log('🔄 开发环境恢复用户信息');
+      return {
+        id: userInfo.user_id || userInfo.id,
+        username: userInfo.username,
+        email: userInfo.email,
+        displayName: userInfo.display_name || userInfo.username,
+        avatar: userInfo.avatar_url || userInfo.avatar,
+        tier: 'Free',
+        isPro: false,
+        createdAt: userInfo.createdAt || '2024-01-01T00:00:00Z',
+        lastLoginAt: userInfo.lastLoginAt || new Date().toISOString(),
+      };
+    }
+  }
+  
+  // 生产环境从API获取
   return get('/auth/me');
 }
 

@@ -16,7 +16,7 @@ interface OptionsPageProps {
 /**
  * 股票详情 - 期权分析页面
  * 
- * 注意：中国A股市场目前只有少数ETF有期权，如50ETF、300ETF、500ETF等
+ * 注意：cn市场目前只有少数ETF有期权，如50ETF、300ETF、500ETF等
  * 大部分个股暂无期权，需要根据实际情况显示相应内容
  */
 const StockOptionsPage: React.FC<OptionsPageProps> = ({ stockCode, stockName }) => {

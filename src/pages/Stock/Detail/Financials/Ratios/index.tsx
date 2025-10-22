@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Card, Tabs, Row, Col, Progress, Tag, Space, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { useParams } from '@umijs/max';
+import { useParams } from 'umi';
 import { Radar, Column } from '@ant-design/plots';
 import {
   getFinancialRatios,

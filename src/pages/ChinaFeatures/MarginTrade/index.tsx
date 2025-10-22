@@ -4,7 +4,7 @@ import { RiseOutlined, FallOutlined, DollarOutlined, PercentageOutlined } from '
 import { useRequest } from 'ahooks';
 import { getMarginTradeOverview, getMarginTradeTop } from '@/services/china-features';
 import { Line } from '@ant-design/plots';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import { formatCurrency, formatPercent, formatNumber } from '@/utils/format';
 import type { MarginTradeStock } from '@/typings/china-features';
 import dayjs, { Dayjs } from 'dayjs';

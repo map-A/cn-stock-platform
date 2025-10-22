@@ -3,7 +3,7 @@
  */
 import React, { useEffect } from 'react';
 import { Card, Row, Col, Tabs, Spin } from 'antd';
-import { useParams } from '@umijs/max';
+import { useParams } from 'umi';
 import { useRequest } from 'ahooks';
 import { getStockInfo, getStockQuote } from '@/services/stock';
 import { useStockStore } from '@/models/stock';

@@ -4,7 +4,7 @@ import { RiseOutlined, FallOutlined, SwapOutlined, GlobalOutlined } from '@ant-d
 import { useRequest } from 'ahooks';
 import { getNorthMoneyFlow, getNorthMoneyTop } from '@/services/china-features';
 import { Line } from '@ant-design/plots';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import { formatCurrency, formatPercent } from '@/utils/format';
 import type { NorthMoneyFlow, NorthMoneyStock } from '@/typings/china-features';
 import dayjs, { Dayjs } from 'dayjs';
@@ -198,7 +198,7 @@ const NorthMoney: React.FC = () => {
         <Title level={2}>
           <GlobalOutlined style={{ color: '#1890ff' }} /> 北向资金
         </Title>
-        <Text type="secondary">追踪外资通过沪深港通流入A股的资金动向</Text>
+        <Text type="secondary">追踪外资通过沪深港通流入的资金动向</Text>
       </div>
 
       {/* 统计卡片 */}

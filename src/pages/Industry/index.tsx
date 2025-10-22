@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Tabs, Spin, Empty, Tag, Space, Row, Col, Statistic } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import IndustryTable from './components/IndustryTable';
 import SectorOverview from './components/SectorOverview';
 import IndustryPerformanceChart from './components/IndustryPerformanceChart';
@@ -169,7 +169,7 @@ const IndustryOverview: React.FC = () => {
   return (
     <PageContainer
       title="行业与板块"
-      subTitle="深度分析A股各行业和板块的表现、资金流向和投资机会"
+      subTitle="深度分析各行业和板块的表现、资金流向和投资机会"
       extra={renderTimeRangeSelector()}
     >
       <Spin spinning={loading}>

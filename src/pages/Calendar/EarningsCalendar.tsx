@@ -3,7 +3,7 @@ import { Card, Table, DatePicker, Select, Tag, Space, Button, message } from 'an
 import { DownloadOutlined, BellOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import calendarService, { type EarningsEvent } from '@/services/calendar';
-import { useNavigate } from '@umijs/max';
+import { useNavigate } from 'umi';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs, { type Dayjs } from 'dayjs';
 import styles from './index.less';

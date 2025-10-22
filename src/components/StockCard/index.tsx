@@ -4,7 +4,7 @@
 import React from 'react';
 import { Card, Space, Typography } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import { history } from '@umijs/max';
+import { history } from 'umi';
 import { formatPrice, formatPercent, getPriceColor } from '@/utils/format';
 import type { StockInfo } from '@/typings/stock';
 import styles from './index.less';
