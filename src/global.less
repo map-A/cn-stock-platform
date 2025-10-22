@@ -1,357 +1,94 @@
-// 全局样式 - 参考 Stocknear 配色方案
-
-// 颜色变量
-@primary-dark: #1e222d;
-@secondary-dark: #2a2e39;
-@background-dark: #09090b;
-@table-dark: #18181d;
-@text-light: #e5e7eb;
-@text-secondary: #9ca3af;
-
-@color-positive: #00fc50;
-@color-negative: #ff2f1f;
-@color-neutral: #ffa838;
-
-// 全局样式
-html, body {
-  background-color: @background-dark;
-  color: @text-light;
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*1GSgSYDD_aIAAAAAQsAAAAgAegCCAQ/AlibabaSans-Light.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*2zEUQqnPNesAAAAAQtAAAAgAegCCAQ/AlibabaSans-Regular.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*E_cxRbMlZqUAAAAAQuAAAAgAegCCAQ/AlibabaSans-Medium.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*E_cxRbMlZqUAAAAAQuAAAAgAegCCAQ/AlibabaSans-Bold.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*E_cxRbMlZqUAAAAAQuAAAAgAegCCAQ/AlibabaSans-Heavy.woff2")
+    format("woff2");
 }
 
-// ProLayout 侧边栏样式
-.ant-pro-layout {
-  background: @background-dark !important;
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family:
+    AlibabaSans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-.ant-pro-sider {
-  background: @background-dark !important;
-  border-right: 1px solid @secondary-dark !important;
+.colorWeak {
+  filter: invert(80%);
 }
 
-.ant-pro-sider-menu {
-  background: @background-dark !important;
-  
-  .ant-menu {
-    background: @background-dark !important;
-    
-    .ant-menu-item,
-    .ant-menu-submenu-title {
-      color: @text-secondary !important;
-      
-      &:hover {
-        color: @color-positive !important;
-        background: rgba(0, 252, 80, 0.05) !important;
-      }
-    }
-    
-    .ant-menu-item-selected {
-      background: rgba(0, 252, 80, 0.1) !important;
-      color: @color-positive !important;
-      
-      &::after {
-        border-right-color: @color-positive !important;
-      }
-    }
-    
-    .ant-menu-submenu-open > .ant-menu-submenu-title {
-      color: @color-positive !important;
-    }
-  }
-}
-
-// ProLayout 顶部栏样式
-.ant-pro-top-nav-header {
-  background: @secondary-dark !important;
-  border-bottom: 1px solid @primary-dark !important;
-  
-  .ant-pro-top-nav-header-logo {
-    color: @text-light !important;
-  }
-}
-
-.ant-pro-global-header {
-  background: @secondary-dark !important;
-}
-
-// 滚动条样式
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: @table-dark;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: @secondary-dark;
-  border-radius: 4px;
-
-  &:hover {
-    background: @primary-dark;
-  }
-}
-
-// 卡片样式
-.ant-card {
-  background-color: @secondary-dark !important;
-  border-color: @primary-dark !important;
-  border-radius: 6px;
-
-  .ant-card-head {
-    border-color: @primary-dark !important;
-  }
-
-  .ant-card-body {
-    padding: 16px;
-  }
-}
-
-// 表格样式
-.ant-table {
-  background: transparent;
-
-  .ant-table-thead > tr > th {
-    background-color: @primary-dark !important;
-    color: @text-light !important;
-    border-color: @primary-dark !important;
-  }
-
-  .ant-table-tbody > tr {
-    &:hover > td {
-      background-color: @primary-dark !important;
-    }
-
-    > td {
-      border-color: @primary-dark !important;
-    }
-  }
-}
-
-// 输入框样式
-.ant-input,
-.ant-input-number,
-.ant-select-selector,
-.ant-picker {
-  background-color: @primary-dark !important;
-  border-color: @secondary-dark !important;
-  color: @text-light !important;
-
-  &:hover {
-    border-color: @text-secondary !important;
-  }
-
-  &:focus,
-  &.ant-input-focused {
-    border-color: #00fc50 !important;
-    box-shadow: 0 0 0 2px rgba(0, 252, 80, 0.2) !important;
-  }
-}
-
-// 按钮样式
-.ant-btn {
-  &.ant-btn-primary {
-    background-color: #00fc50 !important;
-    border-color: #00fc50 !important;
-    color: @background-dark !important;
-
-    &:hover {
-      background-color: #00e046 !important;
-      border-color: #00e046 !important;
-    }
-  }
-
-  &.ant-btn-default {
-    color: @text-light !important;
-    border-color: @primary-dark !important;
-
-    &:hover {
-      color: #00fc50 !important;
-      border-color: #00fc50 !important;
-    }
-  }
-}
-
-// 统计数字样式
-.ant-statistic {
-  .ant-statistic-title {
-    color: @text-secondary !important;
-    font-size: 12px;
-  }
-
-  .ant-statistic-content {
-    color: @text-light !important;
-  }
-}
-
-// 正数（上升）- 绿色
-.ant-statistic-content-value-positive,
-.positive,
-.rise {
-  color: @color-positive !important;
-}
-
-// 负数（下降）- 红色
-.ant-statistic-content-value-negative,
-.negative,
-.fall {
-  color: @color-negative !important;
-}
-
-// 中性 - 橙色
-.neutral {
-  color: @color-neutral !important;
-}
-
-// 分割线
-.ant-divider {
-  border-color: @primary-dark !important;
-}
-
-// 标签样式
-.ant-tag {
-  background-color: @primary-dark !important;
-  border-color: @secondary-dark !important;
-  color: @text-light !important;
-
-  &.ant-tag-success {
-    background-color: rgba(0, 252, 80, 0.15) !important;
-    border-color: @color-positive !important;
-    color: @color-positive !important;
-  }
-
-  &.ant-tag-error {
-    background-color: rgba(255, 47, 31, 0.15) !important;
-    border-color: @color-negative !important;
-    color: @color-negative !important;
-  }
-
-  &.ant-tag-warning {
-    background-color: rgba(255, 168, 56, 0.15) !important;
-    border-color: @color-neutral !important;
-    color: @color-neutral !important;
-  }
-}
-
-// 加载动画颜色
-.ant-spin-dot i {
-  background-color: #00fc50 !important;
-}
-
-// 进度条
-.ant-progress {
-  .ant-progress-inner {
-    background-color: @primary-dark !important;
-  }
-}
-
-// 弹出框样式
-.ant-dropdown,
-.ant-popover,
-.ant-tooltip,
-.ant-message,
-.ant-notification {
-  .ant-popover-inner,
-  .ant-message-notice-content,
-  .ant-notification-notice {
-    background-color: @secondary-dark !important;
-    border-color: @primary-dark !important;
-  }
-}
-
-// 模态框样式
-.ant-modal-content {
-  background-color: @secondary-dark !important;
-
-  .ant-modal-header {
-    background-color: @secondary-dark !important;
-    border-color: @primary-dark !important;
-  }
-
-  .ant-modal-close {
-    color: @text-light !important;
-  }
-}
-
-// 菜单样式
-.ant-menu {
-  background-color: @primary-dark !important;
-
-  .ant-menu-item {
-    color: @text-secondary !important;
-
-    &:hover {
-      color: @color-positive !important;
-    }
-
-    &.ant-menu-item-selected {
-      background-color: rgba(0, 252, 80, 0.1) !important;
-      color: @color-positive !important;
-    }
-  }
-}
-
-// 面包屑
-.ant-breadcrumb-link {
-  color: @text-secondary !important;
-
-  &:hover {
-    color: @color-positive !important;
-  }
-}
-
-// 链接
-a {
-  color: #00fc50 !important;
-
-  &:hover {
-    color: #00e046 !important;
-  }
-}
-
-// 悬停效果
-.hover-lift {
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 252, 80, 0.1);
-  }
-}
-
-// 闪烁效果
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(0, 252, 80, 0.7);
-  }
-
-  50% {
-    box-shadow: 0 0 0 8px rgba(0, 252, 80, 0);
-  }
-}
-
-.pulse-glow {
-  animation: pulse-glow 2s infinite;
-}
-
-// 页面背景
-.home,
-.page-container {
-  background: linear-gradient(135deg, #0a0a0e 0%, #1a1a24 100%);
+.ant-layout {
   min-height: 100vh;
 }
+.ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  left: unset;
+}
 
-// 卡片容器
-.card-container {
-  background-color: @secondary-dark;
-  border: 1px solid @primary-dark;
-  border-radius: 6px;
-  padding: 16px;
-  transition: all 0.3s ease;
+canvas {
+  display: block;
+}
 
-  &:hover {
-    border-color: @color-positive;
-    box-shadow: 0 4px 12px rgba(0, 252, 80, 0.1);
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+@media (max-width: 768px) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
   }
 }

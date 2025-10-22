@@ -1,74 +1,52 @@
-/**
- * Umi 运行时配置 - 参考 stock-front
- */
-import { requestConfig } from '@/request';
-import '@/global.less';
+import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig } from '@umijs/max';
-import { history } from '@umijs/max';
-import defaultSettings from '../config/defaultSettings';
+import { SettingDrawer } from '@ant-design/pro-components';
+import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
+import { history, Link } from '@umijs/max';
 import React from 'react';
-import DevStorage from '@/utils/devStorage';
-import { getCurrentUser } from '@/services/user';
-import { Question } from '@/components/RightContent';
-import SiderFooter from '@/components/SiderFooter';
+import {
+  AvatarDropdown,
+  AvatarName,
+  Footer,
+  Question,
+  SelectLang,
+} from '@/components';
+import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
+import defaultSettings from '../config/defaultSettings';
+import { errorConfig } from './requestErrorConfig';
+import '@ant-design/v5-patch-for-react-19';
 
-const loginPath = '/user/login';
 const isDev = process.env.NODE_ENV === 'development';
+const isDevOrTest = isDev || process.env.CI;
+const loginPath = '/user/login';
 
 /**
- * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
- */
+ * @see https://umijs.org/docs/api/runtime-config#getinitialstate
+ * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: any;
-  fetchUserInfo?: () => Promise<any | undefined>;
+  currentUser?: API.CurrentUser;
+  loading?: boolean;
+  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {
-      // 开发环境下，优先尝试从缓存恢复用户信息
-      if (isDev) {
-        const { token, userInfo } = DevStorage.getLoginState();
-        
-        if (token && userInfo) {
-          console.log('🔄 开发环境恢复用户登录状态');
-          return {
-            name: userInfo.display_name || userInfo.username,
-            avatar: userInfo.avatar_url || userInfo.avatar || 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-            userid: userInfo.user_id || userInfo.id,
-            email: userInfo.email,
-            signature: userInfo.role_name || '用户',
-            title: userInfo.role_name || '用户',
-            group: '股票交易系统',
-            access: userInfo.role || 'user',
-          };
-        }
-      }
-      
-      // 正常情况下从API获取用户信息
-      const userInfo = await getCurrentUser();
-      return {
-        name: userInfo.displayName || userInfo.username,
-        avatar: userInfo.avatar || 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-        userid: userInfo.id,
-        email: userInfo.email,
-        signature: '用户',
-        title: '用户',
-        group: '股票交易系统',
-        access: 'user',
-      };
-    } catch (error) {
-      // 只有在没有有效token的情况下才跳转到登录页
-      if (!DevStorage.hasValidLoginState()) {
-        history.push(loginPath);
-      }
+      const msg = await queryCurrentUser({
+        skipErrorHandler: true,
+      });
+      return msg.data;
+    } catch (_error) {
+      history.push(loginPath);
     }
     return undefined;
   };
-
-  // 如果不是登录页面和首页，执行获取用户信息
+  // 如果不是登录页面，执行
   const { location } = history;
-  if (location.pathname !== loginPath) {
+  if (
+    ![loginPath, '/user/register', '/user/register-result'].includes(
+      location.pathname,
+    )
+  ) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
@@ -76,61 +54,103 @@ export async function getInitialState(): Promise<{
       settings: defaultSettings as Partial<LayoutSettings>,
     };
   }
-
   return {
     fetchUserInfo,
     settings: defaultSettings as Partial<LayoutSettings>,
   };
 }
 
-// 请求配置
-export const request = requestConfig;
-
-/**
- * ProLayout 运行时配置
- * @see https://procomponents.ant.design/components/layout
- */
-export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+// ProLayout 支持的api https://procomponents.ant.design/components/layout
+export const layout: RunTimeLayoutConfig = ({
+  initialState,
+  setInitialState,
+}) => {
   return {
-    // 右上角操作区域 - 只保留帮助图标
     actionsRender: () => [
       <Question key="doc" />,
+      <SelectLang key="SelectLang" />,
     ],
-
-    // 不显示顶部用户头像
-    avatarProps: undefined,
-
-    // 水印配置（可选）
+    avatarProps: {
+      src: initialState?.currentUser?.avatar,
+      title: <AvatarName />,
+      render: (_, avatarChildren) => (
+        <AvatarDropdown>{avatarChildren}</AvatarDropdown>
+      ),
+    },
     waterMarkProps: {
-      // content: initialState?.currentUser?.name,
+      content: initialState?.currentUser?.name,
     },
-
-    // 底部区域
-    footerRender: () => (
-      <div style={{ textAlign: 'center', color: '#8c8c8c', padding: '16px 0' }}>
-        CN Stock Platform © 2024
-      </div>
-    ),
-
-    // 侧边栏菜单配置
-    menu: {
-      locale: true, // 启用国际化
+    footerRender: () => <Footer />,
+    onPageChange: () => {
+      const { location } = history;
+      // 如果没有登录，重定向到 login
+      if (!initialState?.currentUser && location.pathname !== loginPath) {
+        history.push(loginPath);
+      }
     },
-
-    // 菜单头部渲染
+    bgLayoutImgList: [
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/D2LWSqNny4sAAAAAAAAAAAAAFl94AQBr',
+        left: 85,
+        bottom: 100,
+        height: '303px',
+      },
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/C2TWRpJpiC0AAAAAAAAAAAAAFl94AQBr',
+        bottom: -68,
+        right: -45,
+        height: '303px',
+      },
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/F6vSTbj8KpYAAAAAAAAAAAAAFl94AQBr',
+        bottom: 0,
+        left: 0,
+        width: '331px',
+      },
+    ],
+    links: isDevOrTest
+      ? [
+          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
+            <LinkOutlined />
+            <span>OpenAPI 文档</span>
+          </Link>,
+        ]
+      : [],
     menuHeaderRender: undefined,
-
-    // 侧边栏底部渲染 - 用户登录和语言切换
-    menuFooterRender: () => <SiderFooter />,
-
-    // 子页面渲染
+    // 自定义 403 页面
+    // unAccessible: <div>unAccessible</div>,
+    // 增加一个 loading 的状态
     childrenRender: (children) => {
-      return <>{children}</>;
+      // if (initialState?.loading) return <PageLoading />;
+      return (
+        <>
+          {children}
+          {isDevOrTest && (
+            <SettingDrawer
+              disableUrlParams
+              enableDarkTheme
+              settings={initialState?.settings}
+              onSettingChange={(settings) => {
+                setInitialState((preInitialState) => ({
+                  ...preInitialState,
+                  settings,
+                }));
+              }}
+            />
+          )}
+        </>
+      );
     },
-
-    // 应用初始配置
     ...initialState?.settings,
   };
 };
 
-export default {};
+/**
+ * @name request 配置，可以配置错误处理
+ * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
+ * @doc https://umijs.org/docs/max/request#配置
+ */
+export const request: RequestConfig = {
+  baseURL: isDev ? '' : 'https://proapi.azurewebsites.net',
+  ...errorConfig,
+};
