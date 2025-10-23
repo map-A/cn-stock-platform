@@ -3,7 +3,7 @@ import { Card, Table, DatePicker, Tag, Space, Button, message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import calendarService, { type DividendEvent } from '@/services/calendar';
-import { useNavigate } from '@umijs/max';
+import { useNavigate, useIntl } from '@umijs/max';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs, { type Dayjs } from 'dayjs';
 import styles from './index.less';
@@ -12,6 +12,7 @@ const { RangePicker } = DatePicker;
 
 const DividendsCalendar: React.FC = () => {
   const navigate = useNavigate();
+  const intl = useIntl();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<DividendEvent[]>([]);
   const [total, setTotal] = useState(0);
@@ -41,7 +42,7 @@ const DividendsCalendar: React.FC = () => {
         setTotal(response.data.total);
       }
     } catch (error) {
-      message.error('获取分红日历失败');
+      message.error(intl.formatMessage({ id: 'message.loadFailed' }));
       console.error(error);
     } finally {
       setLoading(false);
@@ -61,9 +62,9 @@ const DividendsCalendar: React.FC = () => {
         startDate: dateRange[0].format('YYYY-MM-DD'),
         endDate: dateRange[1].format('YYYY-MM-DD'),
       });
-      message.success('导出成功');
+      message.success(intl.formatMessage({ id: 'message.exportSuccess' }));
     } catch (error) {
-      message.error('导出失败');
+      message.error(intl.formatMessage({ id: 'message.exportFailed' }));
       console.error(error);
     }
   };
@@ -74,7 +75,7 @@ const DividendsCalendar: React.FC = () => {
 
   const columns: ColumnsType<DividendEvent> = [
     {
-      title: '股票代码',
+      title: intl.formatMessage({ id: 'table.columns.symbol' }),
       dataIndex: 'symbol',
       key: 'symbol',
       width: 120,
@@ -86,13 +87,13 @@ const DividendsCalendar: React.FC = () => {
       ),
     },
     {
-      title: '股票名称',
+      title: intl.formatMessage({ id: 'table.columns.stockName' }),
       dataIndex: 'name',
       key: 'name',
       width: 150,
     },
     {
-      title: '除权日',
+      title: intl.formatMessage({ id: 'table.columns.exRightDate' }),
       dataIndex: 'exDividendDate',
       key: 'exDividendDate',
       width: 120,
@@ -100,28 +101,28 @@ const DividendsCalendar: React.FC = () => {
       sorter: (a, b) => dayjs(a.exDividendDate).unix() - dayjs(b.exDividendDate).unix(),
     },
     {
-      title: '派息日',
+      title: intl.formatMessage({ id: 'table.columns.paymentDate' }),
       dataIndex: 'paymentDate',
       key: 'paymentDate',
       width: 120,
       render: (date: string) => dayjs(date).format('YYYY-MM-DD'),
     },
     {
-      title: '登记日',
+      title: intl.formatMessage({ id: 'table.columns.recordDate' }),
       dataIndex: 'recordDate',
       key: 'recordDate',
       width: 120,
       render: (date: string) => dayjs(date).format('YYYY-MM-DD'),
     },
     {
-      title: '宣布日',
+      title: intl.formatMessage({ id: 'table.columns.announcementDate' }),
       dataIndex: 'declarationDate',
       key: 'declarationDate',
       width: 120,
       render: (date: string) => dayjs(date).format('YYYY-MM-DD'),
     },
     {
-      title: '分红金额',
+      title: intl.formatMessage({ id: 'table.columns.dividendAmount' }),
       dataIndex: 'amount',
       key: 'amount',
       width: 120,
@@ -130,48 +131,48 @@ const DividendsCalendar: React.FC = () => {
       sorter: (a, b) => a.amount - b.amount,
     },
     {
-      title: '分红类型',
+      title: intl.formatMessage({ id: 'table.columns.dividendType' }),
       dataIndex: 'dividendType',
       key: 'dividendType',
       width: 100,
       render: (type: string) => {
-        const typeMap = {
-          cash: { text: '现金', color: 'green' },
-          stock: { text: '股票', color: 'blue' },
+        const typeMap: Record<string, { text: string; color: string }> = {
+          cash: { text: intl.formatMessage({ id: 'pages.calendar.dividends.cash' }), color: 'green' },
+          stock: { text: intl.formatMessage({ id: 'pages.calendar.dividends.stock' }), color: 'blue' },
         };
-        const config = typeMap[type as keyof typeof typeMap] || { text: type, color: 'default' };
+        const config = typeMap[type] || { text: type, color: 'default' };
         return <Tag color={config.color}>{config.text}</Tag>;
       },
     },
     {
-      title: '分红频率',
+      title: intl.formatMessage({ id: 'table.columns.dividendFrequency' }),
       dataIndex: 'frequency',
       key: 'frequency',
       width: 100,
       render: (freq: string) => {
-        const freqMap = {
-          annual: '年度',
-          'semi-annual': '半年度',
-          quarterly: '季度',
-          monthly: '月度',
+        const freqMap: Record<string, string> = {
+          annual: intl.formatMessage({ id: 'pages.calendar.dividends.annual' }),
+          'semi-annual': intl.formatMessage({ id: 'pages.calendar.dividends.semiAnnual' }),
+          quarterly: intl.formatMessage({ id: 'pages.calendar.dividends.quarterly' }),
+          monthly: intl.formatMessage({ id: 'pages.calendar.dividends.monthly' }),
         };
-        return freqMap[freq as keyof typeof freqMap] || freq;
+        return freqMap[freq] || freq;
       },
     },
   ];
 
   return (
     <PageContainer
-      title="分红日历"
+      title={intl.formatMessage({ id: 'pages.calendar.dividends.title' })}
       extra={[
         <Button key="export" icon={<DownloadOutlined />} onClick={handleExport}>
-          导出数据
+          {intl.formatMessage({ id: 'button.export' })}
         </Button>,
       ]}
     >
       <Card bordered={false} style={{ marginBottom: 16 }}>
         <Space size="middle">
-          <span>日期范围：</span>
+          <span>{intl.formatMessage({ id: 'pages.calendar.dateRange' })}</span>
           <RangePicker
             value={dateRange}
             onChange={handleDateRangeChange}
@@ -192,7 +193,7 @@ const DividendsCalendar: React.FC = () => {
             total,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条分红记录`,
+            showTotal: (total) => intl.formatMessage({ id: 'pages.calendar.total' }, { total }),
             onChange: (page, size) => {
               setCurrentPage(page);
               setPageSize(size);

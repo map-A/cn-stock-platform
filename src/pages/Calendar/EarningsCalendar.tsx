@@ -3,7 +3,7 @@ import { Card, Table, DatePicker, Select, Tag, Space, Button, message } from 'an
 import { DownloadOutlined, BellOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import calendarService, { type EarningsEvent } from '@/services/calendar';
-import { useNavigate } from '@umijs/max';
+import { useNavigate, useIntl } from '@umijs/max';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs, { type Dayjs } from 'dayjs';
 import styles from './index.less';
@@ -13,6 +13,7 @@ const { Option } = Select;
 
 const EarningsCalendar: React.FC = () => {
   const navigate = useNavigate();
+  const intl = useIntl();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<EarningsEvent[]>([]);
   const [total, setTotal] = useState(0);
@@ -42,7 +43,7 @@ const EarningsCalendar: React.FC = () => {
         setTotal(response.data.total);
       }
     } catch (error) {
-      message.error('获取财报日历失败');
+      message.error(intl.formatMessage({ id: 'message.loadFailed' }));
       console.error(error);
     } finally {
       setLoading(false);
@@ -62,9 +63,9 @@ const EarningsCalendar: React.FC = () => {
         startDate: dateRange[0].format('YYYY-MM-DD'),
         endDate: dateRange[1].format('YYYY-MM-DD'),
       });
-      message.success('导出成功');
+      message.success(intl.formatMessage({ id: 'message.exportSuccess' }));
     } catch (error) {
-      message.error('导出失败');
+      message.error(intl.formatMessage({ id: 'message.exportFailed' }));
       console.error(error);
     }
   };
@@ -75,7 +76,7 @@ const EarningsCalendar: React.FC = () => {
 
   const columns: ColumnsType<EarningsEvent> = [
     {
-      title: '股票代码',
+      title: intl.formatMessage({ id: 'table.columns.symbol' }),
       dataIndex: 'symbol',
       key: 'symbol',
       width: 120,
@@ -87,13 +88,13 @@ const EarningsCalendar: React.FC = () => {
       ),
     },
     {
-      title: '股票名称',
+      title: intl.formatMessage({ id: 'table.columns.stockName' }),
       dataIndex: 'name',
       key: 'name',
       width: 150,
     },
     {
-      title: '财报日期',
+      title: intl.formatMessage({ id: 'table.columns.earningsDate' }),
       dataIndex: 'reportDate',
       key: 'reportDate',
       width: 120,
@@ -101,13 +102,13 @@ const EarningsCalendar: React.FC = () => {
       sorter: (a, b) => dayjs(a.reportDate).unix() - dayjs(b.reportDate).unix(),
     },
     {
-      title: '财年/季度',
+      title: intl.formatMessage({ id: 'table.columns.period' }),
       key: 'fiscal',
       width: 120,
       render: (_, record) => `${record.fiscalYear}年Q${record.fiscalQuarter}`,
     },
     {
-      title: '预期EPS',
+      title: intl.formatMessage({ id: 'table.columns.expectedEPS' }),
       dataIndex: 'estimatedEPS',
       key: 'estimatedEPS',
       width: 100,
@@ -115,7 +116,7 @@ const EarningsCalendar: React.FC = () => {
       render: (eps?: number) => (eps !== undefined ? `¥${eps.toFixed(2)}` : '-'),
     },
     {
-      title: '实际EPS',
+      title: intl.formatMessage({ id: 'table.columns.actualEPS' }),
       dataIndex: 'actualEPS',
       key: 'actualEPS',
       width: 100,
@@ -123,7 +124,7 @@ const EarningsCalendar: React.FC = () => {
       render: (eps?: number) => (eps !== undefined ? `¥${eps.toFixed(2)}` : '-'),
     },
     {
-      title: 'EPS惊喜度',
+      title: intl.formatMessage({ id: 'table.columns.epsSurprise' }),
       dataIndex: 'surprisePercent',
       key: 'surprisePercent',
       width: 120,
@@ -139,7 +140,7 @@ const EarningsCalendar: React.FC = () => {
       },
     },
     {
-      title: '预期营收',
+      title: intl.formatMessage({ id: 'table.columns.expectedRevenue' }),
       dataIndex: 'estimatedRevenue',
       key: 'estimatedRevenue',
       width: 120,
@@ -148,7 +149,7 @@ const EarningsCalendar: React.FC = () => {
         revenue !== undefined ? `${(revenue / 100000000).toFixed(2)}亿` : '-',
     },
     {
-      title: '实际营收',
+      title: intl.formatMessage({ id: 'table.columns.actualRevenue' }),
       dataIndex: 'actualRevenue',
       key: 'actualRevenue',
       width: 120,
@@ -157,34 +158,34 @@ const EarningsCalendar: React.FC = () => {
         revenue !== undefined ? `${(revenue / 100000000).toFixed(2)}亿` : '-',
     },
     {
-      title: '发布时间',
+      title: intl.formatMessage({ id: 'table.columns.releaseTime' }),
       dataIndex: 'callTime',
       key: 'callTime',
       width: 100,
       render: (time?: string) => {
         if (!time) return '-';
-        const timeMap = {
-          'before-market': '盘前',
-          'after-market': '盘后',
-          'during-market': '盘中',
+        const timeMap: Record<string, string> = {
+          'before-market': intl.formatMessage({ id: 'pages.calendar.beforeMarket' }),
+          'after-market': intl.formatMessage({ id: 'pages.calendar.afterMarket' }),
+          'during-market': intl.formatMessage({ id: 'pages.calendar.duringMarket' }),
         };
-        return timeMap[time as keyof typeof timeMap] || '-';
+        return timeMap[time] || '-';
       },
     },
   ];
 
   return (
     <PageContainer
-      title="财报日历"
+      title={intl.formatMessage({ id: 'pages.calendar.earnings.title' })}
       extra={[
         <Button key="export" icon={<DownloadOutlined />} onClick={handleExport}>
-          导出数据
+          {intl.formatMessage({ id: 'button.export' })}
         </Button>,
       ]}
     >
       <Card bordered={false} style={{ marginBottom: 16 }}>
         <Space size="middle">
-          <span>日期范围：</span>
+          <span>{intl.formatMessage({ id: 'pages.calendar.dateRange' })}</span>
           <RangePicker
             value={dateRange}
             onChange={handleDateRangeChange}
@@ -205,7 +206,7 @@ const EarningsCalendar: React.FC = () => {
             total,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条财报记录`,
+            showTotal: (total) => intl.formatMessage({ id: 'pages.calendar.total' }, { total }),
             onChange: (page, size) => {
               setCurrentPage(page);
               setPageSize(size);

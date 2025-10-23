@@ -23,7 +23,7 @@ import {
 } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import screenerService, { type ScreenerResult, type ScreenerFilter } from '@/services/screener';
-import { useNavigate } from '@umijs/max';
+import { useNavigate, useIntl } from '@umijs/max';
 import type { ColumnsType } from 'antd/es/table';
 import styles from './index.less';
 
@@ -33,6 +33,7 @@ const Screener: React.FC = () => {
   const [form] = Form.useForm();
   const [saveForm] = Form.useForm();
   const navigate = useNavigate();
+  const intl = useIntl();
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<ScreenerResult[]>([]);
   const [total, setTotal] = useState(0);
@@ -83,7 +84,7 @@ const Screener: React.FC = () => {
         setTotal(response.data.total);
       }
     } catch (error) {
-      message.error('筛选失败');
+      message.error(intl.formatMessage({ id: 'message.filterFailed' }));
       console.error(error);
     } finally {
       setLoading(false);
@@ -109,12 +110,12 @@ const Screener: React.FC = () => {
       });
 
       if (response.success) {
-        message.success('保存成功');
+        message.success(intl.formatMessage({ id: 'message.saveSuccess' }));
         setSaveModalVisible(false);
         saveForm.resetFields();
       }
     } catch (error) {
-      message.error('保存失败');
+      message.error(intl.formatMessage({ id: 'message.saveFailed' }));
       console.error(error);
     }
   };
@@ -123,9 +124,9 @@ const Screener: React.FC = () => {
     try {
       const filters = form.getFieldsValue();
       await screenerService.exportResults({ ...filters, page: 1, pageSize: 10000 });
-      message.success('导出成功');
+      message.success(intl.formatMessage({ id: 'message.exportSuccess' }));
     } catch (error) {
-      message.error('导出失败');
+      message.error(intl.formatMessage({ id: 'message.exportFailed' }));
       console.error(error);
     }
   };
@@ -136,7 +137,7 @@ const Screener: React.FC = () => {
 
   const columns: ColumnsType<ScreenerResult> = [
     {
-      title: '股票代码',
+      title: intl.formatMessage({ id: 'table.columns.symbol' }),
       dataIndex: 'symbol',
       key: 'symbol',
       width: 120,
@@ -148,13 +149,13 @@ const Screener: React.FC = () => {
       ),
     },
     {
-      title: '股票名称',
+      title: intl.formatMessage({ id: 'table.columns.name' }),
       dataIndex: 'name',
       key: 'name',
       width: 150,
     },
     {
-      title: '最新价',
+      title: intl.formatMessage({ id: 'table.columns.latestPrice' }),
       dataIndex: 'price',
       key: 'price',
       width: 100,
@@ -163,7 +164,7 @@ const Screener: React.FC = () => {
       render: (price: number) => `¥${price.toFixed(2)}`,
     },
     {
-      title: '涨跌幅',
+      title: intl.formatMessage({ id: 'table.columns.changePercent' }),
       dataIndex: 'changePercent',
       key: 'changePercent',
       width: 120,
@@ -177,7 +178,7 @@ const Screener: React.FC = () => {
       ),
     },
     {
-      title: '成交量',
+      title: intl.formatMessage({ id: 'table.columns.volume' }),
       dataIndex: 'volume',
       key: 'volume',
       width: 120,
@@ -186,7 +187,7 @@ const Screener: React.FC = () => {
       render: (volume: number) => (volume / 10000).toFixed(2) + '万',
     },
     {
-      title: '市值',
+      title: intl.formatMessage({ id: 'table.columns.marketCap' }),
       dataIndex: 'marketCap',
       key: 'marketCap',
       width: 120,
@@ -195,7 +196,7 @@ const Screener: React.FC = () => {
       render: (cap: number) => (cap / 100000000).toFixed(2) + '亿',
     },
     {
-      title: '市盈率',
+      title: intl.formatMessage({ id: 'table.columns.peRatio' }),
       dataIndex: 'peRatio',
       key: 'peRatio',
       width: 100,
@@ -204,7 +205,7 @@ const Screener: React.FC = () => {
       render: (ratio?: number) => (ratio ? ratio.toFixed(2) : '-'),
     },
     {
-      title: '市净率',
+      title: intl.formatMessage({ id: 'table.columns.pbRatio' }),
       dataIndex: 'pbRatio',
       key: 'pbRatio',
       width: 100,
@@ -213,7 +214,7 @@ const Screener: React.FC = () => {
       render: (ratio?: number) => (ratio ? ratio.toFixed(2) : '-'),
     },
     {
-      title: '股息率',
+      title: intl.formatMessage({ id: 'table.columns.dividendYield' }),
       dataIndex: 'dividendYield',
       key: 'dividendYield',
       width: 100,
@@ -222,7 +223,7 @@ const Screener: React.FC = () => {
       render: (yield_?: number) => (yield_ ? yield_.toFixed(2) + '%' : '-'),
     },
     {
-      title: '行业',
+      title: intl.formatMessage({ id: 'table.columns.industry' }),
       dataIndex: 'industry',
       key: 'industry',
       width: 120,
@@ -231,57 +232,57 @@ const Screener: React.FC = () => {
   ];
 
   return (
-    <PageContainer title="股票筛选器">
+    <PageContainer title={intl.formatMessage({ id: 'pages.screener.title' })}>
       <Card bordered={false} style={{ marginBottom: 16 }}>
         <Form form={form} layout="vertical">
           <Row gutter={16}>
             <Col span={6}>
-              <Form.Item label="市值范围（亿元）">
+              <Form.Item label={intl.formatMessage({ id: 'pages.screener.marketCapRange' })}>
                 <Space.Compact style={{ width: '100%' }}>
                   <Form.Item name="marketCapMin" noStyle>
-                    <InputNumber placeholder="最小" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                   <Form.Item name="marketCapMax" noStyle>
-                    <InputNumber placeholder="最大" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                 </Space.Compact>
               </Form.Item>
             </Col>
 
             <Col span={6}>
-              <Form.Item label="价格范围（元）">
+              <Form.Item label={intl.formatMessage({ id: 'pages.screener.priceRange' })}>
                 <Space.Compact style={{ width: '100%' }}>
                   <Form.Item name="priceMin" noStyle>
-                    <InputNumber placeholder="最小" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                   <Form.Item name="priceMax" noStyle>
-                    <InputNumber placeholder="最大" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                 </Space.Compact>
               </Form.Item>
             </Col>
 
             <Col span={6}>
-              <Form.Item label="市盈率范围">
+              <Form.Item label={intl.formatMessage({ id: 'pages.screener.peRatioRange' })}>
                 <Space.Compact style={{ width: '100%' }}>
                   <Form.Item name="peRatioMin" noStyle>
-                    <InputNumber placeholder="最小" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                   <Form.Item name="peRatioMax" noStyle>
-                    <InputNumber placeholder="最大" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                 </Space.Compact>
               </Form.Item>
             </Col>
 
             <Col span={6}>
-              <Form.Item label="市净率范围">
+              <Form.Item label={intl.formatMessage({ id: 'pages.screener.pbRatioRange' })}>
                 <Space.Compact style={{ width: '100%' }}>
                   <Form.Item name="pbRatioMin" noStyle>
-                    <InputNumber placeholder="最小" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                   <Form.Item name="pbRatioMax" noStyle>
-                    <InputNumber placeholder="最大" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                 </Space.Compact>
               </Form.Item>
@@ -290,34 +291,34 @@ const Screener: React.FC = () => {
 
           <Row gutter={16}>
             <Col span={6}>
-              <Form.Item label="涨跌幅范围（%）">
+              <Form.Item label={intl.formatMessage({ id: 'pages.screener.changePercentRange' })}>
                 <Space.Compact style={{ width: '100%' }}>
                   <Form.Item name="changePercentMin" noStyle>
-                    <InputNumber placeholder="最小" style={{ width: '50%' }} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} />
                   </Form.Item>
                   <Form.Item name="changePercentMax" noStyle>
-                    <InputNumber placeholder="最大" style={{ width: '50%' }} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} />
                   </Form.Item>
                 </Space.Compact>
               </Form.Item>
             </Col>
 
             <Col span={6}>
-              <Form.Item label="股息率范围（%）">
+              <Form.Item label={intl.formatMessage({ id: 'pages.screener.dividendYieldRange' })}>
                 <Space.Compact style={{ width: '100%' }}>
                   <Form.Item name="dividendYieldMin" noStyle>
-                    <InputNumber placeholder="最小" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                   <Form.Item name="dividendYieldMax" noStyle>
-                    <InputNumber placeholder="最大" style={{ width: '50%' }} min={0} />
+                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
                   </Form.Item>
                 </Space.Compact>
               </Form.Item>
             </Col>
 
             <Col span={6}>
-              <Form.Item name="industries" label="行业">
-                <Select mode="multiple" placeholder="选择行业" allowClear>
+              <Form.Item name="industries" label={intl.formatMessage({ id: 'table.columns.industry' })}>
+                <Select mode="multiple" placeholder={intl.formatMessage({ id: 'pages.screener.selectIndustry' })} allowClear>
                   {industries.map((item) => (
                     <Option key={item.code} value={item.code}>
                       {item.name}
@@ -328,8 +329,8 @@ const Screener: React.FC = () => {
             </Col>
 
             <Col span={6}>
-              <Form.Item name="sectors" label="板块">
-                <Select mode="multiple" placeholder="选择板块" allowClear>
+              <Form.Item name="sectors" label={intl.formatMessage({ id: 'pages.screener.sector' })}>
+                <Select mode="multiple" placeholder={intl.formatMessage({ id: 'pages.screener.selectSector' })} allowClear>
                   {sectors.map((item) => (
                     <Option key={item.code} value={item.code}>
                       {item.name}
@@ -344,24 +345,24 @@ const Screener: React.FC = () => {
             <Col span={24}>
               <Space>
                 <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
-                  开始筛选
+                  {intl.formatMessage({ id: 'button.search' })}
                 </Button>
                 <Button icon={<ReloadOutlined />} onClick={handleReset}>
-                  重置条件
+                  {intl.formatMessage({ id: 'button.reset' })}
                 </Button>
                 <Button
                   icon={<SaveOutlined />}
                   onClick={() => setSaveModalVisible(true)}
                   disabled={results.length === 0}
                 >
-                  保存筛选
+                  {intl.formatMessage({ id: 'pages.screener.save' })}
                 </Button>
                 <Button
                   icon={<DownloadOutlined />}
                   onClick={handleExport}
                   disabled={results.length === 0}
                 >
-                  导出结果
+                  {intl.formatMessage({ id: 'button.export' })}
                 </Button>
               </Space>
             </Col>
@@ -381,7 +382,7 @@ const Screener: React.FC = () => {
             total,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total) => `共筛选出 ${total} 只股票`,
+            showTotal: (total) => intl.formatMessage({ id: 'pages.screener.total' }, { total }),
             onChange: (page, size) => {
               setCurrentPage(page);
               setPageSize(size);
@@ -392,26 +393,26 @@ const Screener: React.FC = () => {
       </Card>
 
       <Modal
-        title="保存筛选条件"
+        title={intl.formatMessage({ id: 'pages.screener.saveModal.title' })}
         open={saveModalVisible}
         onOk={handleSaveScreener}
         onCancel={() => {
           setSaveModalVisible(false);
           saveForm.resetFields();
         }}
-        okText="保存"
-        cancelText="取消"
+        okText={intl.formatMessage({ id: 'button.save' })}
+        cancelText={intl.formatMessage({ id: 'button.cancel' })}
       >
         <Form form={saveForm} layout="vertical">
           <Form.Item
             name="name"
-            label="筛选器名称"
-            rules={[{ required: true, message: '请输入筛选器名称' }]}
+            label={intl.formatMessage({ id: 'pages.screener.saveModal.name' })}
+            rules={[{ required: true, message: intl.formatMessage({ id: 'pages.screener.saveModal.nameRequired' }) }]}
           >
-            <Input placeholder="例如：高股息蓝筹股" />
+            <Input placeholder={intl.formatMessage({ id: 'pages.screener.saveModal.namePlaceholder' })} />
           </Form.Item>
-          <Form.Item name="description" label="描述">
-            <Input.TextArea rows={3} placeholder="输入描述信息（可选）" />
+          <Form.Item name="description" label={intl.formatMessage({ id: 'pages.screener.saveModal.description' })}>
+            <Input.TextArea rows={3} placeholder={intl.formatMessage({ id: 'pages.screener.saveModal.descriptionPlaceholder' })} />
           </Form.Item>
         </Form>
       </Modal>

@@ -1,4 +1,11 @@
+import component from './en-US/component';
+import globalHeader from './en-US/globalHeader';
 import menu from './en-US/menu';
+import pages from './en-US/pages';
+import pwa from './en-US/pwa';
+import settingDrawer from './en-US/settingDrawer';
+import settings from './en-US/settings';
+import tables from './en-US/tables';
 
 export default {
   'navBar.lang': 'Languages',
@@ -24,5 +31,12 @@ export default {
   'user.profile': 'Profile',
   'user.settings': 'Settings',
   
+  ...component,
+  ...globalHeader,
   ...menu,
+  ...pages,
+  ...pwa,
+  ...settingDrawer,
+  ...settings,
+  ...tables,
 };
