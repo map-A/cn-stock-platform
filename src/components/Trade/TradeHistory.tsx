@@ -28,7 +28,7 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import type { TableProps } from 'antd/es/table';
 import dayjs from 'dayjs';
-import type { TradeRecord } from '../index';
+import type { TradeRecord } from '@/components/Trade';
 import './TradeHistory.less';
 
 const { Search } = Input;

@@ -61,7 +61,7 @@ const FundFlowHistory: React.FC<Props> = ({ fundFlows }) => {
 
   // 过滤流水数据
   const filteredFlows = useMemo(() => {
-    let filtered = fundFlows.filter(flow => {
+    const filtered = fundFlows.filter(flow => {
       // 类型过滤
       if (flowTypeFilter !== 'all' && flow.flow_type !== flowTypeFilter) {
         return false;

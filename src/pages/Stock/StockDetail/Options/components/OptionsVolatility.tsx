@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Statistic, Spin, DatePicker } from 'antd';
 import { Line, DualAxes } from '@ant-design/plots';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 
 interface VolatilityData {
   date: string;

@@ -177,7 +177,7 @@ const BacktestResultsComponent: React.FC<BacktestResultsProps> = ({
 
   // 收益曲线图
   const EquityCurve = () => {
-    const data = timeSeries.equity.map((item, index) => {
+    const data = timeSeries.equity.flatMap((item, index) => {
       const result = [{ date: item.date, value: item.value, type: '策略净值' }];
       if (timeSeries.benchmark?.[index]) {
         result.push({ 
@@ -187,7 +187,7 @@ const BacktestResultsComponent: React.FC<BacktestResultsProps> = ({
         });
       }
       return result;
-    }).flat();
+    });
 
     const config = {
       data,

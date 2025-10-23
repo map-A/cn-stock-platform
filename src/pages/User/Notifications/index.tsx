@@ -15,7 +15,7 @@ import {
   CheckOutlined,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import {
   getNotifications,
   markNotificationRead,

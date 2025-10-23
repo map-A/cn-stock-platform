@@ -8,7 +8,7 @@ import {
   PageContainer,
   ProCard,
   ProTable,
-  ProColumns,
+  type ProColumns,
 } from '@ant-design/pro-components';
 import {
   Descriptions,
@@ -27,7 +27,7 @@ import {
   FallOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import {
   getAnalystDetail,
   getAnalystAccuracy,

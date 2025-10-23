@@ -2,7 +2,7 @@
  * 财务报表服务
  * 提供利润表、资产负债表、现金流量表数据
  */
-import request from '../request';
+import request from '@/services/request';
 
 export interface FinancialQueryParams {
   stockCode: string;

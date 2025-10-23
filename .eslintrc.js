@@ -10,5 +10,7 @@ module.exports = {
     'max-lines': ['error', { max: 300, skipBlankLines: true, skipComments: true }],
     'max-lines-per-function': ['warn', { max: 150, skipBlankLines: true, skipComments: true }],
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"]
   },
 };

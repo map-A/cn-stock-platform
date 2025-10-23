@@ -8,7 +8,7 @@ import { Row, Col, Card, Statistic, Space, Typography, Tag } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import type { Sector } from '@/services/industry';
 import { formatNumber, formatPercent } from '@/utils/format';
-import styles from '../index.less';
+import styles from '@/styles/global.less';
 
 const { Text, Title } = Typography;
 

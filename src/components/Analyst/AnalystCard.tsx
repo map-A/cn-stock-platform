@@ -6,7 +6,7 @@
 import React from 'react';
 import { Card, Badge, Typography, Row, Col, Space, Statistic } from 'antd';
 import { TrophyOutlined, RiseOutlined } from '@ant-design/icons';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import type { AnalystInfo } from '@/services/analyst';
 
 const { Text, Title } = Typography;

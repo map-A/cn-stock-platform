@@ -7,7 +7,7 @@ import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { getCapitalFlow, getIndustryFlow } from '@/services/market';
 import { formatAmount } from '@/utils/format';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './index.less';
 
 const { Text, Title } = Typography;

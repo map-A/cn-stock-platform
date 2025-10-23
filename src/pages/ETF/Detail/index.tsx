@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import { Card, Descriptions, Tabs, Row, Col, Statistic, Tag, Spin } from 'antd';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { useRequest } from 'ahooks';
 import { getETFDetail } from '@/services/etf';
 import PriceTag from '@/components/PriceTag';

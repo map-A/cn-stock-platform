@@ -7,7 +7,7 @@ import { ClockCircleOutlined, LinkOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { getStockNews } from '@/services/stock';
 import { formatRelativeTime } from '@/utils/format';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './index.less';
 
 const { Text, Paragraph } = Typography;

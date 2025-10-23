@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import { Card, Table, Input, Select, Space, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { history } from 'umi';
-import { getETFList, ETFInfo } from '@/services/etf';
+import { history } from '@umijs/max';
+import { getETFList, type ETFInfo } from '@/services/etf';
 import PriceTag from '@/components/PriceTag';
 
 const { Search } = Input;

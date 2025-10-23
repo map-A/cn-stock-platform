@@ -1,6 +1,6 @@
 import React from 'react';
 import { Result, Button } from 'antd';
-import { useNavigate } from 'umi';
+import { useNavigate } from '@umijs/max';
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();

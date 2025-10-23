@@ -4,8 +4,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { compareService, CompareData } from '../../../services/compareService';
-import StockSelector from '../../../components/StockSelector';
+import { compareService, type CompareData } from '@/services/compareService';
+import StockSelector from '@/components/StockSelector';
 import './style.css';
 
 const METRICS_CONFIG = {

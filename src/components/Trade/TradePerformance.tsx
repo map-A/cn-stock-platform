@@ -11,7 +11,7 @@ import {
 import * as echarts from 'echarts';
 import dayjs from 'dayjs';
 import type { ColumnsType } from 'antd/es/table';
-import type { TradeRecord, TradeStats } from '../index';
+import type { TradeRecord, TradeStats } from '@/components/Trade';
 import './TradePerformance.less';
 
 const { Option } = Select;

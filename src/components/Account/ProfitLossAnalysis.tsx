@@ -130,7 +130,7 @@ const ProfitLossAnalysis: React.FC<Props> = ({ positions, accountId }) => {
     
     // 波动率（年化）
     const avgReturn = returns.reduce((sum, r) => sum + r, 0) / returns.length;
-    const variance = returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / returns.length;
+    const variance = returns.reduce((sum, r) => sum + (r - avgReturn) ** 2, 0) / returns.length;
     const volatility = Math.sqrt(variance * 365);
     
     // 夏普比率（假设无风险利率为3%）

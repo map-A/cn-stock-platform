@@ -17,7 +17,7 @@ import {
 } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined, SearchOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import dayjs, { Dayjs } from 'dayjs';
 import {
   getDarkPoolList,
@@ -26,7 +26,7 @@ import {
 } from '@/services/analysis';
 import { formatPrice, formatAmount, getPriceColor } from '@/utils/format';
 import type { DarkPoolData, DepartmentTrack as DepartmentTrackType } from '@/typings/analysis';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './index.less';
 
 const { Search } = Input;

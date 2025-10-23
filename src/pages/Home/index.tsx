@@ -18,10 +18,10 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { useNavigate, useIntl } from 'umi';
+import { useNavigate, useIntl } from '@umijs/max';
 import { getHotStocks } from '@/services/stock';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { useStockStore } from '@/models/stock';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { useStockStore } from '@/stores/modules/stock';
 import styles from './index.less';
 
 const { Title, Text } = Typography;

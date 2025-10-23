@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Spin, Statistic, Space, Tag, Tabs, Empty } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import {
   getIndustryDetail,
   getIndustryStocks,

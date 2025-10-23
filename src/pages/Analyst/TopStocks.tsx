@@ -8,11 +8,11 @@ import {
   PageContainer,
   ProCard,
   ProTable,
-  ProColumns,
+  type ProColumns,
 } from '@ant-design/pro-components';
 import { Typography, Space, Tag, message } from 'antd';
 import { StarOutlined, RiseOutlined } from '@ant-design/icons';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import { getTopAnalystStocks, type TopRatedStock } from '@/services/analyst';
 import { RatingBadge } from '@/components/Analyst';
 

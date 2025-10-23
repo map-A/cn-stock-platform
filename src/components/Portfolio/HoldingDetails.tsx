@@ -6,7 +6,7 @@ import {
   InfoCircleOutlined,
   MoreOutlined,
 } from '@ant-design/icons';
-import { ColumnsType } from 'antd/es/table';
+import type { ColumnsType } from 'antd/es/table';
 import './HoldingDetails.less';
 
 const { Text, Title } = Typography;

@@ -4,7 +4,7 @@ import { InfoCircleOutlined, ExportOutlined, RiseOutlined, FallOutlined } from '
 import * as echarts from 'echarts';
 import dayjs from 'dayjs';
 import type { ColumnsType } from 'antd/es/table';
-import type { TradeRecord } from '../index';
+import type { TradeRecord } from '@/components/Trade';
 import './ProfitLossReport.less';
 
 const { Option } = Select;

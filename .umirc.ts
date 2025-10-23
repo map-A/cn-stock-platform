@@ -2,10 +2,10 @@
 
 import { join } from 'node:path';
 import { defineConfig } from '@umijs/max';
-import defaultSettings from './defaultSettings';
-import proxy from './proxy';
+import defaultSettings from './src/config/defaultSettings';
+import proxy from './src/config/proxy';
 
-import routes from './routes';
+import routes from './src/config/routes';
 
 const { UMI_ENV = 'dev' } = process.env;
 

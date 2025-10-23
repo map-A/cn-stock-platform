@@ -5,9 +5,9 @@
 import React, { useState } from 'react';
 import { Card, Table, Tag, Statistic, Modal } from 'antd';
 import { useRequest } from 'ahooks';
-import { getETFProviders, getProviderETFs, ETFInfo } from '@/services/etf';
+import { getETFProviders, getProviderETFs, type ETFInfo } from '@/services/etf';
 import { BankOutlined } from '@ant-design/icons';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 
 const ETFProviders: React.FC = () => {
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);

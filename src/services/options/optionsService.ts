@@ -3,7 +3,7 @@
  * 提供期权筛选、计算、希腊字母等高级分析功能
  */
 
-import request from '../request';
+import request from '@/services/request';
 
 export interface OptionsChain {
   expiryDate: string;

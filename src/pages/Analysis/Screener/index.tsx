@@ -25,7 +25,7 @@ import {
   ReloadOutlined,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import {
   screenStock,
   saveScreenerCondition,
@@ -35,7 +35,7 @@ import {
 } from '@/services/analysis';
 import { formatPrice, formatPercent, formatMarketCap, getPriceColor } from '@/utils/format';
 import type { ScreenerParams, ScreenerResult } from '@/typings/analysis';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './index.less';
 
 const { Title, Text } = Typography;

@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { Card, Form, InputNumber, Button, Row, Col, Table, Tooltip, message } from 'antd';
 import { InfoCircleOutlined, CalculatorOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { Heatmap } from '@ant-design/plots';
 import {
   calculateDCF,
@@ -106,7 +106,7 @@ const DCFPage: React.FC = () => {
         key: i,
         year: `第${i + 1}年`,
         fcf,
-        discountFactor: 1 / Math.pow(1 + result.wacc, i + 1),
+        discountFactor: 1 / (1 + result.wacc) ** (i + 1),
         pv: result.discountedFCF[i],
       }))
     : [];

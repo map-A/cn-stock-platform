@@ -8,7 +8,7 @@ import { stringify } from 'querystring';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import React, { useCallback } from 'react';
 import { flushSync } from 'react-dom';
-import HeaderDropdown from '../HeaderDropdown';
+import HeaderDropdown from '@/components/HeaderDropdown';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;

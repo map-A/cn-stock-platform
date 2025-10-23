@@ -3,7 +3,7 @@
  * 提供市场热图、行业热图、板块热图等可视化数据
  */
 
-import request from '../request';
+import request from '@/services/request';
 
 /**
  * 热图单元格数据接口

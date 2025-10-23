@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Card, Table, Tag, Select, Space, Badge } from 'antd';
 import { useRequest } from 'ahooks';
 import { getNewLaunchETFs } from '@/services/etf';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import { RocketOutlined } from '@ant-design/icons';
 import PriceTag from '@/components/PriceTag';
 

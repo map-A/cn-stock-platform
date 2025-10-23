@@ -50,7 +50,7 @@ const PositionAnalysis: React.FC<Props> = ({ positions, totalAssets }) => {
 
   // 过滤和排序持仓数据
   const filteredPositions = useMemo(() => {
-    let filtered = positions.filter(pos => 
+    const filtered = positions.filter(pos => 
       pos.code.toLowerCase().includes(searchText.toLowerCase())
     );
 

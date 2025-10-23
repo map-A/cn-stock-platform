@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { backtestService, BacktestStrategy, BacktestResult } from '../../../services/backtestService';
+import { backtestService, type BacktestStrategy, type BacktestResult } from '@/services/backtestService';
 import './style.css';
 
 const BacktestingPage: React.FC = () => {

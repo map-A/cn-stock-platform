@@ -146,7 +146,7 @@ const PerformanceMetrics: React.FC<Props> = ({ accountId }) => {
     
     // 波动率（年化）
     const avgReturn = returns.reduce((sum, r) => sum + r, 0) / returns.length;
-    const variance = returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / returns.length;
+    const variance = returns.reduce((sum, r) => sum + (r - avgReturn) ** 2, 0) / returns.length;
     const volatility = Math.sqrt(variance * 365);
     
     // 夏普比率
@@ -173,7 +173,7 @@ const PerformanceMetrics: React.FC<Props> = ({ accountId }) => {
     // 下行波动率
     const negativeReturns = returns.filter(r => r < avgReturn);
     const downVolatility = negativeReturns.length > 0 ? 
-      Math.sqrt(negativeReturns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / negativeReturns.length * 365) : 0;
+      Math.sqrt(negativeReturns.reduce((sum, r) => sum + (r - avgReturn) ** 2, 0) / negativeReturns.length * 365) : 0;
     
     // Sortino比率
     const sortinoRatio = downVolatility > 0 ? (annualizedReturn - riskFreeRate) / downVolatility : 0;
@@ -271,10 +271,10 @@ const PerformanceMetrics: React.FC<Props> = ({ accountId }) => {
 
   // 收益率对比配置
   const returnComparisonConfig = {
-    data: performanceData.map(d => [
+    data: performanceData.flatMap(d => [
       { date: d.date, type: '策略收益', value: d.cumulative_return },
       { date: d.date, type: '基准收益', value: d.benchmark_return },
-    ]).flat(),
+    ]),
     xField: 'date',
     yField: 'value',
     seriesField: 'type',

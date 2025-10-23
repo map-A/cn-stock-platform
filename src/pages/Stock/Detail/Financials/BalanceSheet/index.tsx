@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Card, Select, Table, Tabs, Space, Button, message } from 'antd';
 import { DownloadOutlined, BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { Line } from '@ant-design/plots';
 import type { ColumnsType } from 'antd/es/table';
 import {
@@ -133,11 +133,11 @@ const BalanceSheetPage: React.FC = () => {
   
   // 资产趋势图表配置
   const assetChartConfig = {
-    data: dataList.map(item => [
+    data: dataList.flatMap(item => [
       { date: item.date, type: '总资产', value: item.assets.totalAssets / 100000000 },
       { date: item.date, type: '流动资产', value: item.assets.totalCurrentAssets / 100000000 },
       { date: item.date, type: '非流动资产', value: item.assets.totalNonCurrentAssets / 100000000 },
-    ]).flat(),
+    ]),
     xField: 'date',
     yField: 'value',
     seriesField: 'type',
@@ -152,11 +152,11 @@ const BalanceSheetPage: React.FC = () => {
   
   // 负债趋势图表配置
   const liabilityChartConfig = {
-    data: dataList.map(item => [
+    data: dataList.flatMap(item => [
       { date: item.date, type: '总负债', value: item.liabilities.totalLiabilities / 100000000 },
       { date: item.date, type: '流动负债', value: item.liabilities.totalCurrentLiabilities / 100000000 },
       { date: item.date, type: '非流动负债', value: item.liabilities.totalNonCurrentLiabilities / 100000000 },
-    ]).flat(),
+    ]),
     xField: 'date',
     yField: 'value',
     seriesField: 'type',

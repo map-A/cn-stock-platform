@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Card, Space, Statistic, Row, Col, Alert } from 'antd';
 import { TrophyOutlined, DollarOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { getTopDividendStocks, DividendStock } from '@/services/featuredLists';
+import { getTopDividendStocks, type DividendStock } from '@/services/featuredLists';
 import StockListTable from '@/components/StockListTable';
 import type { ColumnsType } from 'antd/es/table';
 

@@ -5,7 +5,7 @@
 import React from 'react';
 import { Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import PriceTag from '@/components/PriceTag';
 import type { StockListItem } from '@/services/featuredLists';
 

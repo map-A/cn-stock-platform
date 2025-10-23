@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Tabs, Spin, Empty, Tag, Space, Row, Col, Statistic } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import IndustryTable from './components/IndustryTable';
 import SectorOverview from './components/SectorOverview';
 import IndustryPerformanceChart from './components/IndustryPerformanceChart';

@@ -14,7 +14,7 @@ import {
   BellOutlined,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { useUserStore } from '@/models/user';
+import { useUserStore } from '@/stores/modules/user';
 import { getMembershipPlans, createPaymentOrder, getSubscriptionStatus } from '@/services/user';
 import type { MembershipPlan } from '@/typings/user';
 import PricingCard from './components/PricingCard';

@@ -5,8 +5,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { chatService, ChatMessage, ChatSession } from '../../../services/chatService';
-import { useUserStore } from '../../../stores/userStore';
+import { chatService, type ChatMessage, type ChatSession } from '@/services/chatService';
+import { useUserStore } from '@/stores/modules/user';
 import './style.css';
 
 // Agent类型配置

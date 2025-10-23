@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Card, Table, Tag, Select, Space, Badge, Tooltip } from 'antd';
 import { ThunderboltOutlined, FireOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { getUnusualActivity, UnusualActivity as UnusualActivityType } from '@/services/options';
+import { getUnusualActivity, type UnusualActivity as UnusualActivityType } from '@/services/options';
 import PriceTag from '@/components/PriceTag';
 
 const { Option } = Select;

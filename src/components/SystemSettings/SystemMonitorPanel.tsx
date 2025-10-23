@@ -145,11 +145,11 @@ const SystemMonitorPanel: React.FC = () => {
   const PerformanceTrend = () => {
     if (!metrics?.performance) return null;
 
-    const data = metrics.performance.map((item: any) => [
+    const data = metrics.performance.flatMap((item: any) => [
       { time: item.timestamp, value: item.cpu, type: 'CPU使用率' },
       { time: item.timestamp, value: item.memory, type: '内存使用率' },
       { time: item.timestamp, value: item.disk, type: '磁盘使用率' },
-    ]).flat();
+    ]);
 
     const config = {
       data,

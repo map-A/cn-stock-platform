@@ -29,8 +29,8 @@ import {
   LockOutlined,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { history } from 'umi';
-import { useUserStore } from '@/models/user';
+import { history } from '@umijs/max';
+import { useUserStore } from '@/stores/modules/user';
 import {
   getUserStats,
   uploadAvatar,

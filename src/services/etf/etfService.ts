@@ -3,7 +3,7 @@
  * 提供ETF列表、详情、持仓等核心数据接口
  */
 
-import request from '../request';
+import request from '@/services/request';
 
 export interface ETFInfo {
   code: string;

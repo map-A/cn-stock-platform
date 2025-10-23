@@ -3,17 +3,17 @@
  */
 import React, { useEffect } from 'react';
 import { Card, Row, Col, Tabs, Spin } from 'antd';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { useRequest } from 'ahooks';
 import { getStockInfo, getStockQuote } from '@/services/stock';
-import { useStockStore } from '@/models/stock';
+import { useStockStore } from '@/stores/modules/stock';
 import { useStockWebSocket } from '@/hooks/useWebSocket';
 
 import PriceCard from './components/PriceCard';
 import ChartPanel from './components/ChartPanel';
 import InfoPanel from './components/InfoPanel';
 import NewsPanel from './components/NewsPanel';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 import styles from './index.less';
 

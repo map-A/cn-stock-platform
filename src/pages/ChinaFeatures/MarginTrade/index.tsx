@@ -4,10 +4,10 @@ import { RiseOutlined, FallOutlined, DollarOutlined, PercentageOutlined } from '
 import { useRequest } from 'ahooks';
 import { getMarginTradeOverview, getMarginTradeTop } from '@/services/china-features';
 import { Line } from '@ant-design/plots';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import { formatCurrency, formatPercent, formatNumber } from '@/utils/format';
 import type { MarginTradeStock } from '@/typings/china-features';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import styles from './index.less';
 
 const { Title, Text } = Typography;
@@ -50,10 +50,10 @@ const MarginTrade: React.FC = () => {
 
   // 图表配置
   const chartConfig = {
-    data: overviewData?.map(item => [
+    data: overviewData?.flatMap(item => [
       { date: item.date, value: item.marginBalance / 100000000, type: '融资余额' },
       { date: item.date, value: item.shortBalance / 100000000, type: '融券余额' },
-    ]).flat() || [],
+    ]) || [],
     xField: 'date',
     yField: 'value',
     seriesField: 'type',

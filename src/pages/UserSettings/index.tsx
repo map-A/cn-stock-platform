@@ -50,7 +50,7 @@ import {
   PreferencePanel,
   DevicePanel,
   ActivityPanel,
-} from '../../components/UserSettings';
+} from '@/components/UserSettings';
 
 // API和类型导入
 import {

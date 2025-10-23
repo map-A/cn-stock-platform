@@ -21,7 +21,7 @@ import {
 } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { useWatchlistStore } from '@/stores/watchlist';
-import { useNavigate } from 'umi';
+import { useNavigate } from '@umijs/max';
 import type { ColumnsType } from 'antd/es/table';
 import type { WatchlistStock } from '@/services/watchlist';
 import styles from './index.less';

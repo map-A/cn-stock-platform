@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Card, Form, Row, Col, InputNumber, Select, Button, Table, Space, Tag } from 'antd';
 import { SearchOutlined, ReloadOutlined, SaveOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { screenOptions, OptionsContract } from '@/services/options';
+import { screenOptions, type OptionsContract } from '@/services/options';
 import PriceTag from '@/components/PriceTag';
 
 const { Option } = Select;

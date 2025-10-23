@@ -76,7 +76,7 @@ const StockSearch: React.FC<StockSearchProps> = ({
 
       stockList.forEach(item => {
         const stock = item.info;
-        let matchType: SearchResult['matchType'] = undefined;
+        let matchType: SearchResult['matchType'] ;
         let matchText = '';
 
         // 匹配股票代码

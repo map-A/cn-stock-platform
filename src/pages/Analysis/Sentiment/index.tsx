@@ -24,7 +24,7 @@ import {
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { Line } from '@ant-design/plots';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import {
   getMarketSentiment,
   getSentimentHistory,
@@ -33,7 +33,7 @@ import {
 } from '@/services/analysis';
 import { formatPercent, getPriceColor } from '@/utils/format';
 import type { StockSentiment, TrendingStock } from '@/typings/analysis';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './index.less';
 
 const { Text, Title } = Typography;

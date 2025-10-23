@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message, Typography } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Link, history } from 'umi';
+import { Link, history } from '@umijs/max';
 import styles from './index.less';
 
 const { Title, Text } = Typography;

@@ -16,7 +16,7 @@ import {
   DollarOutlined,
   MenuOutlined,
 } from '@ant-design/icons';
-import { useNavigate, useLocation } from 'umi';
+import { useNavigate, useLocation } from '@umijs/max';
 import styles from './index.less';
 
 interface SidebarProps {

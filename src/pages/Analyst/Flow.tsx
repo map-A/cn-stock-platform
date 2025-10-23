@@ -8,7 +8,7 @@ import {
   PageContainer,
   ProCard,
   ProTable,
-  ProColumns,
+  type ProColumns,
 } from '@ant-design/pro-components';
 import {
   Typography,
@@ -25,7 +25,7 @@ import {
   PlusCircleOutlined,
   MinusCircleOutlined,
 } from '@ant-design/icons';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import {
   getLatestRatingChanges,
   type RatingChange,

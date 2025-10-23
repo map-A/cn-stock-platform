@@ -3,7 +3,7 @@ import { Card, Table, Space, Tag, DatePicker, Button, Select, Statistic, Row, Co
 import { ArrowUpOutlined, ArrowDownOutlined, ReloadOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import type { ColumnsType } from 'antd/es/table';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 
 /**
  * 期权交易记录

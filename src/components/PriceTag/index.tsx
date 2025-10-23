@@ -32,6 +32,7 @@ const PriceTag: React.FC<PriceTagProps> = ({
 
   const isPositive = (change || changePercent || 0) >= 0;
   const color = getPriceColor(change || changePercent);
+  const tagColor = isPositive ? '#00FC50' : '#FF2F1F'; // 按COLOR_SCHEME规范
   const icon = isPositive ? <ArrowUpOutlined /> : <ArrowDownOutlined />;
 
   // 根据尺寸设置字体大小
@@ -45,9 +46,13 @@ const PriceTag: React.FC<PriceTagProps> = ({
   if (mode === 'percent-only' && changePercent !== undefined) {
     return (
       <Tag
-        color={isPositive ? 'red' : 'green'}
+        style={{ 
+          color: tagColor,
+          backgroundColor: 'rgba(0, 252, 80, 0.1)',
+          borderColor: tagColor,
+          fontSize 
+        }}
         icon={icon}
-        style={{ fontSize }}
       >
         {formatPercent(changePercent)}
       </Tag>
@@ -74,9 +79,13 @@ const PriceTag: React.FC<PriceTagProps> = ({
         </span>
       )}
       <Tag
-        color={isPositive ? 'red' : 'green'}
+        style={{
+          color: tagColor,
+          backgroundColor: isPositive ? 'rgba(0, 252, 80, 0.1)' : 'rgba(255, 47, 31, 0.1)',
+          borderColor: tagColor,
+          fontSize
+        }}
         icon={icon}
-        style={{ fontSize }}
       >
         {change !== undefined && formatPrice(change)}
         {change !== undefined && changePercent !== undefined && ' '}

@@ -103,7 +103,7 @@ const SystemSettingsPage: React.FC = () => {
           await clearSystemCache();
           message.success('系统缓存已清理');
           break;
-        case 'export':
+        case 'export': {
           const blob = await exportSystemConfig();
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
@@ -113,6 +113,7 @@ const SystemSettingsPage: React.FC = () => {
           window.URL.revokeObjectURL(url);
           message.success('配置导出成功');
           break;
+        }
         case 'refresh':
           await loadSystemStatus();
           message.success('状态已刷新');

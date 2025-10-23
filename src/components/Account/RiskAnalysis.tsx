@@ -85,7 +85,7 @@ const RiskAnalysis: React.FC<Props> = ({ accountData, positions }) => {
     const profitLossRatios = positions.map(p => p.profit_loss_ratio);
     const avgProfitLossRatio = profitLossRatios.reduce((sum, r) => sum + r, 0) / profitLossRatios.length;
     const volatility = Math.sqrt(
-      profitLossRatios.reduce((sum, r) => sum + Math.pow(r - avgProfitLossRatio, 2), 0) / profitLossRatios.length
+      profitLossRatios.reduce((sum, r) => sum + (r - avgProfitLossRatio) ** 2, 0) / profitLossRatios.length
     );
 
     // 亏损风险 - 亏损持仓比例

@@ -3,7 +3,7 @@
  * 提供恐慌贪婪指数、市场情绪指标、投资者情绪等数据
  */
 
-import request from '../request';
+import request from '@/services/request';
 
 /**
  * 恐慌贪婪指数接口

@@ -98,7 +98,7 @@ const VaRDisplay: React.FC<VaRDisplayProps> = ({
       const minVaR = Math.min(...values);
       
       // 计算波动率
-      const variance = values.reduce((sum, val) => sum + Math.pow(val - avgVaR, 2), 0) / values.length;
+      const variance = values.reduce((sum, val) => sum + (val - avgVaR) ** 2, 0) / values.length;
       const volatility = Math.sqrt(variance);
       
       // 计算准确性（预测违反次数）

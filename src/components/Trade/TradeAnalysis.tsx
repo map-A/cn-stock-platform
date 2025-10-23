@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 import * as echarts from 'echarts';
 import dayjs from 'dayjs';
-import type { TradeRecord, TradeStats } from '../index';
+import type { TradeRecord, TradeStats } from '@/components/Trade';
 import './TradeAnalysis.less';
 
 const { Option } = Select;

@@ -1,20 +1,20 @@
-import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
+import { history } from '@umijs/max';
 import React from 'react';
 import {
   AvatarDropdown,
   AvatarName,
-  Footer,
   Question,
   SelectLang,
 } from '@/components';
 import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
-import defaultSettings from '../config/defaultSettings';
-import { errorConfig } from './requestErrorConfig';
+import defaultSettings from '@/config/defaultSettings';
+import { errorConfig } from '@/requestErrorConfig';
 import '@ant-design/v5-patch-for-react-19';
+// 导入 API 拦截器，确保在应用启动时被初始化
+import '@/api/interceptors';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isDevOrTest = isDev || process.env.CI;
@@ -80,7 +80,7 @@ export const layout: RunTimeLayoutConfig = ({
     waterMarkProps: {
       content: initialState?.currentUser?.name,
     },
-    footerRender: () => <Footer />,
+    footerRender: () => null, // Footer 未定义
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login

@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Card, Space, Alert } from 'antd';
 import { RiseOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { getHighestCallVolume, OptionsStock } from '@/services/featuredLists';
+import { getHighestCallVolume, type OptionsStock } from '@/services/featuredLists';
 import StockListTable from '@/components/StockListTable';
 import type { ColumnsType } from 'antd/es/table';
 

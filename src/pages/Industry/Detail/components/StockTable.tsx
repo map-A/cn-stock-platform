@@ -5,7 +5,7 @@
 import React from 'react';
 import { Table, Space, Typography } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import type { ColumnsType } from 'antd/es/table';
 import type { IndustryStock } from '@/services/industry';
 import { formatNumber, formatPercent } from '@/utils/format';

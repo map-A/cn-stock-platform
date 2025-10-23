@@ -159,23 +159,23 @@ export const formatSymbol = (symbol: string, withExchange: boolean = true): stri
 };
 
 /**
- * 获取涨跌颜色
+ * 获取涨跌颜色 - 按照COLOR_SCHEME.md规范
  * @param value 涨跌值
  */
 export const getPriceColor = (value: number | undefined): string => {
   if (value === undefined || value === null || isNaN(value)) {
-    return '#666';
+    return '#9CA3AF'; // 次文本颜色（灰）
   }
 
   if (value > 0) {
-    return '#f5222d'; // 红色（涨）
+    return '#00FC50'; // 上升 - 亮绿色
   }
 
   if (value < 0) {
-    return '#52c41a'; // 绿色（跌）
+    return '#FF2F1F'; // 下跌 - 鲜红色
   }
 
-  return '#666'; // 灰色（平）
+  return '#FFA838'; // 中性 - 橙色
 };
 
 /**

@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox, message, Typography, Space, Card, Alert } from 'antd';
 import { UserOutlined, LockOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { history, useModel, useIntl, SelectLang, Link } from 'umi';
+import { history, useModel, useIntl, SelectLang, Link } from '@umijs/max';
 import { login } from '@/services/user';
 import { flushSync } from 'react-dom';
 import styles from './index.less';

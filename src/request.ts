@@ -1,5 +1,5 @@
-import { RequestConfig } from '@umijs/max';
-import { history } from 'umi';
+import type { RequestConfig } from '@umijs/max';
+import { history } from '@umijs/max';
 import { message } from 'antd';
 
 export const requestConfig: RequestConfig = {

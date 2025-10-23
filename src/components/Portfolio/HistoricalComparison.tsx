@@ -279,7 +279,7 @@ const HistoricalComparison: React.FC<HistoricalComparisonProps> = ({
     // 计算夏普比率和波动率
     const returns = historicalData.slice(1).map(data => data.portfolioReturn);
     const avgReturn = returns.reduce((sum, ret) => sum + ret, 0) / returns.length;
-    const variance = returns.reduce((sum, ret) => sum + Math.pow(ret - avgReturn, 2), 0) / returns.length;
+    const variance = returns.reduce((sum, ret) => sum + (ret - avgReturn) ** 2, 0) / returns.length;
     const volatility = Math.sqrt(variance * 252); // 年化波动率
     const sharpeRatio = volatility > 0 ? (avgReturn * 252) / volatility : 0; // 假设无风险利率为0
 
@@ -293,7 +293,7 @@ const HistoricalComparison: React.FC<HistoricalComparisonProps> = ({
     
     for (let i = 0; i < portfolioReturns.length; i++) {
       covariance += (portfolioReturns[i] - avgReturn) * (benchmarkReturns[i] - avgBenchmarkReturn);
-      benchmarkVariance += Math.pow(benchmarkReturns[i] - avgBenchmarkReturn, 2);
+      benchmarkVariance += (benchmarkReturns[i] - avgBenchmarkReturn) ** 2;
     }
     
     const beta = benchmarkVariance > 0 ? covariance / benchmarkVariance : 1;

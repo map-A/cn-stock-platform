@@ -7,10 +7,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   learningService,
-  LearningArticle,
-  ArticleCategory,
-  ArticleTag,
-} from '../../../services/learningService';
+  type LearningArticle,
+  type ArticleCategory,
+  type ArticleTag,
+} from '@/services/learningService';
 import './style.css';
 
 const DIFFICULTY_LABELS = {

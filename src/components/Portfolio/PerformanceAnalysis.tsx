@@ -7,7 +7,7 @@ import {
   LineChartOutlined 
 } from '@ant-design/icons';
 import * as echarts from 'echarts';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import './PerformanceAnalysis.less';
 
 const { Text } = Typography;
@@ -255,7 +255,7 @@ const PerformanceAnalysis: React.FC<PerformanceAnalysisProps> = ({
         };
         break;
 
-      case 'drawdown':
+      case 'drawdown': {
         // 计算回撤数据
         const drawdownData = calculateDrawdown(performanceData);
         option = {
@@ -323,6 +323,7 @@ const PerformanceAnalysis: React.FC<PerformanceAnalysisProps> = ({
           ],
         };
         break;
+      }
     }
 
     chartInstance.current.setOption(option, true);

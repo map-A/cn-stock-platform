@@ -4,10 +4,10 @@ import { RiseOutlined, FallOutlined, SwapOutlined, GlobalOutlined } from '@ant-d
 import { useRequest } from 'ahooks';
 import { getNorthMoneyFlow, getNorthMoneyTop } from '@/services/china-features';
 import { Line } from '@ant-design/plots';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import { formatCurrency, formatPercent } from '@/utils/format';
 import type { NorthMoneyFlow, NorthMoneyStock } from '@/typings/china-features';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import styles from './index.less';
 
 const { Title, Text } = Typography;

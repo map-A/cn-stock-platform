@@ -3,7 +3,7 @@
  * 提供行业分类、行业数据、行业表现等功能
  */
 
-import request from '../request';
+import request from '@/services/request';
 
 /**
  * 行业信息接口
