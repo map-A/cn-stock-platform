@@ -7,7 +7,6 @@ import React, { useMemo } from 'react';
 import { Column } from '@ant-design/plots';
 import { Card, Space, Typography, Segmented } from 'antd';
 import type { IndustryPerformance } from '@/services/industry';
-import styles from '@/styles/global.less';
 
 const { Title } = Typography;
 
@@ -131,7 +130,7 @@ const IndustryPerformanceChart: React.FC<IndustryPerformanceChartProps> = ({
           />
         </div>
 
-        <div className={styles.performanceChart}>
+        <div>
           <Column {...config} />
         </div>
       </Space>

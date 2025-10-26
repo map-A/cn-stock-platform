@@ -8,7 +8,6 @@ import { Row, Col, Card, Statistic, Space, Typography, Tag } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import type { Sector } from '@/services/industry';
 import { formatNumber, formatPercent } from '@/utils/format';
-import styles from '@/styles/global.less';
 
 const { Text, Title } = Typography;
 
@@ -32,7 +31,6 @@ const SectorOverview: React.FC<SectorOverviewProps> = ({ data, onSectorClick }) 
     return (
       <Col xs={24} sm={12} md={8} lg={6} key={sector.code}>
         <Card
-          className={styles.industryCard}
           hoverable
           onClick={() => onSectorClick?.(sector.code)}
         >
