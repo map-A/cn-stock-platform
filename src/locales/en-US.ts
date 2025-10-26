@@ -6,6 +6,7 @@ import pwa from './en-US/pwa';
 import settingDrawer from './en-US/settingDrawer';
 import settings from './en-US/settings';
 import tables from './en-US/tables';
+import common from './en-US/common';
 
 export default {
   'navBar.lang': 'Languages',
@@ -31,6 +32,7 @@ export default {
   'user.profile': 'Profile',
   'user.settings': 'Settings',
   
+  ...common,
   ...component,
   ...globalHeader,
   ...menu,

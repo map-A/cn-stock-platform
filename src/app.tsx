@@ -11,10 +11,13 @@ import {
 } from '@/components';
 import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
 import defaultSettings from '@/config/defaultSettings';
+import { getLayoutSettings } from '@/config/themeToken';
 import { errorConfig } from '@/requestErrorConfig';
 import '@ant-design/v5-patch-for-react-19';
 // 导入 API 拦截器，确保在应用启动时被初始化
 import '@/api/interceptors';
+// 导入全局主题样式变量
+import '@/styles/theme-variables.css';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isDevOrTest = isDev || process.env.CI;
@@ -40,6 +43,22 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
+  
+  // 应用动态主题token到默认设置
+  const initialSettings = getLayoutSettings(defaultSettings as Partial<LayoutSettings>);
+  
+  // 初始化时设置CSS变量到:root
+  if (initialSettings.token) {
+    const root = document.documentElement;
+    Object.entries(initialSettings.token).forEach(([key, value]) => {
+      if (typeof value === 'string') {
+        // 将驼峰命名转换为kebab-case
+        const cssVarName = `--ant-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
+        root.style.setProperty(cssVarName, value);
+      }
+    });
+  }
+  
   // 如果不是登录页面，执行
   const { location } = history;
   if (
@@ -51,12 +70,12 @@ export async function getInitialState(): Promise<{
     return {
       fetchUserInfo,
       currentUser,
-      settings: defaultSettings as Partial<LayoutSettings>,
+      settings: initialSettings,
     };
   }
   return {
     fetchUserInfo,
-    settings: defaultSettings as Partial<LayoutSettings>,
+    settings: initialSettings,
   };
 }
 
@@ -122,16 +141,32 @@ export const layout: RunTimeLayoutConfig = ({
             enableDarkTheme
             settings={initialState?.settings}
             onSettingChange={(settings) => {
+              // 应用动态主题token
+              const updatedSettings = getLayoutSettings(settings);
+              
+              // 动态更新CSS变量到:root
+              if (updatedSettings.token) {
+                const root = document.documentElement;
+                Object.entries(updatedSettings.token).forEach(([key, value]) => {
+                  if (typeof value === 'string') {
+                    // 将驼峰命名转换为kebab-case
+                    const cssVarName = `--ant-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
+                    root.style.setProperty(cssVarName, value);
+                  }
+                });
+              }
+              
               setInitialState((preInitialState) => ({
                 ...preInitialState,
-                settings,
+                settings: updatedSettings,
               }));
             }}
           />
         </>
       );
     },
-    ...initialState?.settings,
+    // 应用动态主题token到当前settings
+    ...(initialState?.settings || {}),
   };
 };
 
@@ -143,4 +178,29 @@ export const layout: RunTimeLayoutConfig = ({
 export const request: RequestConfig = {
   baseURL: isDev ? '' : 'https://proapi.azurewebsites.net',
   ...errorConfig,
+};
+
+/**
+ * @name Ant Design 运行时配置
+ * @description 配置运行时的主题，确保首次加载时主题正确
+ * @doc https://umijs.org/docs/max/antd#运行时配置
+ */
+export const antd = (memo: any) => {
+  // 获取初始化的主题设置
+  const initialSettings = getLayoutSettings(defaultSettings as Partial<LayoutSettings>);
+  const token = initialSettings.token || {};
+
+  return {
+    ...memo,
+    theme: {
+      cssVar: {
+        prefix: '--ant',
+      },
+      token: {
+        fontFamily: 'AlibabaSans, sans-serif',
+        // 应用初始主题token
+        ...token,
+      },
+    },
+  };
 };

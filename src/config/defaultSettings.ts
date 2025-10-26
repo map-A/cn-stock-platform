@@ -15,15 +15,8 @@ const Settings: ProLayoutProps & {
   pwa: false,
   logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
-  token: {
-    bgLayout: '#09090B',
-    sider: {
-      colorMenuBackground: '#09090B',
-      colorTextMenu: '#E5E7EB',
-      colorTextMenuSelected: '#00FC50',
-      colorBgMenuItemSelected: '#1A1D23',
-    },
-  },
+  // 注意：移除硬编码的 token，让主题系统动态控制
+  // 主题切换会自动应用正确的背景色
 };
 
 export default Settings;

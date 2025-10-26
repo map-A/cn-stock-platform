@@ -1,6 +1,6 @@
 .chatContainer {
   height: 100%;
-  background: #09090B;
+  background: var(--ant-color-bg-layout);
   display: flex;
   flex-direction: column;
 }
@@ -9,13 +9,13 @@
   display: flex;
   height: calc(100vh - 64px);
   gap: 1px;
-  background: #2A2E39;
+  background: var(--ant-color-bg-elevated);
 }
 
 // 左侧会话面板
 .sessionPanel {
   width: 280px;
-  background: #09090B;
+  background: var(--ant-color-bg-layout);
   border-right: 1px solid #2A2E39;
   display: flex;
   flex-direction: column;
@@ -35,7 +35,7 @@
 
   h3 {
     margin: 0;
-    color: #E5E7EB;
+    color: var(--ant-color-text);
     font-size: 14px;
     font-weight: 600;
   }
@@ -64,11 +64,11 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #4B5563;
+    background: var(--ant-color-text-tertiary);
     border-radius: 3px;
 
     &:hover {
-      background: #6B7280;
+      background: var(--ant-color-text-quaternary);
     }
   }
 }
@@ -93,7 +93,7 @@
 }
 
 .sessionTitle {
-  color: #E5E7EB;
+  color: var(--ant-color-text);
   font-size: 14px;
   font-weight: 500;
   overflow: hidden;
@@ -102,7 +102,7 @@
 }
 
 .sessionTime {
-  color: #6B7280;
+  color: var(--ant-color-text-tertiary);
   font-size: 12px;
   margin-top: 4px;
 }
@@ -112,7 +112,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #09090B;
+  background: var(--ant-color-bg-layout);
   overflow: hidden;
 }
 
@@ -122,14 +122,14 @@
   align-items: center;
   padding: 16px;
   border-bottom: 1px solid #2A2E39;
-  background: #0F0F12;
+  background: var(--ant-color-bg-text-hover);
 }
 
 .chatTitle {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #E5E7EB;
+  color: var(--ant-color-text);
   font-size: 16px;
   font-weight: 600;
 }
@@ -151,11 +151,11 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #4B5563;
+    background: var(--ant-color-text-tertiary);
     border-radius: 4px;
 
     &:hover {
-      background: #6B7280;
+      background: var(--ant-color-text-quaternary);
     }
   }
 }
@@ -176,13 +176,13 @@
 }
 
 .emptyState h2 {
-  color: #E5E7EB;
+  color: var(--ant-color-text);
   font-size: 20px;
   margin-bottom: 8px;
 }
 
 .emptyState p {
-  color: #9CA3AF;
+  color: var(--ant-color-text-secondary);
   font-size: 14px;
   margin-bottom: 16px;
   max-width: 400px;
@@ -200,7 +200,7 @@
 .promptCard {
   background: rgba(0, 252, 80, 0.05) !important;
   border-color: rgba(0, 252, 80, 0.2) !important;
-  color: #E5E7EB;
+  color: var(--ant-color-text);
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -227,7 +227,7 @@
 
     .messageBubble {
       background: linear-gradient(135deg, #00FC50 0%, #00D540 100%);
-      color: #09090B;
+      color: var(--ant-color-text);
     }
   }
 
@@ -235,9 +235,9 @@
     justify-content: flex-start;
 
     .messageBubble {
-      background: #1F2937;
-      color: #E5E7EB;
-      border: 1px solid #2A2E39;
+      background: var(--ant-color-bg-elevated);
+      color: var(--ant-color-text);
+      border: 1px solid var(--ant-color-border);
     }
   }
 }
@@ -267,7 +267,7 @@
 
 .thinking {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--ant-color-text-secondary);
   margin-bottom: 8px;
   font-style: italic;
 }
@@ -285,7 +285,7 @@
 
 .sourcesLabel {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--ant-color-text-secondary);
   margin-right: 8px;
 }
 
@@ -293,7 +293,7 @@
 .inputArea {
   padding: 16px;
   border-top: 1px solid #2A2E39;
-  background: #0F0F12;
+  background: var(--ant-color-bg-text-hover);
   display: flex;
   gap: 8px;
   align-items: flex-end;
@@ -304,9 +304,9 @@
 
   :global {
     .ant-input {
-      background: #1F2937 !important;
-      border-color: #2A2E39 !important;
-      color: #E5E7EB !important;
+      background: var(--ant-color-bg-elevated) !important;
+      border-color: var(--ant-color-border) !important;
+      color: var(--ant-color-text) !important;
       font-size: 14px;
 
       &:hover {
@@ -319,7 +319,7 @@
       }
 
       &::placeholder {
-        color: #6B7280;
+        color: var(--ant-color-text-tertiary);
       }
     }
   }
@@ -328,7 +328,7 @@
 .sendBtn {
   background: linear-gradient(135deg, #00FC50 0%, #00D540 100%) !important;
   border-color: transparent !important;
-  color: #09090B !important;
+  color: var(--ant-color-text) !important;
   font-weight: 600;
   height: auto;
   padding: 8px 16px;
@@ -338,6 +338,6 @@
   }
 
   &:disabled {
-    background: #6B7280 !important;
+    background: var(--ant-color-text-quaternary) !important;
   }
 }

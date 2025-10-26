@@ -1,0 +1,373 @@
+/**
+ * 全局主题样式变量
+ * 使用CSS变量确保所有页面响应主题切换
+ */
+
+/* 
+  使用Ant Design的CSS变量系统
+  这些变量会根据主题自动更新
+*/
+
+/* 深色主题变量 */
+:root {
+  --ant-color-bg-layout: #09090B;
+  --ant-color-bg-container: #1E222D;
+  --ant-color-bg-elevated: #2A2E39;
+  --ant-color-text: #E5E7EB;
+  --ant-color-text-secondary: #9CA3AF;
+  --ant-color-text-tertiary: #6B7280;
+  --ant-color-text-quaternary: #4B5563;
+  --ant-color-border: #2A2E39;
+  --ant-color-border-secondary: #3A3F4B;
+  --ant-color-bg-text-hover: rgba(255, 255, 255, 0.06);
+}
+
+/* 确保页面内容区域使用CSS变量 */
+#root {
+  background-color: var(--ant-color-bg-layout);
+  color: var(--ant-color-text);
+  min-height: 100vh;
+}
+
+/* ProLayout的内容区域 */
+.ant-pro-layout {
+  background-color: var(--ant-color-bg-layout);
+  color: var(--ant-color-text);
+}
+
+.ant-pro-layout-content {
+  background-color: var(--ant-color-bg-layout);
+  color: var(--ant-color-text);
+}
+
+/* 页面容器 */
+.ant-pro-page-container {
+  background-color: var(--ant-color-bg-layout);
+  color: var(--ant-color-text);
+}
+
+/* 卡片和面板 */
+.ant-card {
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border);
+  color: var(--ant-color-text);
+}
+
+.ant-card-head {
+  color: var(--ant-color-text);
+  border-color: var(--ant-color-border);
+}
+
+.ant-card-head-title {
+  color: var(--ant-color-text);
+}
+
+/* 表格 */
+.ant-table {
+  background-color: var(--ant-color-bg-container);
+  color: var(--ant-color-text);
+}
+
+.ant-table-thead > tr > th {
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border);
+  color: var(--ant-color-text);
+}
+
+.ant-table-tbody > tr > td {
+  border-color: var(--ant-color-border);
+  color: var(--ant-color-text);
+}
+
+.ant-table-tbody > tr:hover > td {
+  background-color: var(--ant-color-bg-text-hover);
+}
+
+/* 输入框 */
+.ant-input,
+.ant-input-affix-wrapper {
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border);
+  color: var(--ant-color-text);
+}
+
+.ant-input::placeholder,
+.ant-input-affix-wrapper input::placeholder {
+  color: var(--ant-color-text-secondary);
+}
+
+/* 选择器 */
+.ant-select-selector {
+  background-color: var(--ant-color-bg-container) !important;
+  border-color: var(--ant-color-border) !important;
+  color: var(--ant-color-text) !important;
+}
+
+.ant-select-selection-item {
+  color: var(--ant-color-text);
+}
+
+/* Modal */
+.ant-modal-content {
+  background-color: var(--ant-color-bg-container);
+  color: var(--ant-color-text);
+}
+
+.ant-modal-header {
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border);
+}
+
+.ant-modal-title {
+  color: var(--ant-color-text);
+}
+
+/* Drawer */
+.ant-drawer-content {
+  background-color: var(--ant-color-bg-container);
+  color: var(--ant-color-text);
+}
+
+.ant-drawer-header {
+  color: var(--ant-color-text);
+  border-color: var(--ant-color-border);
+}
+
+.ant-drawer-title {
+  color: var(--ant-color-text);
+}
+
+/* 下拉菜单 */
+.ant-dropdown-menu {
+  background-color: var(--ant-color-bg-elevated);
+}
+
+.ant-dropdown-menu-item {
+  color: var(--ant-color-text);
+}
+
+.ant-dropdown-menu-item:hover {
+  background-color: var(--ant-color-bg-text-hover);
+  color: var(--ant-color-text);
+}
+
+/* Tabs */
+.ant-tabs-nav {
+  background-color: transparent;
+}
+
+.ant-tabs-tab {
+  color: var(--ant-color-text-secondary);
+}
+
+.ant-tabs-tab:hover {
+  color: var(--ant-color-text);
+}
+
+.ant-tabs-tab.ant-tabs-tab-active {
+  color: var(--ant-color-primary);
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--ant-color-primary);
+}
+
+/* Popover */
+.ant-popover-inner {
+  background-color: var(--ant-color-bg-elevated);
+  color: var(--ant-color-text);
+}
+
+/* Tooltip */
+.ant-tooltip-inner {
+  background-color: var(--ant-color-bg-elevated);
+  color: var(--ant-color-text);
+}
+
+/* 通用文本颜色 */
+body {
+  color: var(--ant-color-text);
+}
+
+/* 标题 */
+h1, h2, h3, h4, h5, h6,
+.ant-typography h1,
+.ant-typography h2,
+.ant-typography h3,
+.ant-typography h4,
+.ant-typography h5,
+.ant-typography h6 {
+  color: var(--ant-color-text);
+}
+
+/* 段落和文本 */
+p, span, div {
+  color: inherit;
+}
+
+/* 二级文本 */
+.ant-typography-secondary,
+.ant-descriptions-item-label {
+  color: var(--ant-color-text-secondary) !important;
+}
+
+/* 描述列表 */
+.ant-descriptions-item-content {
+  color: var(--ant-color-text);
+}
+
+/* 统计数字 */
+.ant-statistic-title {
+  color: var(--ant-color-text-secondary);
+}
+
+.ant-statistic-content {
+  color: var(--ant-color-text);
+}
+
+/* 列表 */
+.ant-list-item {
+  color: var(--ant-color-text);
+  border-color: var(--ant-color-border);
+}
+
+.ant-list-item-meta-title {
+  color: var(--ant-color-text);
+}
+
+.ant-list-item-meta-description {
+  color: var(--ant-color-text-secondary);
+}
+
+/* 按钮文本 */
+.ant-btn-text {
+  color: var(--ant-color-text);
+}
+
+.ant-btn-link {
+  color: var(--ant-color-primary);
+}
+
+/* 标签 */
+.ant-tag {
+  color: var(--ant-color-text);
+}
+
+/* 徽章 */
+.ant-badge-status-text {
+  color: var(--ant-color-text);
+}
+
+/* 面包屑 */
+.ant-breadcrumb {
+  color: var(--ant-color-text-secondary);
+}
+
+.ant-breadcrumb-link {
+  color: var(--ant-color-text-secondary);
+}
+
+.ant-breadcrumb-link:hover {
+  color: var(--ant-color-text);
+}
+
+/* 菜单 */
+.ant-menu {
+  color: var(--ant-color-text);
+}
+
+.ant-menu-item {
+  color: var(--ant-color-text);
+}
+
+.ant-menu-item:hover {
+  color: var(--ant-color-primary);
+}
+
+/* 步骤条 */
+.ant-steps-item-title {
+  color: var(--ant-color-text);
+}
+
+.ant-steps-item-description {
+  color: var(--ant-color-text-secondary);
+}
+
+/* 时间轴 */
+.ant-timeline-item-content {
+  color: var(--ant-color-text);
+}
+
+/* 折叠面板 */
+.ant-collapse {
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border);
+}
+
+.ant-collapse-header {
+  color: var(--ant-color-text);
+}
+
+.ant-collapse-content {
+  color: var(--ant-color-text);
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border);
+}
+
+/* 警告提示 */
+.ant-alert {
+  border-color: var(--ant-color-border);
+}
+
+/* 空状态 */
+.ant-empty-description {
+  color: var(--ant-color-text-secondary);
+}
+
+/* 分页 */
+.ant-pagination-item {
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border);
+}
+
+.ant-pagination-item a {
+  color: var(--ant-color-text);
+}
+
+/* 确保所有硬编码的深色背景改为使用CSS变量 */
+[style*="background: #1e222d"],
+[style*="background: #09090b"],
+[style*="background: #2a2e39"],
+[style*="background-color: #1e222d"],
+[style*="background-color: #09090b"],
+[style*="background-color: #2a2e39"] {
+  background: var(--ant-color-bg-container) !important;
+  background-color: var(--ant-color-bg-container) !important;
+}
+
+/* 确保所有硬编码的浅色背景改为使用CSS变量 */
+[style*="background: #f0f2f5"],
+[style*="background: #fafafa"],
+[style*="background-color: #f0f2f5"],
+[style*="background-color: #fafafa"] {
+  background: var(--ant-color-bg-layout) !important;
+  background-color: var(--ant-color-bg-layout) !important;
+}
+
+/* 确保所有硬编码的文本颜色改为使用CSS变量 */
+[style*="color: #e5e7eb"],
+[style*="color: #E5E7EB"],
+[style*="color: #9ca3af"],
+[style*="color: #9CA3AF"] {
+  color: var(--ant-color-text) !important;
+}
+
+[style*="color: #6b7280"],
+[style*="color: #6B7280"] {
+  color: var(--ant-color-text-secondary) !important;
+}
+
+/* 平滑过渡 */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}

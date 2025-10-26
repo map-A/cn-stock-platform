@@ -82,7 +82,7 @@ export default {
   
   // 首页
   'home.hero.title': '研究您的交易想法',
-  'home.hero.subtitle': '准确的中国A股数据。查看股票价格、期权数据、新闻、财务、预测、图表等。',
+  'home.hero.subtitle': '查看股票价格、期权数据、新闻、财务、预测、图表等。',
   'home.search.placeholder': '搜索股票代码或名称...',
   'home.quickCard.aiAgent': 'AI 股票助手',
   'home.quickCard.movers': '涨跌榜',

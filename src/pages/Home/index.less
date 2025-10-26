@@ -8,11 +8,11 @@
 
 // Hero 区域 - 搜索和标题
 .heroSection {
-  border-bottom: 1px solid #2a2e39;
+  border-bottom: 1px solid var(--ant-color-border);
   border-radius: 5px;
   padding: 48px 0;
   margin-bottom: 24px;
-  background: #1e222d;
+  background: var(--ant-color-bg-container);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -43,7 +43,7 @@
 
 .heroSubtitle {
   font-size: 22px !important;
-  color: #9ca3af !important;
+  color: var(--ant-color-text-secondary) !important;
   margin: 0 !important;
   line-height: 1.8;
   font-weight: 400 !important;
@@ -57,9 +57,9 @@
 }
 
 .searchInput {
-  background-color: #2a2e39 !important;
-  border-color: #3a3f4b !important;
-  color: #e5e7eb !important;
+  background-color: var(--ant-color-bg-container) !important;
+  border-color: var(--ant-color-border-secondary) !important;
+  color: var(--ant-color-text) !important;
   font-size: 16px !important;
   padding: 12px 16px !important;
   
@@ -73,7 +73,7 @@
   }
 
   input::placeholder {
-    color: #6b7280;
+    color: var(--ant-color-text-tertiary);
   }
 }
 
@@ -108,8 +108,8 @@
 }
 
 .quickCard {
-  border: 1px solid #2a2e39;
-  background: #1e222d;
+  border: 1px solid var(--ant-color-border);
+  background: var(--ant-color-bg-container);
   border-radius: 5px;
   padding: 16px;
   cursor: pointer;
@@ -120,7 +120,7 @@
     transform: translateY(-4px);
     border-color: #00fc50;
     box-shadow: 0 8px 16px rgba(0, 252, 80, 0.1);
-    background: linear-gradient(135deg, #1e222d 0%, rgba(0, 252, 80, 0.05) 100%);
+    background: linear-gradient(135deg, var(--ant-color-bg-container) 0%, rgba(0, 252, 80, 0.05) 100%);
   }
 }
 
@@ -139,7 +139,7 @@
 .quickCardLabel {
   font-size: 14px;
   font-weight: 600;
-  color: #e5e7eb;
+  color: var(--ant-color-text);
   text-align: center;
 }
 
@@ -169,8 +169,8 @@
 
 // 卡片样式
 .section {
-  background: #1e222d;
-  border: 1px solid #2a2e39;
+  background: var(--ant-color-bg-container);
+  border: 1px solid var(--ant-color-border);
   border-radius: 5px;
   padding: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -193,7 +193,7 @@
     margin: 0 !important;
     font-size: 16px !important;
     font-weight: 600 !important;
-    color: #e5e7eb !important;
+    color: var(--ant-color-text) !important;
   }
 }
 
@@ -224,14 +224,14 @@
 .newsTitle {
   font-size: 14px;
   font-weight: 500;
-  color: #e5e7eb;
+  color: var(--ant-color-text);
   margin-bottom: 4px;
   line-height: 1.4;
 }
 
 .newsTime {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--ant-color-text-tertiary);
 }
 
 // 占位符内容
@@ -265,5 +265,47 @@
 
 .earningsDate {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--ant-color-text-tertiary);
+}
+
+// 确保所有文本颜色正确
+.homeContainer {
+  color: var(--ant-color-text);
+  
+  * {
+    color: inherit;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--ant-color-text) !important;
+  }
+  
+  p, span, div, li, label {
+    color: inherit;
+  }
+  
+  // 确保Ant Design组件文本正确
+  :global(.ant-typography),
+  :global(.ant-typography-paragraph),
+  :global(.ant-typography-text) {
+    color: var(--ant-color-text);
+  }
+  
+  // 表格文本
+  :global(.ant-table) {
+    color: var(--ant-color-text);
+    
+    :global(.ant-table-cell) {
+      color: var(--ant-color-text);
+    }
+  }
+  
+  // 标签页
+  :global(.ant-tabs-tab) {
+    color: var(--ant-color-text-secondary);
+    
+    &:global(.ant-tabs-tab-active) {
+      color: var(--ant-color-text);
+    }
+  }
 }

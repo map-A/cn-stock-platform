@@ -1,6 +1,6 @@
 .notifications {
   padding: 24px;
-  background: #f5f7fa;
+  background: var(--ant-color-bg-layout);
   min-height: calc(100vh - 64px);
 
   .notificationItem {
@@ -11,14 +11,14 @@
     padding: 16px !important;
 
     &:hover {
-      background: #fafafa;
+      background: var(--ant-color-bg-container);
     }
 
     &.unread {
-      background: #e6f7ff;
+      background: var(--ant-color-primary-bg);
 
       &:hover {
-        background: #d6f0ff;
+        background: var(--ant-color-primary-bg-hover);
       }
     }
 
@@ -26,7 +26,7 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: #f5f5f5;
+      background: var(--ant-color-fill-quaternary);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -48,13 +48,13 @@
     .description {
       p {
         margin: 0 0 8px 0;
-        color: #666;
+        color: var(--ant-color-text-secondary);
         font-size: 14px;
       }
 
       .time {
         font-size: 12px;
-        color: #999;
+        color: var(--ant-color-text-tertiary);
       }
     }
   }
