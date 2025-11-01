@@ -33,13 +33,28 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
+    // 开发模式下使用mock用户数据，跳过登录
+    if (isDev) {
+      return {
+        name: '开发用户',
+        username: 'dev',
+        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        userid: '00000001',
+        email: 'dev@example.com',
+        access: 'admin',
+      };
+    }
+    
     try {
       const msg = await queryCurrentUser({
         skipErrorHandler: true,
       });
       return msg.data;
     } catch (_error) {
-      history.push(loginPath);
+      // 生产环境才跳转登录页
+      if (!isDev) {
+        history.push(loginPath);
+      }
     }
     return undefined;
   };
@@ -59,13 +74,13 @@ export async function getInitialState(): Promise<{
     });
   }
   
-  // 如果不是登录页面，执行
+  // 开发模式下直接获取用户信息，跳过登录检查
   const { location } = history;
-  if (
+  if (isDev || (
     ![loginPath, '/user/register', '/user/register-result'].includes(
       location.pathname,
     )
-  ) {
+  )) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,

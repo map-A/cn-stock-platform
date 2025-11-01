@@ -449,7 +449,6 @@ For questions about these API specifications:
 ### Phase 4: Community (Weeks 13-16)
 - Strategy marketplace
 - Community features
-- Learning resources
 - Social features
 
 ### Phase 5: Polish (Weeks 17+)

@@ -29,8 +29,10 @@ import styles from './index.less';
 const Watchlist: React.FC = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [addStockForm] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedWatchlistId, setSelectedWatchlistId] = useState<string>();
+  const [addStockModalVisible, setAddStockModalVisible] = useState(false);
+  const [selectedWatchlistId, setSelectedWatchlistId] = useState<number>();
 
   const {
     watchlists,
@@ -40,6 +42,7 @@ const Watchlist: React.FC = () => {
     fetchWatchlistDetail,
     createWatchlist,
     deleteWatchlist,
+    addStock,
     removeStock,
   } = useWatchlistStore();
 
@@ -68,20 +71,36 @@ const Watchlist: React.FC = () => {
     }
   };
 
-  const handleDeleteWatchlist = async (id: string) => {
+  const handleDeleteWatchlist = async (id: number) => {
     const success = await deleteWatchlist(id);
     if (success && selectedWatchlistId === id) {
       setSelectedWatchlistId(undefined);
     }
   };
 
-  const handleSelectWatchlist = (id: string) => {
+  const handleSelectWatchlist = (id: number) => {
     setSelectedWatchlistId(id);
     fetchWatchlistDetail(id);
   };
 
   const handleStockClick = (symbol: string) => {
     navigate(`/stock/${symbol}`);
+  };
+
+  const handleAddStock = async () => {
+    if (!selectedWatchlistId) {
+      return;
+    }
+    try {
+      const values = await addStockForm.validateFields();
+      const success = await addStock(selectedWatchlistId, values.symbol);
+      if (success) {
+        setAddStockModalVisible(false);
+        addStockForm.resetFields();
+      }
+    } catch (error) {
+      console.error('Validation failed:', error);
+    }
   };
 
   const columns: ColumnsType<WatchlistStock> = [
@@ -259,6 +278,13 @@ const Watchlist: React.FC = () => {
                       title="创建时间"
                       value={new Date(currentWatchlist.createdAt).toLocaleDateString()}
                     />
+                    <Button
+                      type="primary"
+                      icon={<PlusOutlined />}
+                      onClick={() => setAddStockModalVisible(true)}
+                    >
+                      添加股票
+                    </Button>
                   </Space>
                 </div>
               </Card>
@@ -319,6 +345,39 @@ const Watchlist: React.FC = () => {
           >
             <Input.TextArea rows={3} placeholder="输入自选股描述（可选）" />
           </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        title="添加股票到自选股"
+        open={addStockModalVisible}
+        onOk={handleAddStock}
+        onCancel={() => {
+          setAddStockModalVisible(false);
+          addStockForm.resetFields();
+        }}
+        okText="添加"
+        cancelText="取消"
+      >
+        <Form form={addStockForm} layout="vertical">
+          <Form.Item
+            name="symbol"
+            label="股票代码"
+            rules={[
+              { required: true, message: '请输入股票代码' },
+              { 
+                pattern: /^(sh|sz)\d{6}$/i, 
+                message: '请输入正确的股票代码格式（如：sh600519, sz000651）' 
+              },
+            ]}
+          >
+            <Input placeholder="例如：sh600519（贵州茅台）或 sz000651（格力电器）" />
+          </Form.Item>
+          <div style={{ color: '#8c8c8c', fontSize: '12px', marginTop: '-8px' }}>
+            提示：股票代码格式为 sh/sz + 6位数字<br />
+            - sh 表示上海证券交易所<br />
+            - sz 表示深圳证券交易所
+          </div>
         </Form>
       </Modal>
     </PageContainer>

@@ -120,7 +120,6 @@ export default [
       { path: '/community/sentiment', name: 'sentiment', component: './Community/SentimentTracker' },
       { path: '/community/compare', name: 'compare', component: './Community/Compare' },
       { path: '/community/backtest', name: 'backtest', component: './Community/Backtesting' },
-      { path: '/community/learning', name: 'learning', component: './Community/LearningCenter' },
     ],
   },
 

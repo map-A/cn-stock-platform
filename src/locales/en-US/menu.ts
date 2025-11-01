@@ -78,7 +78,6 @@ export default {
   'menu.community.sentiment': 'Sentiment Tracker',
   'menu.community.compare': 'Compare Tool',
   'menu.community.backtest': 'Backtesting',
-  'menu.community.learning': 'Learning Center',
   
   // Home Page
   'home.hero.title': 'Research Your Trading Ideas',

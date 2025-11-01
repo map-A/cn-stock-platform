@@ -127,12 +127,12 @@
 - **Data Management** (`/user/data`) - Data export and backup
 - **API Keys** (`/user/api-keys`) - API integration
 
-#### 13. Community & Learning
+#### 13. Community 
 - **Community Hub** (`/community`) - Community features
   - AI Chat (`/community/ai-chat`)
   - Backtesting Competition (`/community/backtesting`)
   - Strategy Comparison (`/community/compare`)
-  - Learning Center (`/community/learning-center`)
+
   - News Flow (`/community/news-flow`)
   - Sentiment Tracker (`/community/sentiment-tracker`)
 
@@ -419,7 +419,6 @@
 - [ ] Premium subscription system
 - [ ] Strategy marketplace
 - [ ] Community features
-- [ ] Learning center
 - [ ] Advanced analytics
 
 ### Phase 5 - Admin & System

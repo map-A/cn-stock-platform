@@ -6,7 +6,6 @@
 export { default as newsService } from './newsService';
 export { default as sentimentService } from './sentimentService';
 export { default as aiChatService } from './aiChatService';
-export { default as learningService } from './learningService';
 export { default as toolsService } from './toolsService';
 
 // 类型导出
@@ -22,7 +21,6 @@ export type {
   AIAgent,
   RandomChat,
 } from './aiChatService';
-export type { Article, ArticleCategory } from './learningService';
 export type {
   ComparisonData,
   BacktestParams,

@@ -78,7 +78,6 @@ export default {
   'menu.community.sentiment': '情绪追踪',
   'menu.community.compare': '对比工具',
   'menu.community.backtest': '回测',
-  'menu.community.learning': '学习中心',
   
   // 首页
   'home.hero.title': '研究您的交易想法',

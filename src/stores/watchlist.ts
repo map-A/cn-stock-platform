@@ -9,11 +9,11 @@ interface WatchlistState {
   loading: boolean;
   // Actions
   fetchWatchlists: () => Promise<void>;
-  fetchWatchlistDetail: (id: string) => Promise<void>;
+  fetchWatchlistDetail: (id: number) => Promise<void>;
   createWatchlist: (name: string, description?: string) => Promise<boolean>;
-  deleteWatchlist: (id: string) => Promise<boolean>;
-  addStock: (watchlistId: string, symbol: string) => Promise<boolean>;
-  removeStock: (watchlistId: string, symbol: string) => Promise<boolean>;
+  deleteWatchlist: (id: number) => Promise<boolean>;
+  addStock: (watchlistId: number, symbol: string) => Promise<boolean>;
+  removeStock: (watchlistId: number, symbol: string) => Promise<boolean>;
   setCurrentWatchlist: (watchlist: WatchlistDetail | null) => void;
   isStockInWatchlist: (symbol: string) => boolean;
 }
@@ -41,7 +41,7 @@ export const useWatchlistStore = create<WatchlistState>()(
           }
         },
 
-        fetchWatchlistDetail: async (id: string) => {
+        fetchWatchlistDetail: async (id: number) => {
           set({ loading: true });
           try {
             const response = await watchlistService.getWatchlistDetail(id);
@@ -72,7 +72,7 @@ export const useWatchlistStore = create<WatchlistState>()(
           }
         },
 
-        deleteWatchlist: async (id: string) => {
+        deleteWatchlist: async (id: number) => {
           try {
             const response = await watchlistService.deleteWatchlist(id);
             if (response.success) {
@@ -88,7 +88,7 @@ export const useWatchlistStore = create<WatchlistState>()(
           }
         },
 
-        addStock: async (watchlistId: string, symbol: string) => {
+        addStock: async (watchlistId: number, symbol: string) => {
           try {
             const response = await watchlistService.addStock(watchlistId, symbol);
             if (response.success) {
@@ -104,7 +104,7 @@ export const useWatchlistStore = create<WatchlistState>()(
           }
         },
 
-        removeStock: async (watchlistId: string, symbol: string) => {
+        removeStock: async (watchlistId: number, symbol: string) => {
           try {
             const response = await watchlistService.removeStock(watchlistId, symbol);
             if (response.success) {

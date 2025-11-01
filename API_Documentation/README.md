@@ -25,7 +25,7 @@ API_Documentation/
 6. **Strategy & Backtesting** - Strategy creation, backtesting, performance analysis
 7. **Options Trading** - Options chain, greeks, volatility analysis
 8. **China-specific Features** - Long Hu Bang, North money flow, margin trading
-9. **Community Features** - Chat, learning center, news flow
+9. **Community Features** - Chat, news flow
 10. **Admin & System Settings** - System configuration, permissions, data sources
 
 ## Document Overview

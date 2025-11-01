@@ -66,10 +66,37 @@ export async function searchStock(keyword: string): Promise<StockInfo[]> {
 }
 
 /**
- * 获取热门股票
+ * 获取热门股票 - 从Market Service获取实时行情
  * @param limit 数量限制
  */
 export async function getHotStocks(limit: number = 10): Promise<StockInfo[]> {
+  try {
+    // 先尝试从Market Service获取实时行情
+    const response = await fetch('http://localhost:8002/api/quotes');
+    if (response.ok) {
+      const data = await response.json();
+      // 转换Market Service的数据格式到前端格式
+      if (data.data && Array.isArray(data.data)) {
+        return data.data.map((quote: any) => ({
+          symbol: quote.symbol,
+          name: quote.name,
+          price: quote.current_price,
+          change: quote.change,
+          changePercent: quote.change_percent,
+          volume: quote.volume,
+          open: quote.open_price,
+          high: quote.high_price,
+          low: quote.low_price,
+          prevClose: quote.prev_close,
+          amount: quote.amount,
+        })).slice(0, limit);
+      }
+    }
+  } catch (error) {
+    console.warn('Market Service不可用，使用备用数据源', error);
+  }
+  
+  // 备用：从Gateway获取
   return get('/stock/hot', { limit });
 }
 
