@@ -8,7 +8,7 @@
 export type NewsSentiment = 'positive' | 'negative' | 'neutral';
 
 // 新闻分类
-export type NewsCategory = 'market' | 'stock' | 'policy' | 'finance';
+export type NewsCategory = 'market' | 'stock' | 'policy' | 'finance' | 'other';
 
 // 新闻项接口
 export interface NewsItem {

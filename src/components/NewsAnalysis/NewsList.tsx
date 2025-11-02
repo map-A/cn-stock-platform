@@ -39,7 +39,7 @@ import {
   EyeOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { getNewsList, markNewsAsRead } from '@/services/news';
+import { getNewsList } from '@/services/news';
 import { useNewsWebSocket } from '@/hooks/useNewsWebSocket';
 import type { NewsItem, NewsFilterParams, NewsCategory, NewsSentiment } from '@/types/news';
 import './NewsList.less';
@@ -186,17 +186,6 @@ const NewsList: React.FC<NewsListProps> = ({
    */
   const handleNewsClick = async (news: NewsItem) => {
     try {
-      // 标记为已读
-      await markNewsAsRead(news.id);
-      
-      // 更新本地状态
-      setNewsList(prev =>
-        prev.map(item =>
-          item.id === news.id
-            ? { ...item, readCount: (item.readCount || 0) + 1 }
-            : item
-        )
-      );
       
       onNewsClick?.(news);
     } catch (error) {
@@ -321,6 +310,7 @@ const NewsList: React.FC<NewsListProps> = ({
                 <Option value="stock">个股</Option>
                 <Option value="policy">政策</Option>
                 <Option value="finance">财经</Option>
+                <Option value="other">其他</Option>
               </Select>
             </Col>
             

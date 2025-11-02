@@ -232,14 +232,7 @@ export async function deleteNewsSubscription(subscriptionId: string): Promise<vo
   });
 }
 
-/**
- * 标记新闻为已读
- */
-export async function markNewsAsRead(newsId: string): Promise<void> {
-  return request(`${API_PREFIX}/${newsId}/read`, {
-    method: 'POST',
-  });
-}
+
 
 /**
  * 获取热门新闻
