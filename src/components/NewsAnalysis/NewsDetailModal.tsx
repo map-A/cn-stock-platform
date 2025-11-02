@@ -46,6 +46,7 @@ const { Title, Paragraph, Text } = Typography;
 export interface NewsDetailModalProps {
   visible: boolean;
   newsId: string | null;
+  newsData?: NewsItem | null; 
   onClose: () => void;
   onRelatedNewsClick?: (news: NewsItem) => void;
 }
@@ -53,6 +54,7 @@ export interface NewsDetailModalProps {
 const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
   visible,
   newsId,
+  newsData,
   onClose,
   onRelatedNewsClick,
 }) => {
@@ -69,7 +71,8 @@ const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
       setNewsDetail(detail);
     } catch (error) {
       console.error('加载新闻详情失败:', error);
-      message.error('加载新闻详情失败');
+      // 不显示错误消息，因为我们会使用 newsData
+      console.log('Will use newsData instead');
     } finally {
       setLoading(false);
     }
@@ -128,12 +131,17 @@ const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
    * 监听newsId变化
    */
   useEffect(() => {
-    if (visible && newsId) {
+    if (visible && newsData) {
+      // 如果直接传入了新闻数据，使用它
+      setNewsDetail(newsData as NewsDetail);
+      setLoading(false);
+    } else if (visible && newsId) {
+      // 否则尝试加载
       loadNewsDetail(newsId);
     } else {
       setNewsDetail(null);
     }
-  }, [visible, newsId]);
+  }, [visible, newsId, newsData]);
 
   return (
     <Modal
@@ -203,26 +211,19 @@ const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
             </div>
           )}
 
-          {/* 新闻摘要 */}
-          <Card size="small" style={{ marginBottom: 16, backgroundColor: '#fafafa' }}>
-            <Paragraph style={{ marginBottom: 0, fontWeight: 500 }}>
-              {newsDetail.summary}
-            </Paragraph>
-          </Card>
-
           {/* 新闻正文 */}
-          <div className="news-content">
-            <Paragraph>
+          <div className="news-content" style={{ marginBottom: 16 }}>
+            <Paragraph style={{ fontSize: '14px', lineHeight: '1.8' }}>
               {newsDetail.fullContent || newsDetail.content}
             </Paragraph>
           </div>
 
           {/* 相关股票 */}
-          {newsDetail.relatedStocks.length > 0 && (
+          {((newsDetail.stocks && newsDetail.stocks.length > 0) || (newsDetail.relatedStocks && newsDetail.relatedStocks.length > 0)) && (
             <div className="related-stocks" style={{ marginBottom: 16 }}>
               <Text strong style={{ marginRight: 8 }}>相关股票:</Text>
               <Space wrap>
-                {newsDetail.relatedStocks.map(stock => (
+                {(newsDetail.stocks || newsDetail.relatedStocks || []).map(stock => (
                   <Tag key={stock} color="blue">
                     {stock}
                   </Tag>
@@ -339,15 +340,7 @@ const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
           {/* 操作按钮 */}
           <div className="news-actions">
             <Space>
-              <Button
-                type="primary"
-                icon={<LinkOutlined />}
-                onClick={() => window.open(newsDetail.url, '_blank')}
-              >
-                查看原文
-              </Button>
-              
-              <Tooltip title="标记为相关">
+              <Tooltip title="标记为有用">
                 <Button
                   icon={<HeartOutlined />}
                   onClick={() => handleFeedback({ relevant: true, sentiment: 'accurate' })}
@@ -356,7 +349,7 @@ const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
                 </Button>
               </Tooltip>
               
-              <Tooltip title="标记为不相关">
+              <Tooltip title="标记为无用">
                 <Button
                   onClick={() => handleFeedback({ relevant: false, sentiment: 'inaccurate' })}
                 >

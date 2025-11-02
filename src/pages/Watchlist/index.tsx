@@ -273,7 +273,6 @@ const Watchlist: React.FC = () => {
                     )}
                   </div>
                   <Space size="large">
-                    <Statistic title="股票数量" value={currentWatchlist.stockCount} />
                     <Statistic
                       title="创建时间"
                       value={new Date(currentWatchlist.createdAt).toLocaleDateString()}

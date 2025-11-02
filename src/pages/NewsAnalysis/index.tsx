@@ -29,6 +29,7 @@ const { TabPane } = Tabs;
 
 const NewsAnalysis: React.FC = () => {
   const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const [showNewsDetail, setShowNewsDetail] = useState(false);
   const [activeCategory, setActiveCategory] = useState<NewsCategory | undefined>();
   const [activeSentiment, setActiveSentiment] = useState<NewsSentiment | undefined>();
@@ -53,6 +54,7 @@ const NewsAnalysis: React.FC = () => {
    */
   const handleNewsClick = (news: NewsItem) => {
     setSelectedNewsId(news.id);
+    setSelectedNews(news);
     setShowNewsDetail(true);
   };
 
@@ -62,6 +64,7 @@ const NewsAnalysis: React.FC = () => {
   const handleCloseNewsDetail = () => {
     setShowNewsDetail(false);
     setSelectedNewsId(null);
+    setSelectedNews(null);
   };
 
   /**
@@ -271,6 +274,7 @@ const NewsAnalysis: React.FC = () => {
       <NewsDetailModal
         visible={showNewsDetail}
         newsId={selectedNewsId}
+        newsData={selectedNews}
         onClose={handleCloseNewsDetail}
         onRelatedNewsClick={handleNewsClick}
       />

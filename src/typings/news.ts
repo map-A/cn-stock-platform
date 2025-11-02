@@ -16,19 +16,20 @@ export interface NewsItem {
   title: string;
   summary: string;
   content?: string;
-  url: string;
+  url?: string;
   source: string;
   category: NewsCategory;
-  relatedStocks: string[];
+  stocks: string[]; // 关联股票代码列表
+  relatedStocks?: string[]; // 向后兼容
   sentiment: NewsSentiment;
   sentimentScore: number;
   publishedAt: string;
-  createdAt: string;
+  createdAt?: string;
   imageUrl?: string;
   author?: string;
   tags?: string[];
   readCount?: number;
-  importance?: 'high' | 'medium' | 'low';
+  importance?: number | 'high' | 'medium' | 'low'; // API返回数字类型
 }
 
 // 新闻筛选参数

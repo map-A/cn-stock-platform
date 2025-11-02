@@ -75,6 +75,8 @@ const NewsList: React.FC<NewsListProps> = ({
     sortBy: 'publishedAt',
     sortOrder: 'desc',
   });
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [refreshInterval] = useState(30000); // 30秒自动刷新
 
   /**
    * 加载新闻列表
@@ -204,8 +206,18 @@ const NewsList: React.FC<NewsListProps> = ({
   /**
    * 获取重要性标签
    */
-  const getImportanceTag = (importance?: 'high' | 'medium' | 'low') => {
+  const getImportanceTag = (importance?: number | 'high' | 'medium' | 'low') => {
     if (!importance) return null;
+    
+    // 如果是数字，转换为对应的等级
+    let level: 'high' | 'medium' | 'low';
+    if (typeof importance === 'number') {
+      if (importance >= 8) level = 'high';
+      else if (importance >= 5) level = 'medium';
+      else level = 'low';
+    } else {
+      level = importance;
+    }
     
     const configs = {
       high: { color: 'red', text: '重要' },
@@ -213,7 +225,7 @@ const NewsList: React.FC<NewsListProps> = ({
       low: { color: 'default', text: '普通' },
     };
     
-    const config = configs[importance];
+    const config = configs[level];
     return (
       <Tag color={config.color} style={{ fontSize: '11px' }}>
         {config.text}
@@ -243,6 +255,20 @@ const NewsList: React.FC<NewsListProps> = ({
       loadNewsList(newFilters);
     }
   }, [category, stockCode]);
+
+  /**
+   * 自动刷新
+   */
+  useEffect(() => {
+    if (!autoRefresh) return;
+    
+    const timer = setInterval(() => {
+      // 只刷新第一页
+      loadNewsList({ ...filters, page: 1 });
+    }, refreshInterval);
+    
+    return () => clearInterval(timer);
+  }, [autoRefresh, filters, refreshInterval]);
 
   return (
     <div className="news-list">
@@ -310,21 +336,6 @@ const NewsList: React.FC<NewsListProps> = ({
             style={{ cursor: 'pointer' }}
           >
             <List.Item.Meta
-              avatar={
-                item.imageUrl ? (
-                  <Avatar
-                    size={64}
-                    src={item.imageUrl}
-                    shape="square"
-                  />
-                ) : (
-                  <Avatar
-                    size={64}
-                    icon={<UserOutlined />}
-                    shape="square"
-                  />
-                )
-              }
               title={
                 <div className="news-title">
                   <Text strong ellipsis style={{ maxWidth: '70%' }}>
@@ -366,17 +377,17 @@ const NewsList: React.FC<NewsListProps> = ({
                     </Space>
                   </div>
                   
-                  {item.relatedStocks.length > 0 && (
+                  {item.stocks && item.stocks.length > 0 && (
                     <div className="related-stocks" style={{ marginTop: 8 }}>
                       <Space wrap>
-                        {item.relatedStocks.slice(0, 3).map(stock => (
+                        {item.stocks.slice(0, 3).map(stock => (
                           <Tag key={stock} size="small" color="blue">
                             {stock}
                           </Tag>
                         ))}
-                        {item.relatedStocks.length > 3 && (
+                        {item.stocks.length > 3 && (
                           <Text type="secondary" style={{ fontSize: '12px' }}>
-                            +{item.relatedStocks.length - 3}
+                            +{item.stocks.length - 3}
                           </Text>
                         )}
                       </Space>
