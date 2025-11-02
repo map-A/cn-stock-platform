@@ -26,6 +26,7 @@ import {
   Badge,
   Button,
   Skeleton,
+  message,
 } from 'antd';
 import {
   SearchOutlined,
@@ -39,6 +40,7 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { getNewsList, markNewsAsRead } from '@/services/news';
+import { useNewsWebSocket } from '@/hooks/useNewsWebSocket';
 import type { NewsItem, NewsFilterParams, NewsCategory, NewsSentiment } from '@/types/news';
 import './NewsList.less';
 
@@ -77,6 +79,29 @@ const NewsList: React.FC<NewsListProps> = ({
   });
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [refreshInterval] = useState(30000); // 30秒自动刷新
+
+  // WebSocket实时新闻
+  const { isConnected, latestNews } = useNewsWebSocket({
+    onMessage: (news) => {
+      console.log('Received real-time news:', news);
+      // 将新新闻插入到列表顶部
+      setNewsList(prev => {
+        // 检查是否已存在（避免重复）
+        if (prev.some(item => item.id === news.id)) {
+          return prev;
+        }
+        message.success(`收到新闻: ${news.title.substring(0, 30)}...`);
+        return [news, ...prev];
+      });
+      setTotal(prev => prev + 1);
+    },
+    onConnected: () => {
+      console.log('WebSocket connected');
+    },
+    onDisconnected: () => {
+      console.log('WebSocket disconnected');
+    },
+  });
 
   /**
    * 加载新闻列表
@@ -275,14 +300,14 @@ const NewsList: React.FC<NewsListProps> = ({
       {showFilters && (
         <Card size="small" style={{ marginBottom: 16 }}>
           <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12} md={8}>
-              <Search
-                placeholder="搜索新闻标题、内容"
-                allowClear
-                onSearch={handleSearch}
-                style={{ width: '100%' }}
-              />
-            </Col>
+              <Col xs={24} sm={12} md={8}>
+                <Search
+                  placeholder="搜索新闻标题、内容"
+                  allowClear
+                  onSearch={handleSearch}
+                  style={{ width: '100%' }}
+                />
+              </Col>
             
             <Col xs={12} sm={6} md={4}>
               <Select
