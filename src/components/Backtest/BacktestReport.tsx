@@ -32,7 +32,7 @@ import {
   EyeOutlined,
 } from '@ant-design/icons';
 import { Line, Column, Pie } from '@ant-design/plots';
-import type { BacktestReport, BacktestResults } from '@/types/backtest';
+import type { BacktestReport, BacktestResults } from '@/typings/backtest';
 import { formatNumber, formatPercent, formatCurrency } from '@/utils/format';
 import moment from 'moment';
 

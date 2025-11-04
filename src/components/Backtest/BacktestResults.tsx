@@ -31,7 +31,7 @@ import {
   InfoCircleOutlined,
 } from '@ant-design/icons';
 import { Line } from '@ant-design/plots';
-import type { BacktestResults } from '@/types/backtest';
+import type { BacktestResults } from '@/typings/backtest';
 import { formatNumber, formatPercent, formatCurrency } from '@/utils/format';
 import moment from 'moment';
 

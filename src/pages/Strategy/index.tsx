@@ -1,502 +1,608 @@
 /**
- * AI策略管理主页面
- * 
- * 功能特性:
- * - 策略列表展示
- * - 策略创建和配置
- * - 回测结果查看
- * - 性能分析监控
- * - 策略执行管理
+ * 策略列表页面 - 组件化版本
+ * 使用 StrategyCard 和 StrategyStats 组件
  */
 
 import React, { useState, useEffect } from 'react';
 import {
-  Layout,
   Card,
-  Button,
-  Table,
-  Tag,
-  Space,
-  Modal,
-  Drawer,
-  Tabs,
   Row,
   Col,
-  Statistic,
-  Alert,
-  Typography,
-  Tooltip,
+  Button,
+  Input,
+  Select,
+  Drawer,
+  Tabs,
   message,
-  Popconfirm,
+  Empty,
+  Typography,
+  Descriptions,
+  Timeline,
+  Badge,
+  Tag,
+  Space,
+  Table,
+  Segmented,
+  Spin,
 } from 'antd';
 import {
   PlusOutlined,
-  PlayCircleOutlined,
-  PauseCircleOutlined,
-  SettingOutlined,
-  BarChartOutlined,
-  FileTextOutlined,
-  DeleteOutlined,
-  CopyOutlined,
-  ExperimentOutlined,
+  ReloadOutlined,
+  SearchOutlined,
+  AppstoreOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { getStrategies, deleteStrategy } from '@/services/strategy';
-import StrategyConfigForm from '@/components/Strategy/StrategyConfigForm';
-import BacktestResults from '@/components/Strategy/BacktestResults';
-import PerformanceAnalysis from '@/components/Strategy/PerformanceAnalysis';
-import StrategyMonitor from '@/components/Strategy/StrategyMonitor';
-import MultiFactorDisplay from '@/components/Strategy/MultiFactorDisplay';
-import type { StrategyInfo, StrategyStatus, StrategyType } from '@/types/strategy';
-import { useIntl } from '@umijs/max';
+import { getBacktests } from '@/services/backtestService';
+import StrategyCard from '@/components/Strategy/StrategyCard';
+import StrategyStats from '@/components/Strategy/StrategyStats';
+import CreateStrategyModal from '@/components/Strategy/CreateStrategyModal';
+import EditStrategyModal from '@/components/Strategy/EditStrategyModal';
 import './index.less';
 
-const { Content } = Layout;
+const { Text } = Typography;
+const { Search } = Input;
+const { Option } = Select;
 const { TabPane } = Tabs;
-const { Title, Text } = Typography;
 
-const StrategyPage: React.FC = () => {
-  const intl = useIntl();
+interface Strategy {
+  id: string | number;
+  name: string;
+  description?: string;
+  strategy_type: string;
+  status: string;
+  parameters?: any;
+  config?: any;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface Backtest {
+  id: string | number;
+  strategy_id: string | number;
+  name?: string;
+  start_date: string;
+  end_date: string;
+  initial_capital: number;
+  final_capital?: number;
+  return_percent?: number;
+  max_drawdown?: number;
+  sharpe_ratio?: number;
+  win_rate?: number;
+  status: string;
+}
+
+const StrategyList: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [strategies, setStrategies] = useState<StrategyInfo[]>([]);
-  const [selectedStrategy, setSelectedStrategy] = useState<StrategyInfo | null>(null);
-  const [configVisible, setConfigVisible] = useState(false);
-  const [resultsVisible, setResultsVisible] = useState(false);
-  const [analysisVisible, setAnalysisVisible] = useState(false);
-  const [drawerContent, setDrawerContent] = useState<'config' | 'results' | 'analysis'>('config');
+  const [strategies, setStrategies] = useState<Strategy[]>([]);
+  const [backtests, setBacktests] = useState<Backtest[]>([]);
+  const [filteredStrategies, setFilteredStrategies] = useState<Strategy[]>([]);
+  const [selectedStrategy, setSelectedStrategy] = useState<Strategy | null>(null);
+  const [detailDrawerVisible, setDetailDrawerVisible] = useState(false);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [filterType, setFilterType] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
 
-  /**
-   * 策略状态映射
-   */
-
-  /**
-   * 策略类型映射
-   */
-  const typeMap: Record<string, { color: string; text: string }> = {
-    trend_following: { color: 'blue', text: '趋势跟踪' },
-    mean_reversion: { color: 'green', text: '均值回归' },
-    momentum: { color: 'orange', text: '动量策略' },
-    arbitrage: { color: 'purple', text: '套利策略' },
-    grid: { color: 'cyan', text: '网格策略' },
-    scalping: { color: 'red', text: '剥头皮' },
-    swing: { color: 'magenta', text: '摆动交易' },
-    quantitative: { color: 'volcano', text: '量化策略' },
-    ai_ml: { color: 'geekblue', text: 'AI/ML策略' },
-    custom: { color: 'lime', text: '自定义' },
+  // 策略类型和状态映射
+  const typeMap: Record<string, { color: string; label: string }> = {
+    trend_following: { color: 'blue', label: '趋势跟踪' },
+    mean_reversion: { color: 'green', label: '均值回归' },
+    momentum: { color: 'orange', label: '动量策略' },
+    quantitative: { color: 'purple', label: '量化策略' },
+    machine_learning: { color: 'geekblue', label: 'AI/ML' },
+    grid: { color: 'cyan', label: '网格策略' },
+    arbitrage: { color: 'magenta', label: '套利策略' },
+    custom: { color: 'default', label: '自定义' },
   };
 
-  /**
-   * 策略状态映射
-   */
-  const statusMap: Record<string, { color: string; text: string }> = {
-    draft: { color: 'default', text: '草稿' },
-    testing: { color: 'processing', text: '测试中' },
-    active: { color: 'success', text: '运行中' },
-    paused: { color: 'warning', text: '暂停' },
-    disabled: { color: 'error', text: '已停用' },
-    archived: { color: 'default', text: '已归档' },
+  const statusMap: Record<string, { color: string; label: string }> = {
+    draft: { color: 'default', label: '草稿' },
+    testing: { color: 'processing', label: '测试中' },
+    active: { color: 'success', label: '运行中' },
+    paused: { color: 'warning', label: '已暂停' },
+    stopped: { color: 'error', label: '已停止' },
+    archived: { color: 'default', label: '已归档' },
   };
 
-  /**
-   * 加载策略列表
-   */
-  const loadStrategies = async () => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    filterStrategies();
+  }, [strategies, searchKeyword, filterType, filterStatus]);
+
+  const loadData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const data = await getStrategies();
-      setStrategies(data.items);
+      const [strategyData, backtestData] = await Promise.all([
+        getStrategies(),
+        getBacktests(),
+      ]);
+
+      console.log('Strategy data:', strategyData);
+      console.log('Backtest data:', backtestData);
+
+      setStrategies(strategyData.items || []);
+      setBacktests(backtestData.items || []);
     } catch (error) {
-      console.error('加载策略列表失败:', error);
-      message.error('加载策略列表失败');
+      console.error('加载数据失败:', error);
+      message.error('加载数据失败');
     } finally {
       setLoading(false);
     }
   };
 
-  /**
-   * 创建新策略
-   */
-  const handleCreateStrategy = () => {
-    setSelectedStrategy(null);
-    setDrawerContent('config');
-    setConfigVisible(true);
+  const filterStrategies = () => {
+    let filtered = [...strategies];
+
+    if (searchKeyword) {
+      filtered = filtered.filter(
+        (s) =>
+          s.name.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+          s.description?.toLowerCase().includes(searchKeyword.toLowerCase())
+      );
+    }
+
+    if (filterType !== 'all') {
+      filtered = filtered.filter((s) => s.strategy_type === filterType);
+    }
+
+    if (filterStatus !== 'all') {
+      filtered = filtered.filter((s) => s.status === filterStatus);
+    }
+
+    setFilteredStrategies(filtered);
   };
 
-  /**
-   * 编辑策略配置
-   */
-  const handleEditStrategy = (strategy: StrategyInfo) => {
-    setSelectedStrategy(strategy);
-    setDrawerContent('config');
-    setConfigVisible(true);
+  // 计算统计数据
+  const stats = {
+    total: strategies.length,
+    active: strategies.filter((s) => s.status === 'active').length,
+    testing: strategies.filter((s) => s.status === 'testing').length,
+    draft: strategies.filter((s) => s.status === 'draft').length,
+    avgWinRate:
+      backtests.length > 0
+        ? (
+            backtests.reduce((sum, b) => sum + (b.win_rate || 0), 0) /
+            backtests.length
+          ).toFixed(2)
+        : '0',
+    avgReturn:
+      backtests.length > 0
+        ? (
+            backtests.reduce((sum, b) => sum + (b.return_percent || 0), 0) /
+            backtests.length
+          ).toFixed(2)
+        : '0',
+    totalBacktests: backtests.length,
+    todaySignals: Math.floor(Math.random() * 20), // 模拟数据
   };
 
-  /**
-   * 查看回测结果
-   */
-  const handleViewResults = (strategy: StrategyInfo) => {
-    setSelectedStrategy(strategy);
-    setDrawerContent('results');
-    setResultsVisible(true);
+  // 计算策略类型分布
+  const strategyTypes = strategies.reduce((acc, s) => {
+    const type = s.strategy_type || 'custom';
+    const label = typeMap[type]?.label || '自定义';
+    acc[label] = (acc[label] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // 获取策略的回测记录
+  const getStrategyBacktests = (strategyId: string | number) => {
+    return backtests.filter((b) => String(b.strategy_id) === String(strategyId));
   };
 
-  /**
-   * 查看性能分析
-   */
-  const handleViewAnalysis = (strategy: StrategyInfo) => {
-    setSelectedStrategy(strategy);
-    setDrawerContent('analysis');
-    setAnalysisVisible(true);
+  // 获取策略的最佳回测
+  const getBestBacktest = (strategyId: string | number) => {
+    const strategyBacktests = getStrategyBacktests(strategyId);
+    if (strategyBacktests.length === 0) return undefined;
+    return strategyBacktests.reduce((best, current) => {
+      if (!best) return current;
+      return (current.return_percent || 0) > (best.return_percent || 0)
+        ? current
+        : best;
+    }, strategyBacktests[0]);
   };
 
-  /**
-   * 删除策略
-   */
-  const handleDeleteStrategy = async (strategyId: string) => {
+  const handleDelete = async (id: string | number) => {
     try {
-      await deleteStrategy(strategyId);
-      message.success('策略删除成功');
-      loadStrategies();
+      await deleteStrategy(String(id));
+      message.success('删除成功');
+      loadData();
     } catch (error) {
-      console.error('删除策略失败:', error);
-      message.error('删除策略失败');
+      message.error('删除失败');
     }
   };
 
-  /**
-   * 克隆策略
-   */
-  const handleCloneStrategy = async (strategy: StrategyInfo) => {
-    try {
-      // 创建策略副本
-      const newStrategy = {
-        ...strategy,
-        name: `${strategy.name} - 副本`,
-        status: 'draft' as StrategyStatus,
-      };
-      
-      // TODO: 实现克隆API后替换
-      // await cloneStrategy(strategy.id, `${strategy.name} - 副本`);
-      message.success('策略克隆功能开发中...');
-      message.success('策略克隆成功');
-      loadStrategies();
-    } catch (error) {
-      console.error('克隆策略失败:', error);
-      message.error('克隆策略失败');
-    }
+  const showStrategyDetail = (strategy: Strategy) => {
+    setSelectedStrategy(strategy);
+    setDetailDrawerVisible(true);
   };
 
-  /**
-   * 关闭抽屉
-   */
-  const handleCloseDrawer = () => {
-    setConfigVisible(false);
-    setResultsVisible(false);
-    setAnalysisVisible(false);
-    setSelectedStrategy(null);
-  };
-
-  /**
-   * 策略保存成功回调
-   */
-  const handleStrategySaved = () => {
-    handleCloseDrawer();
-    loadStrategies();
-  };
-
-  /**
-   * 表格列配置
-   */
-  const columns = [
+  // 表格列定义
+  const tableColumns = [
     {
       title: '策略名称',
       dataIndex: 'name',
       key: 'name',
-      render: (name: string, record: StrategyInfo) => (
-        <Space>
-          <Text strong>{name}</Text>
-          <Tag color={typeMap[record.type]?.color}>
-            {typeMap[record.type]?.text}
-          </Tag>
-        </Space>
-      ),
+      width: 200,
+    },
+    {
+      title: '类型',
+      dataIndex: 'strategy_type',
+      key: 'type',
+      width: 120,
+      render: (type: string) => {
+        const info = typeMap[type] || typeMap.custom;
+        return <Tag color={info.color}>{info.label}</Tag>;
+      },
     },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: (status: StrategyStatus) => (
-        <Tag color={statusMap[status]?.color}>
-          {statusMap[status]?.text}
-        </Tag>
-      ),
-    },
-    {
-      title: '总收益率',
-      dataIndex: 'performance',
-      key: 'totalReturn',
-      render: (performance: any) => {
-        const totalReturn = performance?.totalReturn || 0;
-        return (
-          <Text type={totalReturn >= 0 ? 'success' : 'danger'}>
-            {totalReturn >= 0 ? '+' : ''}{(totalReturn * 100).toFixed(2)}%
-          </Text>
-        );
+      width: 100,
+      render: (status: string) => {
+        const info = statusMap[status] || statusMap.draft;
+        return <Badge status={info.color as any} text={info.label} />;
       },
     },
     {
-      title: '夏普比率',
-      dataIndex: 'performance',
-      key: 'sharpeRatio',
-      render: (performance: any) => {
-        const sharpeRatio = performance?.sharpeRatio || 0;
-        return (
-          <Text type={sharpeRatio >= 1 ? 'success' : sharpeRatio >= 0 ? 'warning' : 'danger'}>
-            {sharpeRatio.toFixed(3)}
-          </Text>
-        );
+      title: '回测次数',
+      key: 'backtests',
+      width: 100,
+      align: 'center' as const,
+      render: (_: any, record: Strategy) => getStrategyBacktests(record.id).length,
+    },
+    {
+      title: '最佳收益',
+      key: 'return',
+      width: 100,
+      align: 'right' as const,
+      render: (_: any, record: Strategy) => {
+        const best = getBestBacktest(record.id);
+        return best?.return_percent
+          ? `${best.return_percent.toFixed(2)}%`
+          : '-';
       },
     },
     {
-      title: '最大回撤',
-      dataIndex: 'performance',
-      key: 'maxDrawdown',
-      render: (performance: any) => {
-        const maxDrawdown = Math.abs(performance?.maxDrawdown || 0);
-        return (
-          <Text type="danger">
-            -{(maxDrawdown * 100).toFixed(2)}%
-          </Text>
-        );
+      title: '胜率',
+      key: 'winRate',
+      width: 100,
+      align: 'right' as const,
+      render: (_: any, record: Strategy) => {
+        const best = getBestBacktest(record.id);
+        return best?.win_rate ? `${best.win_rate.toFixed(2)}%` : '-';
       },
     },
     {
       title: '创建时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (time: string) => new Date(time).toLocaleDateString(),
-    },
-    {
-      title: '操作',
-      key: 'actions',
-      render: (_: any, record: StrategyInfo) => (
-        <Space>
-          <Tooltip title="编辑配置">
-            <Button
-              type="text"
-              icon={<SettingOutlined />}
-              onClick={() => handleEditStrategy(record)}
-            />
-          </Tooltip>
-          
-          <Tooltip title="查看回测">
-            <Button
-              type="text"
-              icon={<FileTextOutlined />}
-              onClick={() => handleViewResults(record)}
-            />
-          </Tooltip>
-          
-          <Tooltip title="性能分析">
-            <Button
-              type="text"
-              icon={<BarChartOutlined />}
-              onClick={() => handleViewAnalysis(record)}
-            />
-          </Tooltip>
-          
-          <Tooltip title="克隆策略">
-            <Button
-              type="text"
-              icon={<CopyOutlined />}
-              onClick={() => handleCloneStrategy(record)}
-            />
-          </Tooltip>
-          
-          <Popconfirm
-            title="确定删除此策略吗？"
-            onConfirm={() => handleDeleteStrategy(record.id)}
-            okText="确定"
-            cancelText="取消"
-          >
-            <Tooltip title="删除策略">
-              <Button
-                type="text"
-                danger
-                icon={<DeleteOutlined />}
-              />
-            </Tooltip>
-          </Popconfirm>
-        </Space>
-      ),
+      dataIndex: 'created_at',
+      key: 'created_at',
+      width: 160,
+      render: (date: string) =>
+        date ? new Date(date).toLocaleString('zh-CN') : '-',
     },
   ];
-
-  /**
-   * 计算统计数据
-   */
-  const statistics = React.useMemo(() => {
-    const totalStrategies = strategies.length;
-    const runningStrategies = strategies.filter(s => s.status === 'active').length;
-    const totalReturn = strategies.reduce((sum, s) => sum + (s.performance?.totalReturn || 0), 0);
-    const avgSharpe = strategies.length ? 
-      strategies.reduce((sum, s) => sum + (s.performance?.sharpeRatio || 0), 0) / strategies.length : 0;
-
-    return {
-      totalStrategies,
-      runningStrategies,
-      totalReturn: totalReturn / strategies.length || 0,
-      avgSharpe,
-    };
-  }, [strategies]);
-
-  /**
-   * 初始化
-   */
-  useEffect(() => {
-    loadStrategies();
-  }, []);
 
   return (
     <PageContainer
       title="AI策略管理"
-      subTitle="智能量化交易策略管理平台"
       extra={[
+        <Button key="reload" icon={<ReloadOutlined />} onClick={loadData}>
+          刷新
+        </Button>,
         <Button
           key="create"
           type="primary"
           icon={<PlusOutlined />}
-          onClick={handleCreateStrategy}
+          onClick={() => setCreateModalVisible(true)}
         >
           创建策略
         </Button>,
       ]}
     >
-      <Layout className="strategy-page">
-        <Content>
-          {/* 概览统计 */}
-          <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-            <Col xs={12} sm={6}>
-              <Card size="small">
-                <Statistic
-                  title="总策略数"
-                  value={statistics.totalStrategies}
-                  prefix={<ExperimentOutlined />}
-                  valueStyle={{ color: '#1890ff' }}
-                />
-              </Card>
+      <Spin spinning={loading}>
+        {/* 统计面板 */}
+        <StrategyStats
+          total={stats.total}
+          active={stats.active}
+          testing={stats.testing}
+          draft={stats.draft}
+          avgWinRate={stats.avgWinRate}
+          avgReturn={stats.avgReturn}
+          totalBacktests={stats.totalBacktests}
+          todaySignals={stats.todaySignals}
+          strategyTypes={strategyTypes}
+        />
+
+        {/* 筛选和搜索 */}
+        <Card style={{ marginBottom: 16, marginTop: 16 }}>
+          <Row gutter={16} align="middle">
+            <Col xs={24} sm={12} md={8}>
+              <Search
+                placeholder="搜索策略名称或描述"
+                allowClear
+                enterButton={<SearchOutlined />}
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+              />
             </Col>
-            
-            <Col xs={12} sm={6}>
-              <Card size="small">
-                <Statistic
-                  title="运行中"
-                  value={statistics.runningStrategies}
-                  prefix={<PlayCircleOutlined />}
-                  valueStyle={{ color: '#52c41a' }}
-                />
-              </Card>
+            <Col xs={12} sm={6} md={4}>
+              <Select
+                style={{ width: '100%' }}
+                placeholder="策略类型"
+                value={filterType}
+                onChange={setFilterType}
+              >
+                <Option value="all">全部类型</Option>
+                {Object.entries(typeMap).map(([key, value]) => (
+                  <Option key={key} value={key}>
+                    {value.label}
+                  </Option>
+                ))}
+              </Select>
             </Col>
-            
-            <Col xs={12} sm={6}>
-              <Card size="small">
-                <Statistic
-                  title="平均收益率"
-                  value={statistics.totalReturn * 100}
-                  precision={2}
-                  suffix="%"
-                  valueStyle={{ 
-                    color: statistics.totalReturn >= 0 ? '#52c41a' : '#ff4d4f' 
-                  }}
-                />
-              </Card>
+            <Col xs={12} sm={6} md={4}>
+              <Select
+                style={{ width: '100%' }}
+                placeholder="状态"
+                value={filterStatus}
+                onChange={setFilterStatus}
+              >
+                <Option value="all">全部状态</Option>
+                {Object.entries(statusMap).map(([key, value]) => (
+                  <Option key={key} value={key}>
+                    {value.label}
+                  </Option>
+                ))}
+              </Select>
             </Col>
-            
-            <Col xs={12} sm={6}>
-              <Card size="small">
-                <Statistic
-                  title="平均夏普比率"
-                  value={statistics.avgSharpe}
-                  precision={3}
-                  valueStyle={{ 
-                    color: statistics.avgSharpe >= 1 ? '#52c41a' : '#722ed1' 
-                  }}
-                />
-              </Card>
+            <Col xs={24} md={8} style={{ textAlign: 'right' }}>
+              <Segmented
+                value={viewMode}
+                onChange={(value) => setViewMode(value as 'card' | 'table')}
+                options={[
+                  {
+                    label: '卡片',
+                    value: 'card',
+                    icon: <AppstoreOutlined />,
+                  },
+                  {
+                    label: '列表',
+                    value: 'table',
+                    icon: <UnorderedListOutlined />,
+                  },
+                ]}
+              />
             </Col>
           </Row>
+        </Card>
 
-          {/* 策略列表 */}
+        {/* 策略展示 */}
+        {viewMode === 'card' ? (
+          // 卡片视图
+          <Row gutter={[16, 16]}>
+            {filteredStrategies.length > 0 ? (
+              filteredStrategies.map((strategy) => (
+                <Col key={strategy.id} xs={24} sm={12} lg={8} xl={6}>
+                  <StrategyCard
+                    strategy={strategy}
+                    bestBacktest={getBestBacktest(strategy.id)}
+                    backtestCount={getStrategyBacktests(strategy.id).length}
+                    onView={() => showStrategyDetail(strategy)}
+                    onEdit={() => {
+                      setSelectedStrategy(strategy);
+                      setEditModalVisible(true);
+                    }}
+                    onRun={() => message.info('运行功能开发中')}
+                    onBacktest={() => message.info('回测功能开发中')}
+                    onDelete={() => handleDelete(strategy.id)}
+                  />
+                </Col>
+              ))
+            ) : (
+              <Col span={24}>
+                <Card>
+                  <Empty
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    description="暂无策略数据"
+                  >
+                    <Button type="primary" icon={<PlusOutlined />}>
+                      创建第一个策略
+                    </Button>
+                  </Empty>
+                </Card>
+              </Col>
+            )}
+          </Row>
+        ) : (
+          // 表格视图
           <Card>
             <Table
-              dataSource={strategies}
-              columns={columns}
+              columns={tableColumns}
+              dataSource={filteredStrategies}
               rowKey="id"
-              loading={loading}
               pagination={{
-                pageSize: 20,
+                pageSize: 10,
                 showSizeChanger: true,
                 showQuickJumper: true,
-                showTotal: (total) => `共 ${total} 个策略`,
+                showTotal: (total) => `共 ${total} 条`,
               }}
-              scroll={{ x: 1000 }}
+              locale={{
+                emptyText: (
+                  <Empty
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    description="暂无策略数据"
+                  />
+                ),
+              }}
             />
           </Card>
-        </Content>
-      </Layout>
-
-      {/* 策略配置抽屉 */}
-      <Drawer
-        title={selectedStrategy ? '编辑策略配置' : '创建新策略'}
-        width={800}
-        open={configVisible}
-        onClose={handleCloseDrawer}
-        destroyOnClose
-      >
-        {configVisible && (
-          <StrategyConfigForm
-            strategyId={selectedStrategy?.id || ''}
-            strategyType={selectedStrategy?.type || 'trend_following'}
-            configId={selectedStrategy?.configId}
-            onSave={handleStrategySaved}
-            onCancel={handleCloseDrawer}
-          />
         )}
-      </Drawer>
 
-      {/* 回测结果抽屉 */}
-      <Drawer
-        title="回测结果"
-        width={1200}
-        open={resultsVisible}
-        onClose={handleCloseDrawer}
-        destroyOnClose
-      >
-        {resultsVisible && selectedStrategy && (
-          <BacktestResults
-            backtestId={selectedStrategy.lastBacktestId || ''}
+        {/* 策略详情抽屉 */}
+        <Drawer
+          title={
+            <Space>
+              <span>{selectedStrategy?.name}</span>
+              <Tag color={typeMap[selectedStrategy?.strategy_type || 'custom']?.color}>
+                {typeMap[selectedStrategy?.strategy_type || 'custom']?.label}
+              </Tag>
+            </Space>
+          }
+          width={720}
+          open={detailDrawerVisible}
+          onClose={() => setDetailDrawerVisible(false)}
+        >
+          {selectedStrategy && (
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="基本信息" key="1">
+                <Descriptions column={1} bordered>
+                  <Descriptions.Item label="策略ID">
+                    {selectedStrategy.id}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="策略类型">
+                    <Tag
+                      color={
+                        typeMap[selectedStrategy.strategy_type]?.color
+                      }
+                    >
+                      {typeMap[selectedStrategy.strategy_type]?.label}
+                    </Tag>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="状态">
+                    <Badge
+                      status={statusMap[selectedStrategy.status]?.color as any}
+                      text={statusMap[selectedStrategy.status]?.label}
+                    />
+                  </Descriptions.Item>
+                  <Descriptions.Item label="描述">
+                    {selectedStrategy.description || '-'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="参数">
+                    <pre style={{ margin: 0, fontSize: '12px' }}>
+                      {JSON.stringify(
+                        selectedStrategy.config?.parameters ||
+                          selectedStrategy.parameters ||
+                          {},
+                        null,
+                        2
+                      )}
+                    </pre>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="创建时间">
+                    {selectedStrategy.created_at
+                      ? new Date(selectedStrategy.created_at).toLocaleString(
+                          'zh-CN'
+                        )
+                      : '-'}
+                  </Descriptions.Item>
+                </Descriptions>
+              </TabPane>
+              <TabPane
+                tab={`回测历史 (${
+                  getStrategyBacktests(selectedStrategy.id).length
+                })`}
+                key="2"
+              >
+                <Timeline>
+                  {getStrategyBacktests(selectedStrategy.id).map((backtest) => (
+                    <Timeline.Item
+                      key={backtest.id}
+                      color={
+                        backtest.return_percent && backtest.return_percent > 0
+                          ? 'green'
+                          : 'red'
+                      }
+                    >
+                      <div>
+                        <Text strong>
+                          {backtest.name || `回测 #${backtest.id}`}
+                        </Text>
+                        <div style={{ marginTop: 8 }}>
+                          <Space size="large">
+                            <span>
+                              收益率:{' '}
+                              <Text
+                                type={
+                                  backtest.return_percent &&
+                                  backtest.return_percent > 0
+                                    ? 'danger'
+                                    : 'success'
+                                }
+                                strong
+                              >
+                                {backtest.return_percent?.toFixed(2)}%
+                              </Text>
+                            </span>
+                            <span>
+                              夏普比率:{' '}
+                              <Text strong>
+                                {backtest.sharpe_ratio?.toFixed(2)}
+                              </Text>
+                            </span>
+                            <span>
+                              胜率:{' '}
+                              <Text strong>
+                                {backtest.win_rate?.toFixed(2)}%
+                              </Text>
+                            </span>
+                          </Space>
+                        </div>
+                        <Text
+                          type="secondary"
+                          style={{
+                            fontSize: '12px',
+                            display: 'block',
+                            marginTop: 4,
+                          }}
+                        >
+                          {backtest.start_date} ~ {backtest.end_date}
+                        </Text>
+                      </div>
+                    </Timeline.Item>
+                  ))}
+                </Timeline>
+              </TabPane>
+            </Tabs>
+          )}
+        </Drawer>
+
+        {/* 创建策略模态框 */}
+        <CreateStrategyModal
+          visible={createModalVisible}
+          onCancel={() => setCreateModalVisible(false)}
+          onSuccess={() => {
+            setCreateModalVisible(false);
+            loadData();
+          }}
+        />
+
+        {/* 编辑策略模态框 */}
+        {selectedStrategy && (
+          <EditStrategyModal
+            visible={editModalVisible}
             strategyId={selectedStrategy.id}
+            onCancel={() => {
+              setEditModalVisible(false);
+              setSelectedStrategy(null);
+            }}
+            onSuccess={() => {
+              setEditModalVisible(false);
+              setSelectedStrategy(null);
+              loadData();
+            }}
           />
         )}
-      </Drawer>
-
-      {/* 性能分析抽屉 */}
-      <Drawer
-        title="性能分析"
-        width={1200}
-        open={analysisVisible}
-        onClose={handleCloseDrawer}
-        destroyOnClose
-      >
-        {analysisVisible && selectedStrategy && (
-          <PerformanceAnalysis
-            strategyId={selectedStrategy.id}
-            compareStrategies={[]}
-          />
-        )}
-      </Drawer>
+      </Spin>
     </PageContainer>
   );
 };
 
-export default StrategyPage;
+export default StrategyList;

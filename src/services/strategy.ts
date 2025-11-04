@@ -34,7 +34,7 @@ export async function getStrategies(params?: {
   pageSize?: number;
   keyword?: string;
 }): Promise<{
-  items: StrategyInfo[];
+  items: any[];
   total: number;
   page: number;
   pageSize: number;
@@ -42,11 +42,23 @@ export async function getStrategies(params?: {
   return request(`${API_PREFIX}`, {
     method: 'GET',
     params,
+  }).then(res => {
+    // 兼容后端返回的数据格式
+    if (res.items) {
+      return res;
+    }
+    // 如果后端直接返回数组，转换为标准格式
+    return {
+      items: Array.isArray(res) ? res : [],
+      total: Array.isArray(res) ? res.length : 0,
+      page: params?.page || 1,
+      pageSize: params?.pageSize || 10,
+    };
   });
 }
 
 // 获取策略详情
-export async function getStrategy(strategyId: string): Promise<StrategyInfo> {
+export async function getStrategy(strategyId: string | number): Promise<StrategyInfo> {
   return request(`${API_PREFIX}/${strategyId}`, {
     method: 'GET',
   });
@@ -69,7 +81,7 @@ export async function updateStrategy(strategyId: string, updates: Partial<Strate
 }
 
 // 删除策略
-export async function deleteStrategy(strategyId: string): Promise<void> {
+export async function deleteStrategy(strategyId: string | number): Promise<void> {
   return request(`${API_PREFIX}/${strategyId}`, {
     method: 'DELETE',
   });

@@ -1,71 +1,57 @@
 .backtest-page {
-  .backtest-header {
-    margin-bottom: 24px;
-    
-    .title {
-      margin-bottom: 16px;
-    }
-    
-    .stats-row {
-      margin-bottom: 16px;
+  .ant-page-header {
+    padding: 16px 24px;
+  }
+
+  .filter-card {
+    .ant-card-body {
+      padding: 16px;
     }
   }
-  
-  .backtest-content {
-    .content-tabs {
-      .ant-tabs-content-holder {
-        padding: 24px 0;
-      }
-    }
+
+  .backtest-grid {
+    min-height: 400px;
   }
-  
-  .backtest-table {
-    .status-tag {
-      &.running {
-        color: #1890ff;
-        border-color: #1890ff;
-      }
-      
-      &.completed {
-        color: #52c41a;
-        border-color: #52c41a;
-      }
-      
-      &.failed {
-        color: #ff4d4f;
-        border-color: #ff4d4f;
-      }
-      
-      &.pending {
-        color: #faad14;
-        border-color: #faad14;
-      }
-    }
-    
-    .progress-cell {
-      min-width: 120px;
-    }
-    
-    .action-buttons {
-      display: flex;
-      gap: 8px;
-    }
-  }
-  
-  .backtest-modal {
-    .ant-modal-body {
-      max-height: 70vh;
-      overflow-y: auto;
-    }
-  }
-  
+
+  // 空状态样式
   .empty-state {
-    padding: 48px 24px;
+    padding: 80px 0;
     text-align: center;
-    
-    .empty-description {
-      margin-top: 16px;
-      color: var(--ant-color-text-tertiary);
+
+    .ant-empty-image {
+      height: 100px;
+    }
+  }
+
+  // 抽屉样式
+  .ant-drawer-body {
+    padding: 24px;
+
+    .ant-descriptions-bordered {
+      .ant-descriptions-item-label {
+        width: 120px;
+        font-weight: 600;
+        background-color: #fafafa;
+      }
+    }
+  }
+
+  // 响应式调整
+  @media (max-width: 768px) {
+    .ant-col {
+      margin-bottom: 16px;
+    }
+
+    .filter-card {
+      .ant-row {
+        .ant-col {
+          margin-bottom: 12px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
     }
   }
 }

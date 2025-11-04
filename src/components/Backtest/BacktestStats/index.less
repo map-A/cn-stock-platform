@@ -1,0 +1,61 @@
+.backtest-stats {
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  .ant-card-body {
+    padding: 20px;
+  }
+
+  .stat-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .ant-card-body {
+      padding: 20px;
+    }
+
+    .ant-statistic {
+      .ant-statistic-title {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.65);
+        margin-bottom: 8px;
+      }
+
+      .ant-statistic-content {
+        font-size: 24px;
+        font-weight: 600;
+
+        .ant-statistic-content-prefix {
+          margin-right: 8px;
+          font-size: 20px;
+        }
+
+        .ant-statistic-content-suffix {
+          font-size: 18px;
+          margin-left: 4px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .backtest-stats {
+    .stat-card {
+      margin-bottom: 12px;
+
+      .ant-statistic {
+        .ant-statistic-content {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}

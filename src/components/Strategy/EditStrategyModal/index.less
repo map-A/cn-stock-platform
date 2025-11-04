@@ -1,0 +1,17 @@
+.edit-strategy-modal {
+  .strategy-type-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    .strategy-type-card {
+      text-align: center;
+      cursor: pointer;
+      height: 90px;
+      &.selected {
+        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+      }
+      .type-icon { font-size: 24px; }
+      .type-name { font-size: 13px; font-weight: 600; }
+    }
+  }
+}

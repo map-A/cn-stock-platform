@@ -34,9 +34,9 @@ import {
   SaveOutlined,
 } from '@ant-design/icons';
 import { getStrategies } from '@/services/strategy';
-import { createBacktest } from '@/services/backtest';
-import type { BacktestConfig, BacktestType } from '@/types/backtest';
-import type { StrategyInfo } from '@/types/strategy';
+import { createBacktest } from '@/services/backtestService';
+import type { BacktestConfig, BacktestType } from '@/typings/backtest';
+import type { StrategyInfo } from '@/typings/strategy';
 import moment from 'moment';
 
 const { Title } = Typography;

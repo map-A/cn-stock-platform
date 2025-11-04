@@ -1,500 +1,69 @@
-.strategy-page {
-  min-height: 100vh;
-  background-color: @background-color-light;
-  
-  .ant-layout-content {
-    padding: 0;
+.strategy-list-page {
+  .ant-page-header {
+    padding: 16px 24px;
   }
-  
-  .ant-card {
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s;
-    
-    &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    }
-    
+
+  .filter-card {
     .ant-card-body {
-      padding: 20px;
-    }
-    
-    &.ant-card-small {
-      .ant-card-body {
-        padding: 16px;
-      }
+      padding: 16px;
     }
   }
-  
-  .ant-statistic {
+
+  .strategy-grid {
+    min-height: 400px;
+  }
+
+  // 空状态样式
+  .empty-state {
+    padding: 80px 0;
     text-align: center;
-    
-    .ant-statistic-title {
-      color: @text-color-secondary;
-      font-size: 13px;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    
-    .ant-statistic-content {
-      .ant-statistic-content-value {
-        font-weight: 700;
-        font-size: 28px;
-        line-height: 1.2;
-      }
-      
-      .ant-statistic-content-prefix {
-        margin-right: 8px;
-        font-size: 20px;
-      }
-      
-      .ant-statistic-content-suffix {
-        margin-left: 4px;
-        font-size: 18px;
-      }
+
+    .ant-empty-image {
+      height: 100px;
     }
   }
-  
-  .ant-table {
-    .ant-table-thead > tr > th {
-      background-color: @background-color-light;
-      border-bottom: 2px solid @border-color-split;
-      font-weight: 600;
-      color: @heading-color;
-      
-      &::before {
-        display: none;
-      }
-    }
-    
-    .ant-table-tbody > tr {
-      transition: all 0.3s;
-      
-      &:hover > td {
-        background-color: @primary-1;
-      }
-      
-      > td {
-        border-bottom: 1px solid @border-color-split;
-        padding: 16px;
-        vertical-align: middle;
-      }
-    }
-    
-    .ant-table-pagination {
-      margin: 24px 0 0 0;
-      
-      .ant-pagination-total-text {
-        color: @text-color-secondary;
-      }
-    }
-  }
-  
-  .ant-tag {
-    border-radius: 4px;
-    font-weight: 500;
-    padding: 4px 8px;
-    margin: 0 4px;
-    
-    &.ant-tag-blue {
-      background-color: @primary-1;
-      border-color: @primary-3;
-      color: @primary-color;
-    }
-    
-    &.ant-tag-green {
-      background-color: #f6ffed;
-      border-color: #b7eb8f;
-      color: #52c41a;
-    }
-    
-    &.ant-tag-purple {
-      background-color: @purple-1;
-      border-color: @purple-3;
-      color: @purple-6;
-    }
-    
-    &.ant-tag-cyan {
-      background-color: @cyan-1;
-      border-color: @cyan-3;
-      color: @cyan-6;
-    }
-    
-    &.ant-tag-geekblue {
-      background-color: @geekblue-1;
-      border-color: @geekblue-3;
-      color: @geekblue-6;
-    }
-    
-    &.ant-tag-orange {
-      background-color: var(--ant-color-text)7e6;
-      border-color: #ffd591;
-      color: #fa8c16;
-    }
-    
-    &.ant-tag-red {
-      background-color: var(--ant-color-text)2f0;
-      border-color: #ffccc7;
-      color: #ff4d4f;
-    }
-    
-    &.ant-tag-default {
-      background-color: @background-color-base;
-      border-color: @border-color-base;
-      color: @text-color-secondary;
-    }
-  }
-  
-  .ant-typography {
-    &.ant-typography-success {
-      color: @success-color;
-      font-weight: 600;
-    }
-    
-    &.ant-typography-danger {
-      color: @error-color;
-      font-weight: 600;
-    }
-    
-    &.ant-typography-warning {
-      color: @warning-color;
-      font-weight: 600;
-    }
-  }
-  
-  .ant-btn {
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.3s;
-    
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    &:active {
-      transform: translateY(0);
-    }
-    
-    &.ant-btn-primary {
-      background: linear-gradient(135deg, @primary-color, @primary-6);
-      border: none;
-      
-      &:hover {
-        background: linear-gradient(135deg, @primary-5, @primary-7);
-      }
-    }
-    
-    &.ant-btn-text {
-      &:hover {
-        background-color: @primary-1;
-        border-color: @primary-3;
-        color: @primary-color;
-      }
-      
-      &.ant-btn-dangerous {
-        &:hover {
-          background-color: var(--ant-color-text)2f0;
-          border-color: #ffccc7;
-          color: #ff4d4f;
-        }
-      }
-    }
-  }
-  
-  .ant-tooltip {
-    .ant-tooltip-inner {
-      background-color: #262626;
-      border-radius: 4px;
-      font-size: 12px;
-      padding: 6px 8px;
-    }
-    
-    .ant-tooltip-arrow {
-      &::before {
-        background-color: #262626;
-      }
-    }
-  }
-  
-  .ant-popconfirm {
-    .ant-popover-inner {
-      border-radius: 8px;
-    }
-    
-    .ant-popover-message {
-      margin-bottom: 12px;
-      
-      .ant-popover-message-title {
-        font-weight: 500;
-        color: @heading-color;
-      }
-    }
-    
-    .ant-popover-buttons {
-      .ant-btn {
-        margin-left: 8px;
-        
-        &:first-child {
-          margin-left: 0;
-        }
-      }
-    }
-  }
-  
-  .ant-drawer {
-    .ant-drawer-header {
-      border-bottom: 1px solid @border-color-split;
-      
-      .ant-drawer-title {
+
+  // 抽屉样式
+  .ant-drawer-body {
+    padding: 24px;
+
+    .ant-descriptions-bordered {
+      .ant-descriptions-item-label {
+        width: 120px;
         font-weight: 600;
-        color: @heading-color;
-        font-size: 16px;
+        background-color: #fafafa;
       }
     }
-    
-    .ant-drawer-body {
-      padding: 24px;
-      background-color: @background-color-light;
-    }
-  }
-  
-  /* 页面头部样式 */
-  .ant-pro-page-container {
-    .ant-pro-page-container-children-container {
-      padding: 24px;
-    }
-  }
-  
-  /* 响应式设计 */
-  @media (max-width: 1200px) {
-    .ant-statistic {
-      .ant-statistic-content {
-        .ant-statistic-content-value {
-          font-size: 24px;
-        }
-        
-        .ant-statistic-content-prefix {
-          font-size: 18px;
-        }
-        
-        .ant-statistic-content-suffix {
-          font-size: 16px;
+
+    .ant-timeline {
+      margin-top: 16px;
+
+      .ant-timeline-item {
+        padding-bottom: 24px;
+
+        &:last-child {
+          padding-bottom: 0;
         }
       }
     }
   }
-  
+
+  // 响应式调整
   @media (max-width: 768px) {
-    .ant-layout-content {
-      .ant-pro-page-container-children-container {
-        padding: 16px;
-      }
-    }
-    
-    .ant-card {
+    .ant-col {
       margin-bottom: 16px;
-      
-      .ant-card-body {
-        padding: 16px 12px;
-      }
-      
-      &.ant-card-small {
-        .ant-card-body {
-          padding: 12px;
+    }
+
+    .filter-card {
+      .ant-row {
+        .ant-col {
+          margin-bottom: 12px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
         }
       }
-    }
-    
-    .ant-statistic {
-      .ant-statistic-title {
-        font-size: 12px;
-      }
-      
-      .ant-statistic-content {
-        .ant-statistic-content-value {
-          font-size: 20px;
-        }
-        
-        .ant-statistic-content-prefix {
-          font-size: 16px;
-        }
-        
-        .ant-statistic-content-suffix {
-          font-size: 14px;
-        }
-      }
-    }
-    
-    .ant-table {
-      .ant-table-thead > tr > th,
-      .ant-table-tbody > tr > td {
-        padding: 12px 8px;
-        font-size: 13px;
-      }
-    }
-    
-    .ant-drawer {
-      .ant-drawer-body {
-        padding: 16px;
-      }
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .ant-pro-page-container {
-      .ant-pro-page-container-children-container {
-        padding: 12px;
-      }
-    }
-    
-    .ant-card {
-      .ant-card-body {
-        padding: 12px;
-      }
-    }
-    
-    .ant-statistic {
-      .ant-statistic-content {
-        .ant-statistic-content-value {
-          font-size: 18px;
-        }
-        
-        .ant-statistic-content-prefix {
-          font-size: 14px;
-        }
-        
-        .ant-statistic-content-suffix {
-          font-size: 12px;
-        }
-      }
-    }
-    
-    .ant-btn {
-      font-size: 13px;
-      height: 32px;
-      padding: 4px 12px;
-    }
-    
-    .ant-table {
-      .ant-table-thead > tr > th,
-      .ant-table-tbody > tr > td {
-        padding: 8px 6px;
-        font-size: 12px;
-      }
-    }
-    
-    .ant-tag {
-      margin: 2px;
-      padding: 2px 6px;
-      font-size: 11px;
-    }
-    
-    .ant-drawer {
-      width: 100% !important;
-      
-      .ant-drawer-body {
-        padding: 12px;
-      }
-    }
-  }
-  
-  /* 深色主题适配 */
-  [data-theme='dark'] & {
-    background-color: var(--ant-color-text);
-    
-    .ant-card {
-      background-color: var(--ant-color-bg-container);
-      border-color: var(--ant-color-border);
-    }
-    
-    .ant-table {
-      .ant-table-thead > tr > th {
-        background-color: var(--ant-color-text);
-        border-bottom-color: #d9d9d9;
-      }
-      
-      .ant-table-tbody > tr {
-        &:hover > td {
-          background-color: var(--ant-color-fill-quaternary);
-        }
-        
-        > td {
-          border-bottom-color: #d9d9d9;
-        }
-      }
-    }
-    
-    .ant-drawer {
-      .ant-drawer-header {
-        background-color: var(--ant-color-bg-container);
-        border-bottom-color: #d9d9d9;
-      }
-      
-      .ant-drawer-body {
-        background-color: var(--ant-color-text);
-      }
-    }
-  }
-  
-  /* 性能优化 */
-  .ant-table-tbody {
-    tr {
-      will-change: background-color;
-    }
-  }
-  
-  .ant-statistic-content-value {
-    will-change: transform;
-  }
-  
-  /* 动画效果 */
-  .ant-card {
-    transition: all 0.3s ease;
-  }
-  
-  .ant-card:hover {
-    transform: translateY(-2px);
-  }
-  
-  .ant-statistic:hover {
-    .ant-statistic-content-value {
-      transform: scale(1.05);
-      transition: transform 0.3s ease;
-    }
-  }
-  
-  .ant-btn:hover {
-    .anticon {
-      transform: scale(1.1);
-      transition: transform 0.3s ease;
-    }
-  }
-  
-  /* 加载状态 */
-  .ant-spin {
-    .ant-spin-dot {
-      .ant-spin-dot-item {
-        background-color: @primary-color;
-      }
-    }
-  }
-  
-  /* 打印样式 */
-  @media print {
-    .ant-btn,
-    .ant-table-pagination {
-      display: none;
-    }
-    
-    .ant-card {
-      box-shadow: none;
-      border: 1px solid @border-color-base;
-      page-break-inside: avoid;
-    }
-    
-    .ant-drawer {
-      display: none;
     }
   }
 }
