@@ -31,6 +31,10 @@ import {
   SearchOutlined,
   AppstoreOutlined,
   UnorderedListOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+  LineChartOutlined,
+  PlayCircleOutlined,
 } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { getStrategies, deleteStrategy } from '@/services/strategy';
@@ -287,6 +291,57 @@ const StrategyList: React.FC = () => {
       width: 160,
       render: (date: string) =>
         date ? new Date(date).toLocaleString('zh-CN') : '-',
+    },
+    {
+      title: '操作',
+      key: 'actions',
+      width: 240,
+      fixed: 'right' as const,
+      render: (_: any, record: Strategy) => (
+        <Space size="small">
+          <Button
+            type="link"
+            size="small"
+            icon={<EyeOutlined />}
+            onClick={() => showStrategyDetail(record)}
+          >
+            详情
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              setSelectedStrategy(record);
+              setEditModalVisible(true);
+            }}
+          >
+            编辑
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            icon={<LineChartOutlined />}
+            onClick={() => message.info('回测功能开发中')}
+          >
+            回测
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            icon={<PlayCircleOutlined />}
+            onClick={() => message.info('运行功能开发中')}
+          >
+            运行
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => handleDelete(record.id)}
+          />
+        </Space>
+      ),
     },
   ];
 

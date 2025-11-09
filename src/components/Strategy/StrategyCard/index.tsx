@@ -100,6 +100,9 @@ const StrategyCard: React.FC<StrategyCardProps> = ({
             <PlayCircleOutlined onClick={onRun} />
           )}
         </Tooltip>,
+        <Tooltip key="delete" title="删除策略">
+          <DeleteOutlined onClick={onDelete} style={{ color: '#ff4d4f' }} />
+        </Tooltip>,
       ]}
     >
       <div className="strategy-card-header">
