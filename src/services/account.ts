@@ -1,178 +1,273 @@
 /**
- * @fileoverview 账户管理相关API接口
- * @description 提供账户信息查询、持仓管理、资金流水等功能的API封装
- * @author AI Assistant
- * @created 2024-01-01
+ * Account Service API
+ * 账户管理服务 API
  */
 
 import { request } from '@umijs/max';
-import type { API } from './ant-design-pro/typings';
 
-/**
- * 账户列表查询参数接口
- */
-export interface AccountListParams {
-  /** 当前页码 */
-  current?: number;
-  /** 每页数量 */
-  pageSize?: number;
-  /** 账户ID */
-  account_id?: string;
-  /** 账户名称 */
-  account_name?: string;
-  /** 券商名称 */
-  broker_name?: string;
-  /** 账户状态 */
-  status?: 'active' | 'inactive' | 'suspended';
-  /** 券商ID */
-  broker_id?: string;
+const ACCOUNT_API_BASE = '/api/v1';
+
+export interface BacktestAccount {
+  id: number;
+  user_id: number;
+  backtest_id?: number;
+  account_name: string;
+  account_type: string;
+  initial_capital: number;
+  current_capital: number;
+  available_cash: number;
+  frozen_cash: number;
+  market_value: number;
+  total_assets: number;
+  total_profit_loss: number;
+  total_profit_loss_pct: number;
+  status: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-/**
- * 持仓查询参数接口
- */
-export interface PositionParams {
-  /** 当前页码 */
-  current?: number;
-  /** 每页数量 */
-  pageSize?: number;
-  /** 股票代码 */
-  code?: string;
-  /** 持仓日期 */
-  position_date?: string;
+export interface AccountPosition {
+  id: number;
+  account_id: number;
+  symbol: string;
+  quantity: number;
+  available_quantity: number;
+  average_cost: number;
+  current_price: number;
+  market_value: number;
+  profit_loss: number;
+  profit_loss_pct: number;
+  position_pct: number;
+  updated_at?: string;
+}
+
+export interface AccountTransaction {
+  id: number;
+  account_id: number;
+  transaction_date: string;
+  symbol: string;
+  transaction_type: string;
+  quantity: number;
+  price: number;
+  amount: number;
+  commission: number;
+  stamp_duty: number;
+  transfer_fee: number;
+  total_cost: number;
+  balance_after: number;
+  notes?: string;
+  created_at?: string;
+}
+
+export interface AccountDailySnapshot {
+  id: number;
+  account_id: number;
+  snapshot_date: string;
+  cash: number;
+  market_value: number;
+  total_value: number;
+  daily_return?: number;
+  cumulative_return?: number;
+  daily_profit_loss?: number;
+  positions_count: number;
+  created_at?: string;
+}
+
+export interface AccountPerformance {
+  id: number;
+  account_id: number;
+  total_return: number;
+  annual_return: number;
+  max_drawdown: number;
+  sharpe_ratio?: number;
+  sortino_ratio?: number;
+  win_rate: number;
+  profit_factor: number;
+  total_trades: number;
+  winning_trades: number;
+  losing_trades: number;
+  avg_win: number;
+  avg_loss: number;
+  avg_hold_days?: number;
+  updated_at?: string;
+}
+
+export interface AccountAssetAllocation {
+  id: number;
+  account_id: number;
+  category: string;
+  amount: number;
+  percentage: number;
+  updated_at?: string;
+}
+
+export interface AccountSummary {
+  account: BacktestAccount;
+  performance?: AccountPerformance;
+  positions_count: number;
+  recent_transactions_count: number;
+}
+
+export interface AccountDetail {
+  account: BacktestAccount;
+  positions: AccountPosition[];
+  performance?: AccountPerformance;
+  asset_allocation: AccountAssetAllocation[];
+}
+
+export interface PaginatedTransactions {
+  items: AccountTransaction[];
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+}
+
+export interface ApiResponse<T> {
+  code: number;
+  message: string;
+  data?: T;
 }
 
 /**
  * 获取账户列表
- * @param params 查询参数
- * @param options 请求配置
- * @returns 账户列表响应
  */
-export async function getAccountList(
-  params?: AccountListParams,
-  options?: { [key: string]: any },
-) {
-  return request<API.AccountList>('/api/accounts', {
+export async function getAccountList() {
+  return request<ApiResponse<BacktestAccount[]>>(`${ACCOUNT_API_BASE}/accounts`, {
     method: 'GET',
-    params,
-    ...(options || {}),
   });
 }
 
 /**
- * 获取账户详细信息
- * @param accountId 账户ID
- * @param options 请求配置
- * @returns 账户详情响应
+ * 获取账户摘要
  */
-export async function getAccountDetail(
-  accountId: string,
-  options?: { [key: string]: any },
-) {
-  return request<API.ApiResponse<API.AccountInfo>>(`/api/accounts/${accountId}`, {
+export async function getAccountSummary(accountId: number) {
+  return request<ApiResponse<AccountSummary>>(`${ACCOUNT_API_BASE}/accounts/${accountId}`, {
     method: 'GET',
-    ...(options || {}),
   });
 }
 
 /**
- * 获取账户持仓信息
- * @param accountId 账户ID
- * @param params 查询参数
- * @param options 请求配置
- * @returns 持仓信息响应
+ * 获取账户详情
  */
-export async function getAccountPositions(
-  accountId: string,
-  params?: PositionParams,
-  options?: { [key: string]: any },
-) {
-  return request<API.ApiResponse<API.PositionList>>(`/api/accounts/${accountId}/positions`, {
+export async function getAccountDetail(accountId: number) {
+  return request<ApiResponse<AccountDetail>>(`${ACCOUNT_API_BASE}/accounts/${accountId}/detail`, {
     method: 'GET',
-    params,
-    ...(options || {}),
   });
 }
 
 /**
- * 获取账户资金流水
- * @param accountId 账户ID
- * @param params 查询参数
- * @param options 请求配置
- * @returns 资金流水响应
+ * 获取账户持仓
  */
-export async function getAccountFundFlow(
-  accountId: string,
-  params?: {
-    current?: number;
-    pageSize?: number;
-    start_date?: string;
-    end_date?: string;
-    flow_type?: 'in' | 'out' | 'all';
-  },
-  options?: { [key: string]: any },
-) {
-  return request<API.ApiResponse<API.FundFlowList>>(`/api/accounts/${accountId}/fund-flow`, {
-    method: 'GET',
-    params,
-    ...(options || {}),
-  });
+export async function getAccountPositions(accountId: number) {
+  return request<ApiResponse<AccountPosition[]>>(
+    `${ACCOUNT_API_BASE}/accounts/${accountId}/positions`,
+    {
+      method: 'GET',
+    },
+  );
 }
 
 /**
- * 获取账户概览信息
- * @param accountId 账户ID
- * @param options 请求配置
- * @returns 账户概览响应
+ * 获取账户交易记录
  */
-export async function getAccountOverview(
-  accountId: string,
-  options?: { [key: string]: any },
+export async function getAccountTransactions(
+  accountId: number,
+  page: number = 1,
+  pageSize: number = 20,
 ) {
-  return request<API.ApiResponse<API.AccountOverview>>(`/api/accounts/${accountId}/overview`, {
-    method: 'GET',
-    ...(options || {}),
-  });
+  return request<ApiResponse<PaginatedTransactions>>(
+    `${ACCOUNT_API_BASE}/accounts/${accountId}/transactions`,
+    {
+      method: 'GET',
+      params: {
+        page,
+        page_size: pageSize,
+      },
+    },
+  );
+}
+
+/**
+ * 获取账户每日快照
+ */
+export async function getAccountSnapshots(
+  accountId: number,
+  startDate?: string,
+  endDate?: string,
+) {
+  return request<ApiResponse<AccountDailySnapshot[]>>(
+    `${ACCOUNT_API_BASE}/accounts/${accountId}/snapshots`,
+    {
+      method: 'GET',
+      params: {
+        start_date: startDate,
+        end_date: endDate,
+      },
+    },
+  );
 }
 
 /**
  * 获取账户绩效指标
- * @param accountId 账户ID
- * @param params 查询参数
- * @param options 请求配置
- * @returns 绩效指标响应
  */
-export async function getAccountPerformance(
-  accountId: string,
-  params?: {
-    start_date?: string;
-    end_date?: string;
-    benchmark?: string;
-  },
-  options?: { [key: string]: any },
-) {
-  return request<API.ApiResponse<API.PerformanceMetrics>>(`/api/accounts/${accountId}/performance`, {
-    method: 'GET',
-    params,
-    ...(options || {}),
+export async function getAccountPerformance(accountId: number) {
+  return request<ApiResponse<AccountPerformance>>(
+    `${ACCOUNT_API_BASE}/accounts/${accountId}/performance`,
+    {
+      method: 'GET',
+    },
+  );
+}
+
+/**
+ * 获取账户资产配置
+ */
+export async function getAccountAllocation(accountId: number) {
+  return request<ApiResponse<AccountAssetAllocation[]>>(
+    `${ACCOUNT_API_BASE}/accounts/${accountId}/allocation`,
+    {
+      method: 'GET',
+    },
+  );
+}
+
+/**
+ * 创建账户
+ */
+export async function createAccount(data: {
+  account_name: string;
+  account_type: string;
+  initial_capital: number;
+  backtest_id?: number;
+}) {
+  return request<ApiResponse<BacktestAccount>>(`${ACCOUNT_API_BASE}/accounts`, {
+    method: 'POST',
+    data,
   });
 }
 
-/** 获取账户资金流水 GET /api/accounts/${account_id}/fund-flows */
-export async function getAccountFundFlows(
-  account_id: string,
-  params?: {
-    current?: number;
-    pageSize?: number;
-    flow_type?: string;
-    start_time?: string;
-    end_time?: string;
+/**
+ * 更新账户
+ */
+export async function updateAccount(
+  accountId: number,
+  data: {
+    account_name?: string;
+    status?: string;
   },
-  options?: { [key: string]: any },
 ) {
-  return request<API.AccountFundFlowList>(`/api/accounts/${account_id}/fund-flows`, {
-    method: 'GET',
-    params,
-    ...(options || {}),
+  return request<ApiResponse<BacktestAccount>>(`${ACCOUNT_API_BASE}/accounts/${accountId}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
+/**
+ * 删除账户
+ */
+export async function deleteAccount(accountId: number) {
+  return request<ApiResponse<void>>(`${ACCOUNT_API_BASE}/accounts/${accountId}`, {
+    method: 'DELETE',
   });
 }
