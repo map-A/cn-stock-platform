@@ -1,0 +1,125 @@
+.themePanel {
+  .settingCard {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  .modeOption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  .colorOption {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    .colorEmoji {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      font-size: 14px;
+      background: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .settingItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #f0f0f0;
+    }
+  }
+
+  .previewContainer {
+    margin-top: 16px;
+    overflow: hidden;
+  }
+
+  .actionBar {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    padding: 20px 0;
+    margin-top: 24px;
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+    z-index: 10;
+  }
+}
+
+// 深色模式适配
+[data-theme='dark'] {
+  .themePanel {
+    .settingItem:not(:last-child) {
+      border-bottom-color: #303030;
+    }
+
+    .actionBar {
+      background: #141414;
+      border-top-color: #303030;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .themePanel {
+    .colorOption {
+      width: 40px;
+      height: 40px;
+
+      .colorEmoji {
+        font-size: 12px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .modeOption {
+      padding: 8px 0;
+      
+      span {
+        font-size: 12px;
+      }
+    }
+  }
+}

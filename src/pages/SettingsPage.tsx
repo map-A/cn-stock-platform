@@ -25,11 +25,13 @@ import {
   Globe,
   Mail,
   Smartphone,
+  History,
 } from 'lucide-react';
+import ActivityLogPanel from '@/components/Settings/ActivityLogPanel';
 
 export const SettingsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'account' | 'notifications' | 'appearance' | 'privacy'>('account');
+  const [activeTab, setActiveTab] = useState<'account' | 'notifications' | 'appearance' | 'privacy' | 'logs'>('account');
   
   // 通知设置
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
@@ -133,6 +135,10 @@ export const SettingsPage: React.FC = () => {
           <TabsTrigger value="privacy">
             <Shield className="w-4 h-4 mr-2" />
             隐私
+          </TabsTrigger>
+          <TabsTrigger value="logs">
+            <History className="w-4 h-4 mr-2" />
+            活动日志
           </TabsTrigger>
         </TabsList>
 
@@ -479,6 +485,11 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
           </Card>
+        </TabsContent>
+
+        {/* 活动日志 */}
+        <TabsContent value="logs">
+          <ActivityLogPanel />
         </TabsContent>
       </Tabs>
     </div>

@@ -109,6 +109,112 @@ export async function logout(): Promise<void> {
 
 // 获取用户完整设置信息
 export async function getUserSettings(): Promise<UserSettingsResponse> {
+  // 开发环境模拟数据
+  if (process.env.NODE_ENV === 'development') {
+    const mockData: UserSettingsResponse = {
+      profile: {
+        id: 'user_001',
+        username: 'admin',
+        email: 'admin@example.com',
+        nickname: '系统管理员',
+        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        department: '技术部',
+        position: '高级工程师',
+        timezone: 'Asia/Shanghai',
+        language: 'zh-CN',
+        createdAt: '2024-01-01T00:00:00Z',
+        updatedAt: new Date().toISOString(),
+        lastLoginTime: new Date().toISOString(),
+        loginCount: 128,
+        status: 'active',
+      },
+      theme: {
+        primaryColor: '#1890ff',
+        darkMode: false,
+        fontSize: 'medium',
+        borderRadius: 'medium',
+        compactMode: false,
+        sidebarCollapsed: false,
+        fixedHeader: true,
+        fixedSidebar: true,
+        contentAreaFillHeight: false,
+        animationLevel: 'basic',
+      },
+      notification: {
+        enabled: true,
+        priceAlert: true,
+        newsAlert: true,
+        earningsAlert: true,
+        marketAlert: true,
+        systemAlert: true,
+        email: {
+          enabled: true,
+          address: 'admin@example.com',
+          frequency: 'daily',
+        },
+        browser: {
+          enabled: true,
+          sound: true,
+        },
+        mobile: {
+          enabled: false,
+          sound: true,
+          vibration: true,
+        },
+        doNotDisturb: {
+          enabled: false,
+        },
+      },
+      security: {
+        twoFactorAuth: {
+          enabled: false,
+        },
+        passwordPolicy: {
+          requireChange: true,
+          changeInterval: 90,
+          lastChanged: '2024-01-01T00:00:00Z',
+        },
+        loginSecurity: {
+          allowMultipleDevices: true,
+          sessionTimeout: 30,
+          requireEmailVerification: false,
+        },
+        ipWhitelist: {
+          enabled: false,
+          ips: [],
+        },
+        activityMonitoring: {
+          enabled: true,
+          notifyUnusualActivity: true,
+        },
+      },
+      preference: {
+        language: 'zh-CN',
+        timezone: 'Asia/Shanghai',
+        dateFormat: 'YYYY-MM-DD',
+        timeFormat: '24h',
+        numberFormat: {
+          decimalPlaces: 2,
+          thousandsSeparator: true,
+          currencySymbol: '¥',
+        },
+        defaultMarket: 'sh',
+        favoriteSymbols: [],
+        defaultChartType: 'candlestick',
+        defaultChartPeriod: '1d',
+        technicalIndicators: ['MA', 'MACD', 'KDJ'],
+        autoRefresh: true,
+        refreshInterval: 5,
+        shareData: false,
+        allowAnalytics: true,
+      },
+    };
+    
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(mockData), 300);
+    });
+  }
+  
   return request('/api/v1/user/settings', {
     method: 'GET',
   });
@@ -157,6 +263,14 @@ export async function getThemeSettings(): Promise<ThemeSettings> {
 
 // 更新主题设置
 export async function updateThemeSettings(data: Partial<ThemeSettings>): Promise<ThemeSettings> {
+  // 开发环境模拟数据
+  if (process.env.NODE_ENV === 'development') {
+    console.log('更新主题设置:', data);
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(data as ThemeSettings), 300);
+    });
+  }
+  
   return request('/api/v1/user/settings/theme', {
     method: 'PUT',
     data,
@@ -330,6 +444,14 @@ export async function deleteUserAccount(password: string, reason?: string): Prom
 
 // 重置用户设置到默认值
 export async function resetUserSettings(type: 'theme' | 'notification' | 'security' | 'preference' | 'all'): Promise<void> {
+  // 开发环境模拟数据
+  if (process.env.NODE_ENV === 'development') {
+    console.log('重置设置类型:', type);
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(), 300);
+    });
+  }
+  
   return request('/api/v1/user/settings/reset', {
     method: 'POST',
     data: { type },
@@ -345,6 +467,20 @@ export async function getUserStatistics(): Promise<{
   deviceCount: number;
   securityScore: number; // 0-100
 }> {
+  // 开发环境模拟数据
+  if (process.env.NODE_ENV === 'development') {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve({
+        loginCount: 128,
+        lastLoginTime: new Date().toISOString(),
+        accountAge: 90,
+        dataUsage: 256,
+        deviceCount: 3,
+        securityScore: 85,
+      }), 200);
+    });
+  }
+  
   return request('/api/v1/user/statistics', {
     method: 'GET',
   });

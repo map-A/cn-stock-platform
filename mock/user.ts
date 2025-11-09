@@ -202,4 +202,141 @@ export default {
   },
 
   'GET  /api/login/captcha': getFakeCaptcha,
+
+  // 用户设置相关接口
+  'GET /api/v1/user/settings': (_req: Request, res: Response) => {
+    res.send({
+      success: true,
+      data: {
+        profile: {
+          id: 'user_001',
+          username: 'admin',
+          email: 'admin@example.com',
+          nickname: '系统管理员',
+          avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+          department: '技术部',
+          position: '高级工程师',
+          timezone: 'Asia/Shanghai',
+          language: 'zh-CN',
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: new Date().toISOString(),
+          lastLoginTime: new Date().toISOString(),
+          loginCount: 128,
+          status: 'active',
+        },
+        theme: {
+          primaryColor: '#1890ff',
+          darkMode: false,
+          fontSize: 'medium',
+          borderRadius: 'medium',
+          compactMode: false,
+          sidebarCollapsed: false,
+          fixedHeader: true,
+          fixedSidebar: true,
+          contentAreaFillHeight: false,
+          animationLevel: 'basic',
+        },
+        notification: {
+          enabled: true,
+          priceAlert: true,
+          newsAlert: true,
+          earningsAlert: true,
+          marketAlert: true,
+          systemAlert: true,
+          email: {
+            enabled: true,
+            address: 'admin@example.com',
+            frequency: 'daily',
+          },
+          browser: {
+            enabled: true,
+            sound: true,
+          },
+          mobile: {
+            enabled: false,
+            sound: true,
+            vibration: true,
+          },
+          doNotDisturb: {
+            enabled: false,
+          },
+        },
+        security: {
+          twoFactorAuth: {
+            enabled: false,
+          },
+          passwordPolicy: {
+            requireChange: true,
+            changeInterval: 90,
+            lastChanged: '2024-01-01T00:00:00Z',
+          },
+          loginSecurity: {
+            allowMultipleDevices: true,
+            sessionTimeout: 30,
+            requireEmailVerification: false,
+          },
+          ipWhitelist: {
+            enabled: false,
+            ips: [],
+          },
+          activityMonitoring: {
+            enabled: true,
+            notifyUnusualActivity: true,
+          },
+        },
+        preference: {
+          language: 'zh-CN',
+          timezone: 'Asia/Shanghai',
+          dateFormat: 'YYYY-MM-DD',
+          timeFormat: '24h',
+          numberFormat: {
+            decimalPlaces: 2,
+            thousandsSeparator: true,
+            currencySymbol: '¥',
+          },
+          defaultMarket: 'sh',
+          favoriteSymbols: [],
+          defaultChartType: 'candlestick',
+          defaultChartPeriod: '1d',
+          technicalIndicators: ['MA', 'MACD', 'KDJ'],
+          autoRefresh: true,
+          refreshInterval: 5,
+          shareData: false,
+          allowAnalytics: true,
+        },
+      },
+    });
+  },
+
+  'GET /api/v1/user/statistics': (_req: Request, res: Response) => {
+    res.send({
+      success: true,
+      data: {
+        loginCount: 128,
+        lastLoginTime: new Date().toISOString(),
+        accountAge: 90,
+        dataUsage: 256,
+        deviceCount: 3,
+        securityScore: 85,
+      },
+    });
+  },
+
+  'PUT /api/v1/user/settings/theme': async (req: Request, res: Response) => {
+    await waitTime(500);
+    res.send({
+      success: true,
+      data: req.body,
+    });
+  },
+
+  'POST /api/v1/user/settings/reset': async (_req: Request, res: Response) => {
+    await waitTime(500);
+    res.send({
+      success: true,
+      data: {
+        message: '设置已重置为默认值',
+      },
+    });
+  },
 };

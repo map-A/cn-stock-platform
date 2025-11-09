@@ -1,0 +1,205 @@
+/**
+ * 全局样式
+ * 支持主题变量和动态样式
+ */
+
+/* CSS 变量定义 */
+:root {
+  --primary-color: #1890ff;
+  --font-size-base: 14px;
+  --border-radius-base: 8px;
+}
+
+/* ==================== 字体大小全局应用 ==================== */
+body {
+  font-size: var(--font-size-base) !important;
+}
+
+body * {
+  font-size: inherit;
+}
+
+/* ==================== 圆角全局应用 ==================== */
+.ant-btn,
+.ant-card,
+.ant-modal,
+.ant-modal-content,
+.ant-drawer-content,
+.ant-input,
+.ant-input-number,
+.ant-select-selector,
+.ant-picker,
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab,
+.ant-dropdown-menu,
+.ant-popover-inner,
+.ant-tooltip-inner,
+.ant-message-notice-content,
+.ant-notification-notice,
+.ant-alert,
+.ant-badge,
+.ant-tag,
+.ant-pagination-item,
+.ant-table,
+.ant-form-item-control-input,
+.ant-switch {
+  border-radius: var(--border-radius-base) !important;
+}
+
+/* ==================== 深色模式 ==================== */
+body[data-theme='dark'],
+body.dark-mode {
+  background-color: #09090B !important;
+  color: #E5E7EB !important;
+}
+
+body[data-theme='dark'] .ant-layout,
+body.dark-mode .ant-layout {
+  background-color: #09090B !important;
+}
+
+body[data-theme='dark'] .ant-layout-header,
+body.dark-mode .ant-layout-header {
+  background-color: #1E222D !important;
+}
+
+body[data-theme='dark'] .ant-layout-sider,
+body.dark-mode .ant-layout-sider {
+  background-color: #09090B !important;
+}
+
+body[data-theme='dark'] .ant-card,
+body.dark-mode .ant-card {
+  background-color: #1E222D !important;
+  border-color: #2A2E39 !important;
+  color: #E5E7EB !important;
+}
+
+body[data-theme='dark'] .ant-table,
+body.dark-mode .ant-table {
+  background-color: #1E222D !important;
+  color: #E5E7EB !important;
+}
+
+body[data-theme='dark'] .ant-menu,
+body.dark-mode .ant-menu {
+  background-color: #09090B !important;
+  color: #E5E7EB !important;
+}
+
+body[data-theme='dark'] .ant-menu-item,
+body.dark-mode .ant-menu-item {
+  color: #E5E7EB !important;
+}
+
+/* ==================== 紧凑模式 ==================== */
+body.compact-mode .ant-card {
+  margin-bottom: 8px !important;
+}
+
+body.compact-mode .ant-card-body {
+  padding: 12px !important;
+}
+
+body.compact-mode .ant-space {
+  gap: 8px !important;
+}
+
+body.compact-mode .ant-form-item {
+  margin-bottom: 12px !important;
+}
+
+body.compact-mode .ant-table-tbody > tr > td {
+  padding: 8px !important;
+}
+
+body.compact-mode .ant-btn {
+  padding: 4px 12px !important;
+  height: 28px !important;
+}
+
+body.compact-mode .ant-input {
+  padding: 4px 8px !important;
+}
+
+/* ==================== 关闭动画模式 ==================== */
+body.no-animations,
+body.no-animations * {
+  transition: none !important;
+  animation: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
+body.no-animations .ant-motion-collapse {
+  transition: none !important;
+}
+
+/* ==================== 主色调全局应用 ==================== */
+.ant-btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  opacity: 0.85 !important;
+}
+
+.ant-btn-link {
+  color: var(--primary-color) !important;
+}
+
+.ant-menu-item-selected {
+  color: var(--primary-color) !important;
+}
+
+.ant-menu-item-selected a {
+  color: var(--primary-color) !important;
+}
+
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary-color) !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ant-radio-checked .ant-radio-inner {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-radio-checked .ant-radio-inner::after {
+  background-color: var(--primary-color) !important;
+}
+
+.ant-switch-checked {
+  background-color: var(--primary-color) !important;
+}
+
+.ant-slider-track {
+  background-color: var(--primary-color) !important;
+}
+
+.ant-slider-handle {
+  border-color: var(--primary-color) !important;
+}
+
+a {
+  color: var(--primary-color) !important;
+}
+
+/* ==================== 平滑过渡（仅在启用动画时） ==================== */
+body:not(.no-animations) {
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+body:not(.no-animations) .ant-layout,
+body:not(.no-animations) .ant-card,
+body:not(.no-animations) .ant-btn,
+body:not(.no-animations) .ant-menu {
+  transition: all 0.3s ease !important;
+}

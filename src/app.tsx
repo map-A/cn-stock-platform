@@ -13,15 +13,25 @@ import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
 import defaultSettings from '@/config/defaultSettings';
 import { getLayoutSettings } from '@/config/themeToken';
 import { errorConfig } from '@/requestErrorConfig';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import '@ant-design/v5-patch-for-react-19';
 // 导入 API 拦截器，确保在应用启动时被初始化
 import '@/api/interceptors';
 // 导入全局主题样式变量
 import '@/styles/theme-variables.css';
+import '@/styles/global.css';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isDevOrTest = isDev || process.env.CI;
 const loginPath = '/user/login';
+
+/**
+ * @name rootContainer
+ * @description 应用根容器，包装全局 Provider
+ */
+export function rootContainer(container: React.ReactElement) {
+  return <ThemeProvider>{container}</ThemeProvider>;
+}
 
 /**
  * @see https://umijs.org/docs/api/runtime-config#getinitialstate
