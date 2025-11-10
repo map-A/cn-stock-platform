@@ -82,7 +82,7 @@ export const lightThemeToken = {
  * @param navTheme 导航栏主题 'light' | 'dark' | 'realDark'
  * @returns token配置对象
  */
-export const getThemeToken = (navTheme: string = 'realDark') => {
+export const getThemeToken = (navTheme: string = 'light') => {
   // realDark 和 dark 都使用深色主题
   if (navTheme === 'realDark' || navTheme === 'dark') {
     return darkThemeToken;

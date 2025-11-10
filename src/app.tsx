@@ -13,7 +13,7 @@ import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
 import defaultSettings from '@/config/defaultSettings';
 import { getLayoutSettings } from '@/config/themeToken';
 import { errorConfig } from '@/requestErrorConfig';
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import { loadThemeConfig, applyThemeToDOM } from '@/config/themeConfig';
 import '@ant-design/v5-patch-for-react-19';
 // 导入 API 拦截器，确保在应用启动时被初始化
 import '@/api/interceptors';
@@ -24,14 +24,6 @@ import '@/styles/global.css';
 const isDev = process.env.NODE_ENV === 'development';
 const isDevOrTest = isDev || process.env.CI;
 const loginPath = '/user/login';
-
-/**
- * @name rootContainer
- * @description 应用根容器，包装全局 Provider
- */
-export function rootContainer(container: React.ReactElement) {
-  return <ThemeProvider>{container}</ThemeProvider>;
-}
 
 /**
  * @see https://umijs.org/docs/api/runtime-config#getinitialstate
@@ -68,6 +60,10 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
+  
+  // 加载并应用保存的主题配置
+  const savedThemeConfig = loadThemeConfig();
+  applyThemeToDOM(savedThemeConfig);
   
   // 应用动态主题token到默认设置
   const initialSettings = getLayoutSettings(defaultSettings as Partial<LayoutSettings>);

@@ -5,8 +5,6 @@
  * - 个人信息管理
  * - 界面主题配置
  * - 消息通知设置
- * - 安全设置管理
- * - 个性化偏好配置
  */
 
 import React, { useState, useEffect } from 'react';
@@ -33,9 +31,6 @@ import {
   UserOutlined,
   SettingOutlined,
   BellOutlined,
-  SafetyCertificateOutlined,
-  HeartOutlined,
-  MobileOutlined,
   HistoryOutlined,
   DownloadOutlined,
   ReloadOutlined,
@@ -46,9 +41,6 @@ import {
   ProfilePanel,
   ThemePanel, 
   NotificationPanel,
-  SecurityPanel,
-  PreferencePanel,
-  DevicePanel,
   ActivityPanel,
 } from '@/components/UserSettings';
 
@@ -289,51 +281,6 @@ const UserSettings: React.FC = () => {
           >
             <NotificationPanel 
               notification={settings?.notification}
-              onUpdate={loadUserSettings}
-            />
-          </TabPane>
-
-          <TabPane
-            tab={
-              <Space>
-                <SafetyCertificateOutlined />
-                安全设置
-              </Space>
-            }
-            key="security"
-          >
-            <SecurityPanel 
-              security={settings?.security}
-              onUpdate={loadUserSettings}
-            />
-          </TabPane>
-
-          <TabPane
-            tab={
-              <Space>
-                <HeartOutlined />
-                个性化偏好
-              </Space>
-            }
-            key="preference"
-          >
-            <PreferencePanel 
-              preference={settings?.preference}
-              onUpdate={loadUserSettings}
-            />
-          </TabPane>
-
-          <TabPane
-            tab={
-              <Space>
-                <MobileOutlined />
-                设备管理
-              </Space>
-            }
-            key="devices"
-          >
-            <DevicePanel 
-              devices={settings?.devices}
               onUpdate={loadUserSettings}
             />
           </TabPane>

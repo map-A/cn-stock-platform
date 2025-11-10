@@ -46,49 +46,64 @@ body * {
 }
 
 /* ==================== 深色模式 ==================== */
+:root[data-theme='dark'],
 body[data-theme='dark'],
 body.dark-mode {
-  background-color: #09090B !important;
-  color: #E5E7EB !important;
+  background-color: var(--ant-color-bg-base, #141414) !important;
+  color: var(--ant-color-text, #e8e8e8) !important;
 }
 
+:root[data-theme='dark'] .ant-layout,
 body[data-theme='dark'] .ant-layout,
 body.dark-mode .ant-layout {
-  background-color: #09090B !important;
+  background-color: var(--ant-color-bg-layout, #000000) !important;
 }
 
+:root[data-theme='dark'] .ant-layout-header,
 body[data-theme='dark'] .ant-layout-header,
 body.dark-mode .ant-layout-header {
-  background-color: #1E222D !important;
+  background-color: var(--ant-color-bg-container, #1f1f1f) !important;
 }
 
+:root[data-theme='dark'] .ant-layout-sider,
 body[data-theme='dark'] .ant-layout-sider,
 body.dark-mode .ant-layout-sider {
-  background-color: #09090B !important;
+  background-color: var(--ant-color-bg-layout, #000000) !important;
 }
 
+:root[data-theme='dark'] .ant-card,
 body[data-theme='dark'] .ant-card,
 body.dark-mode .ant-card {
-  background-color: #1E222D !important;
-  border-color: #2A2E39 !important;
-  color: #E5E7EB !important;
+  background-color: var(--ant-color-bg-container, #1f1f1f) !important;
+  border-color: var(--ant-color-border, #434343) !important;
+  color: var(--ant-color-text, #e8e8e8) !important;
 }
 
+:root[data-theme='dark'] .ant-table,
 body[data-theme='dark'] .ant-table,
 body.dark-mode .ant-table {
-  background-color: #1E222D !important;
-  color: #E5E7EB !important;
+  background-color: var(--ant-color-bg-container, #1f1f1f) !important;
+  color: var(--ant-color-text, #e8e8e8) !important;
 }
 
+:root[data-theme='dark'] .ant-menu,
 body[data-theme='dark'] .ant-menu,
 body.dark-mode .ant-menu {
-  background-color: #09090B !important;
-  color: #E5E7EB !important;
+  background-color: var(--ant-color-bg-layout, #000000) !important;
+  color: var(--ant-color-text, #e8e8e8) !important;
 }
 
+:root[data-theme='dark'] .ant-menu-item,
 body[data-theme='dark'] .ant-menu-item,
 body.dark-mode .ant-menu-item {
-  color: #E5E7EB !important;
+  color: var(--ant-color-text, #e8e8e8) !important;
+}
+
+/* ==================== 浅色模式 ==================== */
+:root[data-theme='light'],
+body[data-theme='light'] {
+  background-color: var(--ant-color-bg-base, #ffffff) !important;
+  color: var(--ant-color-text, #1a1a1a) !important;
 }
 
 /* ==================== 紧凑模式 ==================== */
@@ -135,61 +150,156 @@ body.no-animations .ant-motion-collapse {
 }
 
 /* ==================== 主色调全局应用 ==================== */
+/* 使用CSS变量确保主题色统一 */
 .ant-btn-primary {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
+  background-color: var(--ant-color-primary) !important;
+  border-color: var(--ant-color-primary) !important;
 }
 
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
+  background-color: var(--ant-color-primary) !important;
+  border-color: var(--ant-color-primary) !important;
   opacity: 0.85 !important;
 }
 
 .ant-btn-link {
-  color: var(--primary-color) !important;
+  color: var(--ant-color-primary) !important;
 }
 
-.ant-menu-item-selected {
-  color: var(--primary-color) !important;
+.ant-btn-link:hover,
+.ant-btn-link:focus {
+  color: var(--ant-color-primary) !important;
+  opacity: 0.85 !important;
 }
 
-.ant-menu-item-selected a {
-  color: var(--primary-color) !important;
+/* 菜单选中状态 */
+.ant-menu-item-selected,
+.ant-menu-item-active,
+.ant-menu-submenu-selected {
+  color: var(--ant-color-primary) !important;
 }
 
-.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: var(--primary-color) !important;
+.ant-menu-item-selected a,
+.ant-menu-item-active a {
+  color: var(--ant-color-primary) !important;
 }
 
+.ant-menu-item:hover {
+  color: var(--ant-color-primary) !important;
+}
+
+/* Tabs 选中状态 */
+.ant-tabs-tab-active .ant-tabs-tab-btn,
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--ant-color-primary) !important;
+}
+
+.ant-tabs-tab:hover {
+  color: var(--ant-color-primary) !important;
+}
+
+.ant-tabs-ink-bar {
+  background: var(--ant-color-primary) !important;
+}
+
+/* Checkbox */
 .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
+  background-color: var(--ant-color-primary) !important;
+  border-color: var(--ant-color-primary) !important;
 }
 
+.ant-checkbox-wrapper:hover .ant-checkbox-inner {
+  border-color: var(--ant-color-primary) !important;
+}
+
+/* Radio */
 .ant-radio-checked .ant-radio-inner {
-  border-color: var(--primary-color) !important;
+  border-color: var(--ant-color-primary) !important;
 }
 
 .ant-radio-checked .ant-radio-inner::after {
-  background-color: var(--primary-color) !important;
+  background-color: var(--ant-color-primary) !important;
 }
 
+.ant-radio-wrapper:hover .ant-radio-inner {
+  border-color: var(--ant-color-primary) !important;
+}
+
+/* Switch */
 .ant-switch-checked {
-  background-color: var(--primary-color) !important;
+  background-color: var(--ant-color-primary) !important;
 }
 
+/* Slider */
 .ant-slider-track {
-  background-color: var(--primary-color) !important;
+  background-color: var(--ant-color-primary) !important;
 }
 
 .ant-slider-handle {
-  border-color: var(--primary-color) !important;
+  border-color: var(--ant-color-primary) !important;
 }
 
+.ant-slider-handle:hover,
+.ant-slider-handle:focus {
+  border-color: var(--ant-color-primary) !important;
+  box-shadow: 0 0 0 5px rgba(var(--ant-color-primary-rgb), 0.12) !important;
+}
+
+/* Progress */
+.ant-progress-bg {
+  background-color: var(--ant-color-primary) !important;
+}
+
+/* Segmented 选中状态 */
+.ant-segmented-item-selected {
+  background-color: var(--ant-color-primary) !important;
+  color: #fff !important;
+}
+
+.ant-segmented-thumb {
+  background-color: var(--ant-color-primary) !important;
+}
+
+/* Link */
 a {
-  color: var(--primary-color) !important;
+  color: var(--ant-color-primary) !important;
+}
+
+a:hover {
+  color: var(--ant-color-primary) !important;
+  opacity: 0.85 !important;
+}
+
+/* Select 选中项 */
+.ant-select-item-option-selected {
+  background-color: rgba(var(--ant-color-primary-rgb), 0.1) !important;
+}
+
+.ant-select-item-option-active {
+  background-color: rgba(var(--ant-color-primary-rgb), 0.08) !important;
+}
+
+/* Pagination */
+.ant-pagination-item-active {
+  border-color: var(--ant-color-primary) !important;
+  background-color: var(--ant-color-primary) !important;
+}
+
+.ant-pagination-item-active a {
+  color: #fff !important;
+}
+
+/* Badge */
+.ant-badge-status-processing {
+  background-color: var(--ant-color-primary) !important;
+}
+
+/* Tag */
+.ant-tag-blue {
+  color: var(--ant-color-primary) !important;
+  background: rgba(var(--ant-color-primary-rgb), 0.1) !important;
+  border-color: var(--ant-color-primary) !important;
 }
 
 /* ==================== 平滑过渡（仅在启用动画时） ==================== */

@@ -4,8 +4,8 @@ const Settings: ProLayoutProps & {
   pwa?: boolean;
   logo?: string;
 } = {
-  navTheme: 'realDark',
-  colorPrimary: '#00FC50',
+  navTheme: 'light',
+  colorPrimary: '#1677ff',
   layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,

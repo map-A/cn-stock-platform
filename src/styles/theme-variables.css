@@ -1,24 +1,39 @@
 /**
  * 全局主题样式变量
+ * 基于 theme-spec.md v1.1 规范
  * 使用CSS变量确保所有页面响应主题切换
  */
 
-/* 
-  使用Ant Design的CSS变量系统
-  这些变量会根据主题自动更新
-*/
+/* 默认（浅色）主题变量 */
+:root {
+  --ant-color-bg-base: #ffffff;
+  --ant-color-bg-container: #f5f5f5;
+  --ant-color-bg-elevated: #ffffff;
+  --ant-color-bg-layout: #f0f2f5;
+  --ant-color-text: #1a1a1a;
+  --ant-color-text-secondary: #595959;
+  --ant-color-text-tertiary: #8c8c8c;
+  --ant-color-text-disabled: #bfbfbf;
+  --ant-color-border: #d9d9d9;
+  --ant-color-border-secondary: #f0f0f0;
+  --ant-color-primary: #1677ff;
+  --ant-shadow-base: rgba(0, 0, 0, 0.1);
+  --ant-color-bg-text-hover: rgba(0, 0, 0, 0.04);
+}
 
 /* 深色主题变量 */
-:root {
-  --ant-color-bg-layout: #09090B;
-  --ant-color-bg-container: #1E222D;
-  --ant-color-bg-elevated: #2A2E39;
-  --ant-color-text: #E5E7EB;
-  --ant-color-text-secondary: #9CA3AF;
-  --ant-color-text-tertiary: #6B7280;
-  --ant-color-text-quaternary: #4B5563;
-  --ant-color-border: #2A2E39;
-  --ant-color-border-secondary: #3A3F4B;
+:root[data-theme='dark'] {
+  --ant-color-bg-base: #141414;
+  --ant-color-bg-container: #1f1f1f;
+  --ant-color-bg-elevated: #1f1f1f;
+  --ant-color-bg-layout: #000000;
+  --ant-color-text: #e8e8e8;
+  --ant-color-text-secondary: #bfbfbf;
+  --ant-color-text-tertiary: #8c8c8c;
+  --ant-color-text-disabled: #595959;
+  --ant-color-border: #434343;
+  --ant-color-border-secondary: #303030;
+  --ant-shadow-base: rgba(0, 0, 0, 0.5);
   --ant-color-bg-text-hover: rgba(255, 255, 255, 0.06);
 }
 
