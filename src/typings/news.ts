@@ -57,7 +57,7 @@ export interface NewsListResponse {
 }
 
 // 市场情绪指标
-export interface MarketSentiment {
+export interface MarketNewsSentiment {
   date: string;
   overallSentiment: NewsSentiment;
   sentimentScore: number;

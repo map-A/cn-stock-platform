@@ -109,73 +109,8 @@ export interface StrategyConfig {
   updatedAt: string;
 }
 
-// 回测配置
-export interface BacktestConfig {
-  strategyId: string;
-  configId: string;
-  startDate: string;
-  endDate: string;
-  symbols: string[];
-  initialCapital: number;
-  commission: number;
-  slippage: number;
-  benchmark?: string;
-}
 
-// 回测结果
-export interface BacktestResult {
-  id: string;
-  strategyId: string;
-  configId: string;
-  config: BacktestConfig;
-  
-  // 基础指标
-  totalReturn: number;
-  annualizedReturn: number;
-  volatility: number;
-  sharpeRatio: number;
-  maxDrawdown: number;
-  winRate: number;
-  
-  // 详细指标
-  totalTrades: number;
-  winningTrades: number;
-  losingTrades: number;
-  avgWinAmount: number;
-  avgLossAmount: number;
-  profitFactor: number;
-  
-  // 风险指标
-  var95: number;
-  var99: number;
-  expectedShortfall: number;
-  beta: number;
-  alpha: number;
-  informationRatio: number;
-  
-  // 时间序列数据
-  equityCurve: Array<{
-    timestamp: string;
-    value: number;
-    return: number;
-    drawdown: number;
-  }>;
-  
-  // 交易记录
-  trades: Array<{
-    id: string;
-    symbol: string;
-    side: 'buy' | 'sell';
-    quantity: number;
-    price: number;
-    timestamp: string;
-    pnl: number;
-    commission: number;
-  }>;
-  
-  createdAt: string;
-  status: 'running' | 'completed' | 'failed';
-}
+
 
 // 策略执行状态
 export interface StrategyExecution {

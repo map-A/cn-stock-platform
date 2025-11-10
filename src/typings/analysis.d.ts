@@ -128,7 +128,7 @@ export interface DepartmentTrack {
 /**
  * 市场情绪指标
  */
-export interface MarketSentiment {
+export interface MarketTradeSentiment {
   date: string;
   // 市场情绪指数（0-100）
   sentimentIndex: number;
