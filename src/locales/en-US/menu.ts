@@ -4,6 +4,7 @@ export default {
   
   // Market
   'menu.market': 'Market',
+  'menu.market.realtime': 'Real-time Quotes',
   'menu.market.mover': 'Market Movers',
   'menu.market.heatmap': 'Heatmap',
   'menu.market.calendar': 'Economic Calendar',

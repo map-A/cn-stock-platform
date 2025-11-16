@@ -45,7 +45,8 @@
     "echarts": "^6.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "recharts": "^3.3.0"
+    "recharts": "^3.3.0",
+    "scichart": "^4.0.918"
   },
   "devDependencies": {
     "@ant-design/plots": "^2.6.6",

@@ -155,4 +155,14 @@ export default defineConfig({
   define: {
     'process.env.CI': process.env.CI,
   },
+  /**
+   * @name 复制静态文件
+   * @description 复制 SciChart WASM 文件到构建目录
+   */
+  copy: [
+    {
+      from: 'node_modules/scichart/_wasm',
+      to: 'static/scichart',
+    },
+  ],
 });

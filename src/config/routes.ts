@@ -17,12 +17,7 @@ export default [
     path: '/market',
     name: 'market',
     icon: 'LineChartOutlined',
-    routes: [
-      { path: '/market/mover', component: './Market/Mover', name: 'mover', hideInMenu: false },
-      { path: '/market/heatmap', component: './Market/Heatmap', name: 'heatmap', hideInMenu: false },
-      { path: '/market/calendar', component: './Market/Calendar', name: 'calendar', hideInMenu: false },
-      { path: '/market/flow', component: './Market/Flow', name: 'flow', hideInMenu: false },
-    ],
+    component: './Market',
   },
 
   // ============ 选股与关注 ============

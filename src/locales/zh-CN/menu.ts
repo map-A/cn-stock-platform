@@ -4,6 +4,7 @@ export default {
   
   // 市场行情
   'menu.market': '行情',
+  'menu.market.realtime': '实时行情',
   'menu.market.mover': '涨跌榜',
   'menu.market.heatmap': '热力图',
   'menu.market.calendar': '财经日历',
