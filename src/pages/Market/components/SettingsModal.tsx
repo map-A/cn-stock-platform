@@ -13,97 +13,13 @@ import {
   Divider,
 } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import { createStyles } from 'antd-style';
 import { useSettingsStore } from '@/stores/modules/settings';
 import { SymbolSettings, StatusLineSettings, ScalesSettings, LayoutSettings, TradingSettings } from './Settings';
 import AlertSettings from './Settings/AlertSettings';
 import EventSettings from './Settings/EventSettings';
+import styles from './SettingsModal.module.less';
 
 const { Text } = Typography;
-
-const useStyles = createStyles(({ token }) => ({
-  modal: {
-    '.ant-modal-header': {
-      padding: '16px 24px',
-      borderBottom: `1px solid ${token.colorBorder}`,
-      marginBottom: 0,
-    },
-    '.ant-modal-body': {
-      padding: 0,
-      maxHeight: '70vh',
-      overflowY: 'auto',
-    },
-    '.ant-modal-footer': {
-      padding: '12px 24px',
-      marginTop: 0,
-      borderTop: `1px solid ${token.colorBorder}`,
-    },
-  },
-  bodyContent: {
-    display: 'flex',
-    minHeight: '70vh',
-    maxHeight: '70vh',
-  },
-  sidebar: {
-    width: '160px',
-    minWidth: '140px',
-    borderRight: `1px solid ${token.colorBorder}`,
-    padding: '16px 0',
-    background: '#ffffff',
-    flexShrink: 0,
-  },
-  sidebarButton: {
-    width: '100%',
-    textAlign: 'left',
-    padding: '10px 24px',
-    border: 'none',
-    background: 'transparent',
-    cursor: 'pointer',
-    fontSize: '14px',
-    transition: 'all 0.2s',
-    '&:hover': {
-      background: token.colorBgTextHover,
-    },
-    '&.active': {
-      background: token.colorPrimaryBg,
-      color: token.colorPrimary,
-      fontWeight: 500,
-    },
-  },
-  content: {
-    flex: 1,
-    padding: '24px 32px',
-  },
-  section: {
-    marginBottom: '24px',
-  },
-  sectionTitle: {
-    fontSize: '14px',
-    fontWeight: 600,
-    marginBottom: '12px',
-    color: token.colorText,
-  },
-  formItem: {
-    marginBottom: '12px',
-    '.ant-form-item-label': {
-      padding: 0,
-    },
-  },
-  colorButton: {
-    width: '32px',
-    height: '24px',
-    border: `1px solid ${token.colorBorder}`,
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  link: {
-    color: token.colorLink,
-    fontSize: '12px',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
-}));
 
 interface SettingsModalProps {
   visible: boolean;
@@ -111,7 +27,6 @@ interface SettingsModalProps {
 }
 
 const SettingsModal: React.FC<SettingsModalProps> = ({ visible, onClose }) => {
-  const { styles } = useStyles();
   const [form] = Form.useForm();
   const [activeTab, setActiveTab] = useState('symbol');
   const { settings, updateSettings, resetSettings } = useSettingsStore();
@@ -190,7 +105,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ visible, onClose }) => {
   return (
     <Modal
       title={
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className={styles.title}>
           <SettingOutlined />
           <span>设置</span>
         </div>
@@ -201,11 +116,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ visible, onClose }) => {
       style={{ maxWidth: 800 }}
       className={styles.modal}
       footer={
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', gap: 8 }}>
+        <div className={styles.footer}>
+          <div className={styles.actions}>
             <Button onClick={handleReset} danger>重置为默认</Button>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className={styles.actions}>
             <Button onClick={handleCancel}>取消</Button>
             <Button type="primary" onClick={handleSave}>
               确认

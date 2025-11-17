@@ -16,77 +16,10 @@ import {
   Space,
 } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
-import { createStyles } from 'antd-style';
+import styles from './AlertModal.module.less';
 
 const { Text } = Typography;
 const { TextArea } = Input;
-
-const useStyles = createStyles(({ token }) => ({
-  modal: {
-    '.ant-modal-header': {
-      padding: '16px 24px',
-      borderBottom: `1px solid ${token.colorBorder}`,
-      marginBottom: 0,
-    },
-    '.ant-modal-body': {
-      padding: 0,
-      maxHeight: '70vh',
-      overflowY: 'auto',
-    },
-    '.ant-modal-footer': {
-      padding: '12px 24px',
-      marginTop: 0,
-      borderTop: `1px solid ${token.colorBorder}`,
-    },
-  },
-  tabs: {
-    '.ant-tabs-nav': {
-      padding: '0 24px',
-      margin: 0,
-      background: token.colorBgContainer,
-    },
-    '.ant-tabs-content': {
-      padding: '24px',
-    },
-  },
-  formItem: {
-    marginBottom: '16px',
-    '.ant-form-item-label': {
-      padding: '0 0 4px',
-      label: {
-        fontSize: '13px',
-        fontWeight: 500,
-      },
-    },
-  },
-  conditionRow: {
-    display: 'flex',
-    gap: '8px',
-    alignItems: 'center',
-    marginBottom: '12px',
-  },
-  helperText: {
-    fontSize: '12px',
-    color: token.colorTextSecondary,
-    lineHeight: '18px',
-    marginTop: '4px',
-  },
-  checkboxGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-  },
-  subInput: {
-    marginTop: '8px',
-    marginLeft: '24px',
-  },
-  sectionTitle: {
-    fontSize: '13px',
-    fontWeight: 600,
-    marginBottom: '12px',
-    marginTop: '16px',
-  },
-}));
 
 interface AlertModalProps {
   visible: boolean;
@@ -101,7 +34,6 @@ const AlertModal: React.FC<AlertModalProps> = ({
   symbol = 'NVDA',
   currentPrice = 193.12,
 }) => {
-  const { styles } = useStyles();
   const [form] = Form.useForm();
   const [activeTab, setActiveTab] = useState('1');
   const [notifyEmail, setNotifyEmail] = useState(false);
@@ -248,7 +180,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
             />
           </Form.Item>
 
-          <div className={styles.helperText} style={{ marginTop: -8, marginBottom: 16 }}>
+          <div className={styles.helperText}>
             为警报设置一个易于识别的名称
           </div>
 
@@ -261,7 +193,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
             />
           </Form.Item>
 
-          <div className={styles.helperText} style={{ marginTop: -8, marginBottom: 16 }}>
+          <div className={styles.helperText}>
             您可以使用占位符：{'{{price}}, {{time}}, {{volume}}'} 等
           </div>
 
@@ -274,7 +206,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
             <Checkbox>播放提示音</Checkbox>
           </Form.Item>
 
-          <div className={styles.helperText} style={{ marginLeft: 24 }}>
+          <div className={styles.helperText}>
             警报触发时播放声音提醒
           </div>
         </div>
@@ -285,13 +217,11 @@ const AlertModal: React.FC<AlertModalProps> = ({
       label: '通知',
       children: (
         <div>
-          <div style={{ marginBottom: 16 }}>
-            <Text strong style={{ fontSize: 14 }}>
-              通知方式
-            </Text>
-            <div className={styles.helperText} style={{ marginTop: 4 }}>
-              选择警报触发时接收通知的方式
-            </div>
+          <div className={styles.sectionTitle}>
+            通知方式
+          </div>
+          <div className={styles.helperText}>
+            选择警报触发时接收通知的方式
           </div>
 
           <div className={styles.checkboxGroup}>
@@ -339,10 +269,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
                   <Form.Item name="webhookUrl" className={styles.subInput}>
                     <Input placeholder="https://webhook.example.com/alert" />
                   </Form.Item>
-                  <div
-                    className={styles.helperText}
-                    style={{ marginLeft: 24, marginTop: -8 }}
-                  >
+                  <div className={styles.helperText}>
                     将发送 POST 请求到此 URL
                   </div>
                 </>
@@ -361,10 +288,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
                   <Form.Item name="sms" className={styles.subInput}>
                     <Input placeholder="+86 138 0000 0000" />
                   </Form.Item>
-                  <div
-                    className={styles.helperText}
-                    style={{ marginLeft: 24, marginTop: -8 }}
-                  >
+                  <div className={styles.helperText}>
                     需要订阅 Premium 计划
                   </div>
                 </>
@@ -379,7 +303,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
   return (
     <Modal
       title={
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className={styles.title}>
           <BellOutlined />
           <span>创建警报 - {symbol}</span>
         </div>
@@ -389,13 +313,13 @@ const AlertModal: React.FC<AlertModalProps> = ({
       width={520}
       className={styles.modal}
       footer={
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={styles.footer}>
           <div>
             {activeTab !== '3' && (
               <Button onClick={handleNext}>下一步</Button>
             )}
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className={styles.actions}>
             <Button onClick={onClose}>取消</Button>
             <Button type="primary" onClick={handleSubmit}>
               创建警报

@@ -5,9 +5,6 @@ import { CodeOutlined, LineChartOutlined, ExpandOutlined, FullscreenOutlined } f
 
 const useStyles = createStyles(({ token }) => ({
   bottomBar: {
-    position: 'fixed',
-    bottom: 0,
-    right: 0,
     height: '32px',
     background: token.colorBgElevated,
     borderTop: `1px solid ${token.colorBorder}`,
@@ -15,8 +12,7 @@ const useStyles = createStyles(({ token }) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '0 12px',
-    zIndex: 100,
-    left: '48px',
+    flexShrink: 0,
   },
   button: {
     height: '24px',

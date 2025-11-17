@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { createStyles } from 'antd-style';
 import { Button, Space, Tag } from 'antd';
 import {
   StarOutlined,
@@ -10,92 +9,18 @@ import {
 } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
 import type { EChartsOption } from 'echarts';
+import type { ChartType } from '../types';
+import styles from './ChartArea.module.less';
 
-const useStyles = createStyles(({ token }) => ({
-  container: {
-    flex: 1,
-    position: 'relative',
-    background: token.colorBgContainer,
-    overflow: 'hidden',
-  },
-  header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '48px',
-    padding: '8px 16px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    zIndex: 10,
-    pointerEvents: 'none',
-  },
-  headerItem: {
-    pointerEvents: 'all',
-  },
-  symbolInfo: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    background: 'rgba(0, 0, 0, 0.02)',
-    padding: '4px 12px',
-    borderRadius: token.borderRadius,
-  },
-  symbol: {
-    fontWeight: 600,
-    fontSize: '16px',
-  },
-  price: {
-    fontSize: '16px',
-    fontWeight: 600,
-  },
-  change: {
-    fontSize: '14px',
-  },
-  priceUp: {
-    color: token.colorSuccess,
-  },
-  priceDown: {
-    color: token.colorError,
-  },
-  ohlcInfo: {
-    display: 'flex',
-    gap: '12px',
-    fontSize: '13px',
-    color: token.colorTextSecondary,
-  },
-  chartCanvas: {
-    width: '100%',
-    height: '100%',
-    background: token.colorBgContainer,
-  },
-  volumeIndicator: {
-    position: 'absolute',
-    bottom: '0',
-    left: '16px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '8px 12px',
-    background: 'rgba(0, 0, 0, 0.02)',
-    borderRadius: token.borderRadius,
-    zIndex: 10,
-  },
-  placeholder: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: token.colorTextSecondary,
-    fontSize: '16px',
-  },
-}));
+interface ChartAreaProps {
+  chartType?: ChartType;
+  symbol?: string;
+}
 
-const ChartArea: React.FC = () => {
-  const { styles, cx } = useStyles();
+const ChartArea: React.FC<ChartAreaProps> = ({ 
+  chartType = 'candles',
+  symbol = 'NVDA' 
+}) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -150,6 +75,112 @@ const ChartArea: React.FC = () => {
 
   const klineData = useMemo(() => generateMockKlineData(), []);
 
+  const getMainSeries = () => {
+    const closeData = klineData.data.map((d: any) => parseFloat(d[1]));
+    
+    switch (chartType) {
+      case 'candles':
+      case 'bars':
+      case 'hollow_candles':
+      case 'volume_candles':
+      case 'heikinashi':
+        return {
+          name: 'K线',
+          type: 'candlestick' as const,
+          data: klineData.data,
+          itemStyle: {
+            color: '#ef5350',
+            color0: '#26a69a',
+            borderColor: '#ef5350',
+            borderColor0: '#26a69a',
+          },
+        };
+      
+      case 'line':
+      case 'line_with_markers':
+        return {
+          name: '价格',
+          type: 'line' as const,
+          data: closeData,
+          smooth: false,
+          symbol: chartType === 'line_with_markers' ? 'circle' : 'none',
+          symbolSize: 6,
+          lineStyle: {
+            color: '#1E90FF',
+            width: 2,
+          },
+          itemStyle: {
+            color: '#1E90FF',
+          },
+        };
+      
+      case 'step_line':
+        return {
+          name: '价格',
+          type: 'line' as const,
+          data: closeData,
+          step: 'end' as const,
+          symbol: 'none',
+          lineStyle: {
+            color: '#1E90FF',
+            width: 2,
+          },
+        };
+      
+      case 'area':
+      case 'hlc_area':
+      case 'baseline':
+        return {
+          name: '价格',
+          type: 'line' as const,
+          data: closeData,
+          smooth: false,
+          symbol: 'none',
+          lineStyle: {
+            color: '#1E90FF',
+            width: 2,
+          },
+          areaStyle: {
+            color: 'rgba(30, 144, 255, 0.3)',
+          },
+        };
+      
+      case 'column':
+        return {
+          name: '价格',
+          type: 'bar' as const,
+          data: closeData,
+          itemStyle: {
+            color: '#1E90FF',
+          },
+        };
+      
+      case 'hi_lo':
+        return {
+          name: '高低',
+          type: 'line' as const,
+          data: klineData.data.map((d: any) => [parseFloat(d[3]), parseFloat(d[2])]),
+          lineStyle: {
+            color: '#1E90FF',
+            width: 2,
+          },
+        };
+      
+      default:
+        return {
+          name: 'K线',
+          type: 'candlestick' as const,
+          data: klineData.data,
+          itemStyle: {
+            color: '#ef5350',
+            color0: '#26a69a',
+            borderColor: '#ef5350',
+            borderColor0: '#26a69a',
+          },
+        };
+    }
+  };
+
   const getChartOption = (): EChartsOption => {
     return {
       animation: true,
@@ -171,25 +202,19 @@ const ChartArea: React.FC = () => {
         {
           type: 'category',
           data: klineData.dates,
-          scale: true,
           boundaryGap: false,
           axisLine: { onZero: false },
           splitLine: { show: false },
-          min: 'dataMin',
-          max: 'dataMax',
         },
         {
           type: 'category',
           gridIndex: 1,
           data: klineData.dates,
-          scale: true,
           boundaryGap: false,
           axisLine: { onZero: false },
           axisTick: { show: false },
           splitLine: { show: false },
           axisLabel: { show: false },
-          min: 'dataMin',
-          max: 'dataMax',
         },
       ],
       yAxis: [
@@ -243,17 +268,7 @@ const ChartArea: React.FC = () => {
         },
       },
       series: [
-        {
-          name: 'K线',
-          type: 'candlestick',
-          data: klineData.data,
-          itemStyle: {
-            color: '#ef5350',
-            color0: '#26a69a',
-            borderColor: '#ef5350',
-            borderColor0: '#26a69a',
-          },
-        },
+        getMainSeries(),
         {
           name: '成交量',
           type: 'bar',
@@ -284,55 +299,55 @@ const ChartArea: React.FC = () => {
     <div className={styles.container} ref={chartRef}>
       {/* Header with symbol info */}
       <div className={styles.header}>
-        <div className={cx(styles.symbolInfo, styles.headerItem)}>
+        <div className={`${styles.symbolInfo} ${styles.headerItem}`}>
           {mockData.logo && (
             <img 
               src={mockData.logo} 
               alt={mockData.symbol}
-              style={{ width: '24px', height: '24px', marginRight: '8px' }}
+              className={styles.logo}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
             />
           )}
-          <Button type="text" size="small" style={{ fontWeight: 600 }}>
+          <Button type="text" size="small" className={styles.symbolButton}>
             {mockData.name}
           </Button>
-          <span style={{ margin: '0 8px', color: '#999' }}>·</span>
+          <span className={styles.divider}>·</span>
           <Button type="text" size="small">1天</Button>
-          <span style={{ margin: '0 8px', color: '#999' }}>·</span>
-          <span style={{ fontSize: '12px', color: '#999' }}>{mockData.exchange}</span>
+          <span className={styles.divider}>·</span>
+          <span className={styles.exchangeText}>{mockData.exchange}</span>
           <Button type="text" size="small" icon={<StarOutlined />} />
           <Button type="text" size="small" icon={<MoreOutlined />} />
         </div>
 
         <div className={styles.headerItem}>
-          <Button type="text" size="small" style={{ fontSize: '11px' }}>
+          <Button type="text" size="small" className={styles.statusInfo}>
             {mockData.status} · {mockData.updateFrequency} · {mockData.dataSource}
           </Button>
         </div>
 
         <div className={styles.ohlcInfo}>
-          <span>开=<span style={{ fontWeight: 500 }}>{mockData.open}</span></span>
-          <span>高=<span style={{ fontWeight: 500 }}>{mockData.high}</span></span>
-          <span>低=<span style={{ fontWeight: 500 }}>{mockData.low}</span></span>
-          <span>收=<span style={{ fontWeight: 500 }}>{mockData.close}</span></span>
-          <span className={mockData.change >= 0 ? styles.priceUp : styles.priceDown} style={{ fontWeight: 500 }}>
+          <span>开=<span className={styles.value}>{mockData.open}</span></span>
+          <span>高=<span className={styles.value}>{mockData.high}</span></span>
+          <span>低=<span className={styles.value}>{mockData.low}</span></span>
+          <span>收=<span className={styles.value}>{mockData.close}</span></span>
+          <span className={`${styles.change} ${mockData.change >= 0 ? styles.priceUp : styles.priceDown}`}>
             {mockData.change >= 0 ? '+' : ''}{mockData.change.toFixed(2)} ({mockData.change >= 0 ? '+' : ''}{mockData.changePercent.toFixed(2)}%)
           </span>
         </div>
 
-        <div style={{ flex: 1 }} />
+        <div className={styles.spacer} />
 
-        <div className={cx(styles.symbolInfo, styles.headerItem)} style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '4px 12px', gap: '2px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px' }}>
-            <span className={styles.priceDown} style={{ fontWeight: 500 }}>{mockData.bid}</span>
-            <span style={{ color: '#999' }}>卖出</span>
+        <div className={`${styles.symbolInfo} ${styles.headerItem} ${styles.bidAskInfo}`}>
+          <div className={styles.row}>
+            <span className={`${styles.price} ${styles.priceDown}`}>{mockData.bid}</span>
+            <span className={styles.label}>卖出</span>
           </div>
-          <div style={{ fontSize: '11px', color: '#999', textAlign: 'center' }}>{mockData.spread.toFixed(2)}</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px' }}>
-            <span className={styles.priceUp} style={{ fontWeight: 500 }}>{mockData.ask}</span>
-            <span style={{ color: '#999' }}>买入</span>
+          <div className={styles.spread}>{mockData.spread.toFixed(2)}</div>
+          <div className={styles.row}>
+            <span className={`${styles.price} ${styles.priceUp}`}>{mockData.ask}</span>
+            <span className={styles.label}>买入</span>
           </div>
         </div>
       </div>
@@ -340,11 +355,11 @@ const ChartArea: React.FC = () => {
       {/* Volume indicator */}
       <div className={styles.volumeIndicator}>
         <Button type="text" size="small" icon={<EyeInvisibleOutlined />} />
-        <span style={{ fontWeight: 600 }}>Vol</span>
+        <span className={styles.label}>Vol</span>
         <Button type="text" size="small" icon={<SettingOutlined />} />
         <Button type="text" size="small" icon={<CloseOutlined />} />
         <Button type="text" size="small" icon={<MoreOutlined />} />
-        <span style={{ marginLeft: '8px' }}>{mockData.volume}</span>
+        <span className={styles.value}>{mockData.volume}</span>
       </div>
 
       {/* Chart canvas - ECharts */}
@@ -352,7 +367,7 @@ const ChartArea: React.FC = () => {
         {isLoading ? (
           <div className={styles.placeholder}>
             <div>图表加载中...</div>
-            <div style={{ fontSize: '14px', marginTop: '8px' }}>
+            <div className={styles.subText}>
               正在准备 K 线数据
             </div>
           </div>

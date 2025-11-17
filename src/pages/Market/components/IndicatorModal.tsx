@@ -1,124 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Input, Tabs, Empty } from 'antd';
 import { SearchOutlined, StarOutlined, StarFilled } from '@ant-design/icons';
-import { createStyles } from 'antd-style';
-
-const useStyles = createStyles(({ token }) => ({
-  modal: {
-    '.ant-modal-content': {
-      padding: 0,
-      height: '80vh',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    '.ant-modal-header': {
-      padding: '16px 20px',
-      marginBottom: 0,
-      borderBottom: `1px solid ${token.colorBorder}`,
-    },
-    '.ant-modal-body': {
-      padding: 0,
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
-    },
-    '.ant-modal-footer': {
-      display: 'none',
-    },
-  },
-  searchBar: {
-    padding: '12px 20px',
-    borderBottom: `1px solid ${token.colorBorder}`,
-  },
-  content: {
-    display: 'flex',
-    flex: 1,
-    overflow: 'hidden',
-  },
-  sidebar: {
-    width: '200px',
-    borderRight: `1px solid ${token.colorBorder}`,
-    backgroundColor: token.colorBgContainer,
-    overflowY: 'auto',
-  },
-  sidebarSection: {
-    padding: '16px 0',
-    borderBottom: `1px solid ${token.colorBorderSecondary}`,
-  },
-  sidebarTitle: {
-    padding: '0 20px',
-    fontSize: '12px',
-    fontWeight: 600,
-    color: token.colorTextSecondary,
-    textTransform: 'uppercase',
-    marginBottom: '8px',
-    letterSpacing: '0.5px',
-  },
-  sidebarItem: {
-    padding: '8px 20px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    transition: 'all 0.2s',
-    '&:hover': {
-      backgroundColor: token.colorBgTextHover,
-    },
-  },
-  sidebarItemActive: {
-    backgroundColor: token.colorPrimaryBg,
-    color: token.colorPrimary,
-    fontWeight: 500,
-  },
-  mainContent: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-  },
-  tabsContainer: {
-    borderBottom: `1px solid ${token.colorBorder}`,
-    padding: '0 20px',
-    '.ant-tabs-nav': {
-      marginBottom: 0,
-    },
-  },
-  listContainer: {
-    flex: 1,
-    overflowY: 'auto',
-    padding: '8px 0',
-  },
-  indicatorItem: {
-    padding: '10px 20px',
-    cursor: 'pointer',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    transition: 'all 0.2s',
-    '&:hover': {
-      backgroundColor: token.colorBgTextHover,
-    },
-  },
-  indicatorName: {
-    fontSize: '14px',
-    color: token.colorText,
-    fontWeight: 400,
-  },
-  favoriteIcon: {
-    fontSize: '16px',
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-    '&:hover': {
-      transform: 'scale(1.1)',
-    },
-  },
-  emptyContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    padding: '40px 20px',
-  },
-}));
+import styles from './IndicatorModal.module.less';
 
 interface IndicatorModalProps {
   visible: boolean;
@@ -131,7 +14,6 @@ const IndicatorModal: React.FC<IndicatorModalProps> = ({
   onClose,
   onSelect,
 }) => {
-  const { styles, cx } = useStyles();
   const [searchValue, setSearchValue] = useState('');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState('technical');
@@ -223,8 +105,7 @@ const IndicatorModal: React.FC<IndicatorModalProps> = ({
             <span className={styles.indicatorName}>{name}</span>
             {favorites.includes(name) ? (
               <StarFilled
-                className={styles.favoriteIcon}
-                style={{ color: '#faad14' }}
+                className={`${styles.favoriteIcon} ${styles.active}`}
                 onClick={(e) => toggleFavorite(name, e)}
               />
             ) : (
@@ -275,15 +156,12 @@ const IndicatorModal: React.FC<IndicatorModalProps> = ({
           <div className={styles.sidebarSection}>
             <div className={styles.sidebarTitle}>个人</div>
             <div
-              className={cx(
-                styles.sidebarItem,
-                activeCategory === 'my-scripts' && styles.sidebarItemActive
-              )}
+              className={`${styles.sidebarItem} ${activeCategory === 'my-scripts' ? styles.sidebarItemActive : ''}`}
               onClick={() => setActiveCategory('my-scripts')}
             >
               我的脚本
             </div>
-            <div className={styles.sidebarItem} style={{ color: '#999' }}>
+            <div className={`${styles.sidebarItem} ${styles.disabled}`}>
               仅限邀请
             </div>
           </div>
@@ -292,19 +170,13 @@ const IndicatorModal: React.FC<IndicatorModalProps> = ({
           <div className={styles.sidebarSection}>
             <div className={styles.sidebarTitle}>内置</div>
             <div
-              className={cx(
-                styles.sidebarItem,
-                activeCategory === 'technical' && styles.sidebarItemActive
-              )}
+              className={`${styles.sidebarItem} ${activeCategory === 'technical' ? styles.sidebarItemActive : ''}`}
               onClick={() => setActiveCategory('technical')}
             >
               技术指标
             </div>
             <div
-              className={cx(
-                styles.sidebarItem,
-                activeCategory === 'financial' && styles.sidebarItemActive
-              )}
+              className={`${styles.sidebarItem} ${activeCategory === 'financial' ? styles.sidebarItemActive : ''}`}
               onClick={() => setActiveCategory('financial')}
             >
               财务指标

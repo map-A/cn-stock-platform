@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { createStyles } from 'antd-style';
 import {
   SearchOutlined,
   PlusOutlined,
@@ -19,70 +18,55 @@ import {
 } from '@ant-design/icons';
 import { Button, Dropdown, Space, Tooltip, Input, message } from 'antd';
 import type { MenuProps } from 'antd';
+import type { ChartType } from '../types';
 import SymbolSearchModal from './SymbolSearchModal';
 import IndicatorModal from './IndicatorModal';
 import SettingsModal from './SettingsModal';
 import AlertModal from './AlertModal';
+import styles from './TopToolbar.module.less';
 
-const useStyles = createStyles(({ token }) => ({
-  toolbar: {
-    height: '48px',
-    background: token.colorBgElevated,
-    borderBottom: `1px solid ${token.colorBorder}`,
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 12px',
-    gap: '4px',
-    flexShrink: 0,
-  },
-  section: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-  },
-  divider: {
-    width: '1px',
-    height: '24px',
-    background: token.colorBorder,
-    margin: '0 8px',
-  },
-  symbolButton: {
-    fontWeight: 600,
-    fontSize: '14px',
-  },
-  periodButton: {
-    minWidth: '48px',
-  },
-}));
+interface TopToolbarProps {
+  onChartTypeChange?: (type: ChartType) => void;
+}
 
-const TopToolbar: React.FC = () => {
-  const { styles } = useStyles();
+const TopToolbar: React.FC<TopToolbarProps> = ({ onChartTypeChange }) => {
   const [symbol, setSymbol] = useState('NVDA');
   const [period, setPeriod] = useState('1 日');
+  const [currentChartType, setCurrentChartType] = useState<ChartType>('candles');
   const [symbolSearchVisible, setSymbolSearchVisible] = useState(false);
   const [indicatorModalVisible, setIndicatorModalVisible] = useState(false);
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
   const [alertModalVisible, setAlertModalVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const handleChartTypeChange = (type: ChartType, label: string) => {
+    setCurrentChartType(type);
+    if (onChartTypeChange) {
+      onChartTypeChange(type);
+    }
+    message.success(`已切换到${label}`);
+  };
+
   const chartTypeItems: MenuProps['items'] = [
-    { key: 'bars', label: '美国线' },
-    { key: 'candles', label: 'K线图' },
-    { key: 'hollow_candles', label: '空心K线图' },
-    { key: 'volume_candles', label: '成交量蜡烛' },
-    { key: 'line', label: '线形图' },
-    { key: 'line_with_markers', label: '带标记线' },
-    { key: 'step_line', label: '阶梯线' },
-    { key: 'area', label: '面积图' },
-    { key: 'hlc_area', label: 'HLC区域' },
-    { key: 'baseline', label: '基准线' },
-    { key: 'column', label: '柱状图' },
-    { key: 'hi_lo', label: '高-低' },
+    { key: 'bars', label: '美国线', onClick: () => handleChartTypeChange('bars', '美国线') },
+    { key: 'candles', label: 'K线图', onClick: () => handleChartTypeChange('candles', 'K线图') },
+    { key: 'hollow_candles', label: '空心K线图', onClick: () => handleChartTypeChange('hollow_candles', '空心K线图') },
+    { key: 'volume_candles', label: '成交量蜡烛', onClick: () => handleChartTypeChange('volume_candles', '成交量蜡烛') },
+    { type: 'divider' },
+    { key: 'line', label: '线形图', onClick: () => handleChartTypeChange('line', '线形图') },
+    { key: 'line_with_markers', label: '带标记线', onClick: () => handleChartTypeChange('line_with_markers', '带标记线') },
+    { key: 'step_line', label: '阶梯线', onClick: () => handleChartTypeChange('step_line', '阶梯线') },
+    { key: 'area', label: '面积图', onClick: () => handleChartTypeChange('area', '面积图') },
+    { key: 'hlc_area', label: 'HLC区域', onClick: () => handleChartTypeChange('hlc_area', 'HLC区域') },
+    { key: 'baseline', label: '基准线', onClick: () => handleChartTypeChange('baseline', '基准线') },
+    { key: 'column', label: '柱状图', onClick: () => handleChartTypeChange('column', '柱状图') },
+    { key: 'hi_lo', label: '高-低', onClick: () => handleChartTypeChange('hi_lo', '高-低') },
     { key: 'volume_footprint', label: '成交量轨迹' },
     { key: 'tpo', label: '时间 价格 机会' },
     { key: 'volume_profile', label: '交易时段成交量分布图' },
-    { key: 'heikinashi', label: '平均K线图' },
-    { key: 'renko', label: '砖形图' },
+    { type: 'divider' },
+    { key: 'heikinashi', label: '平均K线图', onClick: () => handleChartTypeChange('heikinashi', '平均K线图') },
+     { key: 'renko', label: '砖形图' },
     { key: 'line_break', label: '新价线' },
     { key: 'kagi', label: '卡吉图' },
     { key: 'point_and_figure', label: '点数图' },
@@ -225,7 +209,7 @@ const TopToolbar: React.FC = () => {
             className={styles.symbolButton}
             onClick={() => setSymbolSearchVisible(true)}
           >
-            <SearchOutlined style={{ marginRight: '4px' }} />
+            <SearchOutlined className={styles.iconWithMargin} />
             {symbol}
           </Button>
         </Tooltip>
@@ -244,7 +228,19 @@ const TopToolbar: React.FC = () => {
         </Dropdown>
         <Dropdown menu={{ items: chartTypeItems }}>
           <Button type="text" icon={<LineChartOutlined />}>
-            K线图
+            {currentChartType === 'candles' ? 'K线图' : 
+             currentChartType === 'bars' ? '美国线' :
+             currentChartType === 'hollow_candles' ? '空心K线图' :
+             currentChartType === 'volume_candles' ? '成交量蜡烛' :
+             currentChartType === 'line' ? '线形图' :
+             currentChartType === 'line_with_markers' ? '带标记线' :
+             currentChartType === 'step_line' ? '阶梯线' :
+             currentChartType === 'area' ? '面积图' :
+             currentChartType === 'hlc_area' ? 'HLC区域' :
+             currentChartType === 'baseline' ? '基准线' :
+             currentChartType === 'column' ? '柱状图' :
+             currentChartType === 'hi_lo' ? '高-低' :
+             currentChartType === 'heikinashi' ? '平均K线图' : 'K线图'}
           </Button>
         </Dropdown>
       </div>
@@ -276,13 +272,13 @@ const TopToolbar: React.FC = () => {
             type="text"
             onClick={() => setAlertModalVisible(true)}
           >
-            <BellOutlined style={{ marginRight: '4px' }} />
+            <BellOutlined className={styles.iconWithMargin} />
             警报
           </Button>
         </Tooltip>
         <Tooltip title="K线回放">
           <Button type="text">
-            <PlayCircleOutlined style={{ marginRight: '4px' }} />
+            <PlayCircleOutlined className={styles.iconWithMargin} />
             回放
           </Button>
         </Tooltip>
@@ -299,7 +295,7 @@ const TopToolbar: React.FC = () => {
         </Tooltip>
       </div>
 
-      <div style={{ flex: 1 }} />
+      <div className={styles.spacer} />
 
       <div className={styles.section}>
         <Dropdown menu={{ items: layoutItems }}>
@@ -312,7 +308,7 @@ const TopToolbar: React.FC = () => {
             type="text"
             onClick={handleSaveLayout}
           >
-            <SaveOutlined style={{ marginRight: '4px' }} />
+            <SaveOutlined className={styles.iconWithMargin} />
             保存
           </Button>
         </Tooltip>

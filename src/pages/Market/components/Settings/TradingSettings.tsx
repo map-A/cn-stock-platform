@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Checkbox, Select, Slider } from 'antd';
+import styles from './Settings.module.less';
 
 const TradingSettings: React.FC = () => {
   const [executionSoundEnabled, setExecutionSoundEnabled] = useState(false);
@@ -7,13 +8,11 @@ const TradingSettings: React.FC = () => {
   return (
     <div>
       {/* 普通 */}
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 12, color: '#131722' }}>
-          普通
-        </div>
+      <div className={styles.section}>
+        <div className={styles.sectionTitle}>普通</div>
         
         {/* 买/卖按钮 */}
-        <div style={{ marginBottom: 12 }}>
+        <div className={styles.settingRow} style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
           <Form.Item 
             name={['trading', 'buySellButtons']} 
             noStyle 
@@ -21,16 +20,16 @@ const TradingSettings: React.FC = () => {
             initialValue={true}
           >
             <Checkbox>
-              <span style={{ fontSize: 12, color: '#131722' }}>买/卖按钮</span>
+              <span className={styles.label}>买/卖按钮</span>
             </Checkbox>
           </Form.Item>
-          <div style={{ fontSize: 11, color: '#787B86', marginLeft: 24, marginTop: 2 }}>
+          <div className={styles.helperText}>
             图表上直接显示买入和卖出按钮
           </div>
         </div>
 
         {/* 一键交易 */}
-        <div style={{ marginBottom: 12 }}>
+        <div className={styles.settingRow} style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
           <div>
             <Form.Item 
               name={['trading', 'oneClickTrading']} 
@@ -39,14 +38,15 @@ const TradingSettings: React.FC = () => {
               initialValue={false}
             >
               <Checkbox>
-                <span style={{ fontSize: 12, color: '#131722' }}>一键交易</span>
+                <span className={styles.label}>一键交易</span>
               </Checkbox>
             </Form.Item>
             <a
               href="https://cn.tradingview.com/chart/?solution=43000480920"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#2962FF', fontSize: 11, marginLeft: 4, textDecoration: 'none' }}
+              className={styles.link}
+              style={{ marginLeft: 4 }}
             >
               一键交易
             </a>

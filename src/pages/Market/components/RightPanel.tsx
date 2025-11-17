@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { createStyles } from 'antd-style';
 import {
   StarOutlined,
   BellOutlined,
@@ -15,74 +14,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Tabs, Input, Space, Table, Tag, Card } from 'antd';
 import type { TabsProps, ColumnsType } from 'antd';
-
-const useStyles = createStyles(({ token }) => ({
-  panel: {
-    width: '320px',
-    background: token.colorBgElevated,
-    borderLeft: `1px solid ${token.colorBorder}`,
-    display: 'flex',
-    flexDirection: 'column',
-    flexShrink: 0,
-  },
-  tabs: {
-    height: '48px',
-    borderBottom: `1px solid ${token.colorBorder}`,
-    padding: '0 8px',
-    '& .ant-tabs-nav': {
-      marginBottom: 0,
-    },
-  },
-  content: {
-    flex: 1,
-    overflow: 'auto',
-    padding: '12px',
-  },
-  watchlistHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    marginBottom: '12px',
-  },
-  stockRow: {
-    cursor: 'pointer',
-    '&:hover': {
-      background: token.colorBgTextHover,
-    },
-  },
-  priceUp: {
-    color: token.colorSuccess,
-  },
-  priceDown: {
-    color: token.colorError,
-  },
-  detailSection: {
-    marginBottom: '16px',
-  },
-  sectionTitle: {
-    fontSize: '14px',
-    fontWeight: 600,
-    marginBottom: '8px',
-  },
-  statGrid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '8px',
-  },
-  statItem: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-  },
-  statLabel: {
-    fontSize: '12px',
-    color: token.colorTextSecondary,
-  },
-  statValue: {
-    fontSize: '14px',
-    fontWeight: 500,
-  },
-}));
+import styles from './RightPanel.module.less';
 
 interface WatchlistStock {
   key: string;
@@ -94,7 +26,6 @@ interface WatchlistStock {
 }
 
 const RightPanel: React.FC = () => {
-  const { styles } = useStyles();
   const [activeTab, setActiveTab] = useState('watchlist');
 
   interface WatchlistStock {
@@ -128,20 +59,20 @@ const RightPanel: React.FC = () => {
       key: 'symbol',
       width: 100,
       render: (text, record) => (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div className={styles.symbolCell}>
           {record.logo && (
             <img 
               src={record.logo} 
               alt={text}
-              style={{ width: '20px', height: '20px', borderRadius: '50%' }}
+              className={styles.logo}
               onError={(e) => e.currentTarget.style.display = 'none'}
             />
           )}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontWeight: 500, fontSize: '12px' }}>{text}</span>
-            {record.delayed && <Tag color="default" style={{ fontSize: '9px', padding: '0 2px', lineHeight: '14px', marginTop: '2px' }}>D</Tag>}
+          <div className={styles.info}>
+            <span className={styles.symbol}>{text}</span>
+            {record.delayed && <Tag color="default" className={styles.tag}>D</Tag>}
           </div>
-          {record.status && <Tag color="default" style={{ fontSize: '9px', padding: '0 2px' }}>{record.status}</Tag>}
+          {record.status && <Tag color="default" className={styles.statusTag}>{record.status}</Tag>}
         </div>
       ),
     },
@@ -177,7 +108,7 @@ const RightPanel: React.FC = () => {
         <Button type="text" icon={<PlusOutlined />} size="small">
           添加商品代码
         </Button>
-        <div style={{ flex: 1 }} />
+        <div className={styles.spacer} />
         <Button type="text" icon={<EyeOutlined />} size="small">
           高级视图
         </Button>
@@ -189,14 +120,7 @@ const RightPanel: React.FC = () => {
         dataSource={mockWatchlist}
         pagination={false}
         size="small"
-        rowClassName={(record) => record.isGroup ? '' : styles.stockRow}
-        onRow={(record) => ({
-          style: record.isGroup ? {
-            background: '#fafafa',
-            fontWeight: 600,
-            cursor: 'default',
-          } : undefined,
-        })}
+        rowClassName={(record) => record.isGroup ? styles.groupRow : styles.stockRow}
       />
     </div>
   );
@@ -205,42 +129,40 @@ const RightPanel: React.FC = () => {
     <div>
       {/* 公司信息头部 */}
       <div className={styles.detailSection}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
+        <div className={styles.companyHeader}>
           <img 
             src="https://s3-symbol-logo.tradingview.com/nvidia.svg" 
             alt="NVDA"
-            style={{ width: '40px', height: '40px', borderRadius: '8px' }}
+            className={styles.logo}
             onError={(e) => e.currentTarget.style.display = 'none'}
           />
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <a href="#" style={{ fontSize: '16px', fontWeight: 600, color: '#1890ff' }}>
-                NVIDIA Corporation
-              </a>
-              <span style={{ color: '#999', fontSize: '12px' }}>NASDAQ</span>
+          <div className={styles.info}>
+            <div className={styles.title}>
+              <a href="#">NVIDIA Corporation</a>
+              <span className={styles.exchange}>NASDAQ</span>
             </div>
-            <div style={{ display: 'flex', gap: '8px', fontSize: '12px' }}>
-              <a href="#" style={{ color: '#1890ff' }}>电子科技</a>
-              <span style={{ color: '#999' }}>·</span>
-              <a href="#" style={{ color: '#1890ff' }}>半导体</a>
+            <div className={styles.categories}>
+              <a href="#">电子科技</a>
+              <span className={styles.dot}>·</span>
+              <a href="#">半导体</a>
             </div>
           </div>
         </div>
         
-        <div style={{ marginBottom: '16px' }}>
-          <div style={{ fontSize: '28px', fontWeight: 600, marginBottom: '4px' }}>
-            195.36 <span style={{ fontSize: '14px', color: '#999' }}>USD</span>
+        <div className={styles.priceInfo}>
+          <div className={styles.price}>
+            195.36 <span className={styles.currency}>USD</span>
           </div>
-          <div style={{ fontSize: '16px', color: '#52c41a', fontWeight: 500 }}>
+          <div className={styles.change}>
             +2.20 +1.14%
           </div>
-          <Tag color="success" style={{ marginTop: '8px' }}>开市</Tag>
+          <Tag color="success" className={styles.status}>开市</Tag>
         </div>
 
-        <Card size="small" style={{ marginBottom: '16px', background: '#fafafa' }}>
-          <div style={{ fontSize: '12px', color: '#666' }}>
-            <div>3小时前</div>
-            <div style={{ marginTop: '4px', fontWeight: 500, color: '#000' }}>
+        <Card size="small" className={styles.newsCard}>
+          <div className={styles.newsContent}>
+            <div className={styles.time}>3小时前</div>
+            <div className={styles.title}>
               投资者为长期增长目标欢呼，AMD 股价攀升
             </div>
           </div>
@@ -251,20 +173,20 @@ const RightPanel: React.FC = () => {
         <div className={styles.sectionTitle}>关键统计</div>
         <div className={styles.statGrid}>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>下一份财报</span>
-            <span className={styles.statValue}>8天后</span>
+            <span className={styles.label}>下一份财报</span>
+            <span className={styles.value}>8天后</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>成交量</span>
-            <span className={styles.statValue}>4.59M</span>
+            <span className={styles.label}>成交量</span>
+            <span className={styles.value}>4.59M</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>平均成交量(30)</span>
-            <span className={styles.statValue}>181.16M</span>
+            <span className={styles.label}>平均成交量(30)</span>
+            <span className={styles.value}>181.16M</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>市值</span>
-            <span className={styles.statValue}>4.69T</span>
+            <span className={styles.label}>市值</span>
+            <span className={styles.value}>4.69T</span>
           </div>
         </div>
       </div>
@@ -273,41 +195,33 @@ const RightPanel: React.FC = () => {
         <div className={styles.sectionTitle}>表现</div>
         <div className={styles.statGrid}>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>1周</span>
-            <span className={styles.statValue}>
-              <span className={styles.priceDown}>-4.85%</span>
-            </span>
+            <span className={styles.label}>1周</span>
+            <span className={`${styles.value} ${styles.priceDown}`}>-4.85%</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>1月</span>
-            <span className={styles.statValue}>
-              <span className={styles.priceDown}>-0.18%</span>
-            </span>
+            <span className={styles.label}>1月</span>
+            <span className={`${styles.value} ${styles.priceDown}`}>-0.18%</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>3月</span>
-            <span className={styles.statValue}>
-              <span className={styles.priceUp}>+5.77%</span>
-            </span>
+            <span className={styles.label}>3月</span>
+            <span className={`${styles.value} ${styles.priceUp}`}>+5.77%</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>年初至今</span>
-            <span className={styles.statValue}>
-              <span className={styles.priceUp}>+42.03%</span>
-            </span>
+            <span className={styles.label}>年初至今</span>
+            <span className={`${styles.value} ${styles.priceUp}`}>+42.03%</span>
           </div>
         </div>
       </div>
 
       <div className={styles.detailSection}>
         <div className={styles.sectionTitle}>技术指标</div>
-        <Card size="small">
+        <Card size="small" className={styles.ratingCard}>
           <Space direction="vertical" style={{ width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className={styles.row}>
               <span>评级</span>
               <Tag color="warning">中立</Tag>
             </div>
-            <div style={{ fontSize: '12px', color: '#999' }}>
+            <div className={styles.description}>
               基于移动平均线和振荡指标
             </div>
           </Space>
@@ -316,13 +230,13 @@ const RightPanel: React.FC = () => {
 
       <div className={styles.detailSection}>
         <div className={styles.sectionTitle}>分析师评级</div>
-        <Card size="small">
+        <Card size="small" className={styles.ratingCard}>
           <Space direction="vertical" style={{ width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className={styles.row}>
               <span>评级</span>
               <Tag color="success">强烈买入</Tag>
             </div>
-            <div style={{ fontSize: '12px', color: '#999' }}>
+            <div className={styles.description}>
               1年价格目标: $233.76 (+21.02%)
             </div>
           </Space>
@@ -333,22 +247,22 @@ const RightPanel: React.FC = () => {
         <div className={styles.sectionTitle}>概览</div>
         <div className={styles.statGrid}>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>网站</span>
+            <span className={styles.label}>网站</span>
             <a href="https://nvidia.com" target="_blank" rel="noopener noreferrer">
               nvidia.com
             </a>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>员工(FY)</span>
-            <span className={styles.statValue}>36K</span>
+            <span className={styles.label}>员工(FY)</span>
+            <span className={styles.value}>36K</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>行业</span>
-            <span className={styles.statValue}>半导体</span>
+            <span className={styles.label}>行业</span>
+            <span className={styles.value}>半导体</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>部门</span>
-            <span className={styles.statValue}>电子科技</span>
+            <span className={styles.label}>部门</span>
+            <span className={styles.value}>电子科技</span>
           </div>
         </div>
       </div>
@@ -364,7 +278,7 @@ const RightPanel: React.FC = () => {
     {
       key: 'alerts',
       label: <BellOutlined />,
-      children: <div style={{ padding: '20px', textAlign: 'center' }}>暂无警报</div>,
+      children: <div style={{ padding: 20, textAlign: 'center' }}>暂无警报</div>,
     },
     {
       key: 'details',
@@ -374,17 +288,17 @@ const RightPanel: React.FC = () => {
     {
       key: 'screener',
       label: <FilterOutlined />,
-      children: <div style={{ padding: '20px', textAlign: 'center' }}>筛选器功能</div>,
+      children: <div style={{ padding: 20, textAlign: 'center' }}>筛选器功能</div>,
     },
     {
       key: 'calendar',
       label: <CalendarOutlined />,
-      children: <div style={{ padding: '20px', textAlign: 'center' }}>财经日历</div>,
+      children: <div style={{ padding: 20, textAlign: 'center' }}>财经日历</div>,
     },
     {
       key: 'community',
       label: <TeamOutlined />,
-      children: <div style={{ padding: '20px', textAlign: 'center' }}>社区观点</div>,
+      children: <div style={{ padding: 20, textAlign: 'center' }}>社区观点</div>,
     },
   ];
 

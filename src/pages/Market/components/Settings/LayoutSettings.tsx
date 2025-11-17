@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Select, InputNumber, ColorPicker, Form } from 'antd';
 import type { Color } from 'antd/es/color-picker';
+import styles from './Settings.module.less';
 
 interface ColorButtonProps {
   value?: string;
@@ -26,15 +27,8 @@ const ColorButton: React.FC<ColorButtonProps> = ({ value = '#FFFFFF', onChange, 
       onOpenChange={setOpen}
     >
       <div
-        style={{
-          width: 24,
-          height: 24,
-          backgroundColor: value,
-          border: '1px solid #d9d9d9',
-          borderRadius: 2,
-          opacity: disabled ? 0.5 : 1,
-          cursor: disabled ? 'not-allowed' : 'pointer',
-        }}
+        className={`${styles.colorBox} ${disabled ? styles.disabled : ''}`}
+        style={{ backgroundColor: value }}
       />
     </ColorPicker>
   );
@@ -44,10 +38,10 @@ const LayoutSettings: React.FC = () => {
   return (
     <div>
       {/* 图表基本样式 */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 16, color: '#131722' }}>图表基本样式</div>
+      <div className={styles.section}>
+        <div className={styles.sectionTitle}>图表基本样式</div>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div className={styles.settingGroup}>
           {/* 背景 */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ fontSize: 12, color: '#787B86' }}>背景</div>

@@ -1,18 +1,19 @@
 import React from 'react';
 import { Checkbox, Select, Form } from 'antd';
+import styles from './Settings.module.less';
 
 const EventSettings: React.FC = () => {
   return (
     <div>
       {/* 事件 */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 16, color: '#131722' }}>事件</div>
+      <div className={styles.section}>
+        <div className={styles.sectionTitle}>事件</div>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div className={styles.settingGroup}>
           {/* 观点 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className={styles.settingRow}>
             <Form.Item name={['events', 'ideasEnabled']} noStyle valuePropName="checked" initialValue={false}>
-              <Checkbox style={{ fontSize: 12 }}>观点</Checkbox>
+              <Checkbox className={styles.checkbox}>观点</Checkbox>
             </Form.Item>
             <Form.Item
               noStyle
@@ -26,7 +27,7 @@ const EventSettings: React.FC = () => {
                   <Form.Item name={['events', 'ideasType']} noStyle initialValue="all">
                     <Select
                       size="small"
-                      style={{ width: 180 }}
+                      className={styles.select}
                       disabled={!isEnabled}
                       options={[
                         { value: 'all', label: '所有观点' },
@@ -46,7 +47,7 @@ const EventSettings: React.FC = () => {
               href="https://cn.tradingview.com/chart/?solution=43000694285"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#2962FF', fontSize: 12, textDecoration: 'none' }}
+              className={styles.link}
             >
               点击这里了解更多
             </a>
