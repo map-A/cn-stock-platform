@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { createStyles } from 'antd-style';
 import { Button, Space, Tag } from 'antd';
 import {
@@ -8,6 +8,8 @@ import {
   SettingOutlined,
   CloseOutlined,
 } from '@ant-design/icons';
+import ReactECharts from 'echarts-for-react';
+import type { EChartsOption } from 'echarts';
 
 const useStyles = createStyles(({ token }) => ({
   container: {
@@ -119,11 +121,161 @@ const ChartArea: React.FC = () => {
     spread: 0.16,
   };
 
+  // 生成模拟的K线数据
+  const generateMockKlineData = () => {
+    const data = [];
+    const dates = [];
+    const volumes = [];
+    let basePrice = 190;
+    const today = new Date();
+    
+    for (let i = 60; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      dates.push(date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }));
+      
+      const open = basePrice + (Math.random() - 0.5) * 5;
+      const close = open + (Math.random() - 0.5) * 8;
+      const high = Math.max(open, close) + Math.random() * 3;
+      const low = Math.min(open, close) - Math.random() * 3;
+      const volume = Math.floor(Math.random() * 10000000 + 2000000);
+      
+      data.push([open.toFixed(2), close.toFixed(2), low.toFixed(2), high.toFixed(2)]);
+      volumes.push(volume);
+      basePrice = close;
+    }
+    
+    return { dates, data, volumes };
+  };
+
+  const klineData = useMemo(() => generateMockKlineData(), []);
+
+  const getChartOption = (): EChartsOption => {
+    return {
+      animation: true,
+      grid: [
+        {
+          left: '10%',
+          right: '8%',
+          top: '15%',
+          height: '55%',
+        },
+        {
+          left: '10%',
+          right: '8%',
+          top: '75%',
+          height: '15%',
+        },
+      ],
+      xAxis: [
+        {
+          type: 'category',
+          data: klineData.dates,
+          scale: true,
+          boundaryGap: false,
+          axisLine: { onZero: false },
+          splitLine: { show: false },
+          min: 'dataMin',
+          max: 'dataMax',
+        },
+        {
+          type: 'category',
+          gridIndex: 1,
+          data: klineData.dates,
+          scale: true,
+          boundaryGap: false,
+          axisLine: { onZero: false },
+          axisTick: { show: false },
+          splitLine: { show: false },
+          axisLabel: { show: false },
+          min: 'dataMin',
+          max: 'dataMax',
+        },
+      ],
+      yAxis: [
+        {
+          scale: true,
+          splitArea: {
+            show: true,
+          },
+        },
+        {
+          scale: true,
+          gridIndex: 1,
+          splitNumber: 2,
+          axisLabel: { show: false },
+          axisLine: { show: false },
+          axisTick: { show: false },
+          splitLine: { show: false },
+        },
+      ],
+      dataZoom: [
+        {
+          type: 'inside',
+          xAxisIndex: [0, 1],
+          start: 50,
+          end: 100,
+        },
+        {
+          show: true,
+          xAxisIndex: [0, 1],
+          type: 'slider',
+          top: '92%',
+          start: 50,
+          end: 100,
+        },
+      ],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+        },
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        textStyle: {
+          color: '#000',
+        },
+        position: function (pos, params, el, elRect, size) {
+          const obj: any = { top: 10 };
+          obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+          return obj;
+        },
+      },
+      series: [
+        {
+          name: 'K线',
+          type: 'candlestick',
+          data: klineData.data,
+          itemStyle: {
+            color: '#ef5350',
+            color0: '#26a69a',
+            borderColor: '#ef5350',
+            borderColor0: '#26a69a',
+          },
+        },
+        {
+          name: '成交量',
+          type: 'bar',
+          xAxisIndex: 1,
+          yAxisIndex: 1,
+          data: klineData.volumes,
+          itemStyle: {
+            color: function (params: any) {
+              const dataIndex = params.dataIndex;
+              const klineItem = klineData.data[dataIndex];
+              return parseFloat(klineItem[1]) >= parseFloat(klineItem[0]) ? '#ef5350' : '#26a69a';
+            },
+          },
+        },
+      ],
+    };
+  };
+
   useEffect(() => {
-    // TODO: 初始化 SciChart
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -195,7 +347,7 @@ const ChartArea: React.FC = () => {
         <span style={{ marginLeft: '8px' }}>{mockData.volume}</span>
       </div>
 
-      {/* Chart canvas - will be replaced with SciChart */}
+      {/* Chart canvas - ECharts */}
       <div className={styles.chartCanvas}>
         {isLoading ? (
           <div className={styles.placeholder}>
@@ -205,12 +357,11 @@ const ChartArea: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className={styles.placeholder}>
-            <div>图表区域</div>
-            <div style={{ fontSize: '14px', marginTop: '8px' }}>
-              此处将集成 SciChart.js 显示 K 线图和成交量
-            </div>
-          </div>
+          <ReactECharts
+            option={getChartOption()}
+            style={{ height: '100%', width: '100%' }}
+            opts={{ renderer: 'canvas' }}
+          />
         )}
       </div>
     </div>

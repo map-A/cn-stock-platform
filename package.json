@@ -43,10 +43,10 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "echarts": "^6.0.0",
+    "echarts-for-react": "^3.0.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "recharts": "^3.3.0",
-    "scichart": "^4.0.918"
+    "recharts": "^3.3.0"
   },
   "devDependencies": {
     "@ant-design/plots": "^2.6.6",

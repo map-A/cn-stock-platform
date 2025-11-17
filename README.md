@@ -219,3 +219,5 @@ export const useStockStore = create((set) => ({
    - Service 参数和返回值需要类型注解
    - 严格使用 TypeScript
 
+在项目的/workspaces/cn-stock-platform/src/pages/Market 路径中，我写了一些使用scichart 库的一些包含图表页面，现在我不想使用scichart了，我想改用
+echarts-for-react 来呈现这些图表。请你移除scichart的使用，改用echarts-for-react，
