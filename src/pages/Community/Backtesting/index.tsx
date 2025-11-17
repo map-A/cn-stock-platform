@@ -4,8 +4,65 @@
  */
 
 import React, { useState } from 'react';
-import { backtestService, type BacktestStrategy, type BacktestResult } from '@/services/backtestService';
 import './style.css';
+
+// TODO: 待迁移到新的回测系统
+// 临时类型定义
+interface BacktestStrategy {
+  name: string;
+  type: string;
+  rules: any[];
+  initialCapital: number;
+  positionSize: number;
+  commission: number;
+}
+
+interface BacktestResult {
+  summary: {
+    totalReturn: number;
+    annualizedReturn: number;
+    sharpeRatio: number;
+    maxDrawdown: number;
+    winRate: number;
+    totalTrades: number;
+  };
+  trades: Array<{
+    date: string;
+    type: 'buy' | 'sell';
+    price: number;
+    quantity: number;
+    profit?: number;
+  }>;
+}
+
+// 临时模拟服务
+const backtestService = {
+  runBacktest: async (
+    strategy: BacktestStrategy,
+    symbol: string,
+    startDate: string,
+    endDate: string
+  ): Promise<BacktestResult> => {
+    // 模拟延迟
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // 返回模拟数据
+    return {
+      summary: {
+        totalReturn: 0.15,
+        annualizedReturn: 0.12,
+        sharpeRatio: 1.5,
+        maxDrawdown: -0.08,
+        winRate: 0.65,
+        totalTrades: 20,
+      },
+      trades: [
+        { date: '2023-01-15', type: 'buy', price: 10.5, quantity: 1000, profit: undefined },
+        { date: '2023-02-20', type: 'sell', price: 11.2, quantity: 1000, profit: 700 },
+      ],
+    };
+  },
+};
 
 const BacktestingPage: React.FC = () => {
   const [strategy, setStrategy] = useState<BacktestStrategy>({

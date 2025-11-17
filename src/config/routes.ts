@@ -57,15 +57,19 @@ export default [
   { path: '/industry', name: 'industry', icon: 'ToolOutlined', component: './Industry' },
 
   // ============ 交易与策略 ============
-  {
-    path: '/strategy',
-    name: 'strategy',
-    icon: 'ExperimentOutlined',
-    routes: [
-      { path: '/strategy/list', name: 'list', component: './Strategy' },
-      { path: '/strategy/backtest', name: 'backtest', component: './Backtest' },
-    ],
-  },
+  // TODO: 新的策略与回测路由将在重构后添加
+  // {
+  //   path: '/strategies',
+  //   name: 'strategies',
+  //   icon: 'ExperimentOutlined',
+  //   component: './Strategy',
+  // },
+  // {
+  //   path: '/backtests',
+  //   name: 'backtests',
+  //   icon: 'BarChartOutlined',
+  //   component: './Backtest',
+  // },
   {
     path: '/trade',
     name: 'trade',
