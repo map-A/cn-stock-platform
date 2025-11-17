@@ -1,1 +1,139 @@
-// 股票筛选器样式
+.screenerPage {
+  height: calc(100vh - 120px);
+  min-height: 600px;
+
+  :global {
+    .ant-page-header-content {
+      padding-top: 0;
+    }
+  }
+
+  .content {
+    height: calc(100% - 60px);
+    padding: 16px 0;
+  }
+
+  .filterPanelWrapper {
+    height: 100%;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .resultPanelWrapper {
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  // 响应式设计
+  @media (max-width: 1920px) {
+    // 普通屏幕（1920px及以下）
+    .content {
+      :global {
+        .ant-col {
+          &:first-child {
+            flex: 0 0 25%;
+            max-width: 25%;
+          }
+          &:last-child {
+            flex: 0 0 75%;
+            max-width: 75%;
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: 2560px) {
+    // 4K大屏适配
+    height: calc(100vh - 140px);
+    
+    .content {
+      padding: 24px 0;
+      
+      :global {
+        .ant-col {
+          &:first-child {
+            flex: 0 0 20%;
+            max-width: 20%;
+          }
+          &:last-child {
+            flex: 0 0 80%;
+            max-width: 80%;
+          }
+        }
+      }
+    }
+
+    .filterPanelWrapper,
+    .resultPanelWrapper {
+      border-radius: 12px;
+    }
+  }
+
+  @media (max-width: 1440px) {
+    // 小屏适配
+    .content {
+      :global {
+        .ant-col {
+          &:first-child {
+            flex: 0 0 30%;
+            max-width: 30%;
+          }
+          &:last-child {
+            flex: 0 0 70%;
+            max-width: 70%;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    // 平板适配
+    height: auto;
+    min-height: 100vh;
+
+    .content {
+      height: auto;
+      
+      :global {
+        .ant-row {
+          flex-direction: column;
+        }
+
+        .ant-col {
+          &:first-child,
+          &:last-child {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-bottom: 16px;
+          }
+        }
+      }
+    }
+
+    .filterPanelWrapper {
+      height: auto;
+      min-height: 400px;
+    }
+
+    .resultPanelWrapper {
+      height: auto;
+      min-height: 600px;
+    }
+  }
+}

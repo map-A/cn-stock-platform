@@ -1,48 +1,66 @@
+/**
+ * 股票筛选器主页面
+ */
+
 import React, { useState, useEffect } from 'react';
-import {
-  Card,
-  Form,
-  Row,
-  Col,
-  InputNumber,
-  Select,
-  Button,
-  Table,
-  Space,
-  Tag,
-  Modal,
-  Input,
-  message,
-} from 'antd';
-import {
-  SearchOutlined,
-  SaveOutlined,
-  ReloadOutlined,
-  DownloadOutlined,
-  StarOutlined,
-} from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import screenerService, { type ScreenerResult, type ScreenerFilter } from '@/services/screener';
-import { useNavigate, useIntl } from '@umijs/max';
-import type { ColumnsType } from 'antd/es/table';
+import { Row, Col, message, Modal, Form, Input, Button, Space } from 'antd';
+import screenerService from '@/services/screener';
+import { useFilters } from './hooks/useFilters';
+import { useScreener } from './hooks/useScreener';
+import { useCharts } from './hooks/useCharts';
+import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
+import FilterPanel from './components/FilterPanel';
+import ResultPanel from './components/ResultPanel';
+import SavedScreeners from './components/SavedScreeners';
+import ChartArea from './components/ResultPanel/ChartArea';
+import KeyboardShortcutsHelp from './components/KeyboardShortcutsHelp';
+import type { SavedScreener } from './types';
 import styles from './index.less';
 
-const { Option } = Select;
-
 const Screener: React.FC = () => {
-  const [form] = Form.useForm();
-  const [saveForm] = Form.useForm();
-  const navigate = useNavigate();
-  const intl = useIntl();
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<ScreenerResult[]>([]);
-  const [total, setTotal] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
   const [saveModalVisible, setSaveModalVisible] = useState(false);
-  const [industries, setIndustries] = useState<{ code: string; name: string }[]>([]);
-  const [sectors, setSectors] = useState<{ code: string; name: string }[]>([]);
+  const [saveForm] = Form.useForm();
+  const [industries, setIndustries] = useState<Array<{ code: string; name: string }>>([]);
+  const [sectors, setSectors] = useState<Array<{ code: string; name: string }>>([]);
+  const [showSavedScreeners, setShowSavedScreeners] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
+  // 使用自定义 Hooks
+  const {
+    filters,
+    updateBasicFilters,
+    updateTechnicalFilters,
+    updateFundamentalFilters,
+    addCustomRule,
+    updateCustomRule,
+    removeCustomRule,
+    resetFilters,
+    loadFilters,
+    validateFilters,
+    hasAnyFilter,
+  } = useFilters();
+
+  const {
+    loading,
+    results,
+    total,
+    currentPage,
+    pageSize,
+    executeScreen,
+    changePage,
+    resetResults,
+    exportResults,
+  } = useScreener();
+
+  const {
+    chartMode,
+    selectedStocks,
+    selectStock,
+    toggleChartMode,
+  } = useCharts();
+
+  // 加载元数据
   useEffect(() => {
     loadMetadata();
   }, []);
@@ -65,44 +83,42 @@ const Screener: React.FC = () => {
     }
   };
 
+  // 处理筛选
   const handleSearch = async () => {
-    setLoading(true);
-    try {
-      const values = await form.validateFields();
-      const filters: ScreenerFilter = {
-        ...values,
-      };
-
-      const response = await screenerService.screenStocks({
-        ...filters,
-        page: currentPage,
-        pageSize,
-      });
-
-      if (response.success && response.data) {
-        setResults(response.data.list);
-        setTotal(response.data.total);
-      }
-    } catch (error) {
-      message.error(intl.formatMessage({ id: 'message.filterFailed' }));
-      console.error(error);
-    } finally {
-      setLoading(false);
+    const validation = validateFilters();
+    if (!validation.valid) {
+      message.error(validation.errors[0]);
+      return;
     }
+
+    if (!hasAnyFilter()) {
+      message.warning('请至少设置一个筛选条件');
+      return;
+    }
+
+    await executeScreen(filters, 1, pageSize);
   };
 
+  // 处理重置
   const handleReset = () => {
-    form.resetFields();
-    setResults([]);
-    setTotal(0);
-    setCurrentPage(1);
+    resetFilters();
+    resetResults();
+    message.success('已重置所有筛选条件');
   };
 
-  const handleSaveScreener = async () => {
+  // 处理保存筛选器
+  const handleSave = () => {
+    if (!hasAnyFilter()) {
+      message.warning('请至少设置一个筛选条件');
+      return;
+    }
+    setSaveModalVisible(true);
+  };
+
+  // 确认保存筛选器
+  const handleSaveConfirm = async () => {
     try {
       const values = await saveForm.validateFields();
-      const filters = form.getFieldsValue();
-
       const response = await screenerService.saveScreener({
         name: values.name,
         description: values.description,
@@ -110,309 +126,197 @@ const Screener: React.FC = () => {
       });
 
       if (response.success) {
-        message.success(intl.formatMessage({ id: 'message.saveSuccess' }));
+        message.success('筛选器保存成功');
+        setSaveModalVisible(false);
+        saveForm.resetFields();
+      } else {
+        message.error('保存失败，请重试');
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      message.error('保存失败');
+    }
+  };
+
+  // 保存为策略
+  const handleSaveAsStrategy = async () => {
+    try {
+      Modal.confirm({
+        title: '保存为策略',
+        content: '确定要将当前筛选器保存为策略吗？',
+        onOk: async () => {
+          const response = await screenerService.saveAsStrategy({
+            name: `筛选策略_${new Date().toLocaleDateString()}`,
+            filters,
+          });
+
+          if (response.success) {
+            message.success('策略保存成功');
+          } else {
+            message.error('保存失败');
+          }
+        },
+      });
+    } catch (error) {
+      console.error('Save as strategy error:', error);
+      message.error('保存失败');
+    }
+  };
+
+  // 处理导出
+  const handleExport = async (type: 'current' | 'all') => {
+    if (type === 'all') {
+      await exportResults(filters);
+    } else {
+      message.info('导出当前页功能开发中');
+    }
+  };
+
+  // 处理分页
+  const handlePageChange = (page: number, size: number) => {
+    changePage(page, size);
+    executeScreen(filters, page, size);
+  };
+
+  // 处理筛选条件变化
+  const handleFiltersChange = (newFilters: typeof filters) => {
+    loadFilters(newFilters);
+  };
+
+  // 加载保存的筛选器
+  const handleLoadScreener = (screener: SavedScreener) => {
+    loadFilters(screener.filters);
+    setShowSavedScreeners(false);
+    message.success(`已加载筛选器: ${screener.name}`);
+  };
+
+  // 验证表达式
+  const handleValidateExpression = async (expression: string) => {
+    try {
+      const response = await screenerService.validateExpression(expression);
+      if (response.success && response.data) {
+        return response.data;
+      }
+      return { valid: false, errors: [{ message: '验证失败' }] };
+    } catch (error) {
+      return { valid: false, errors: [{ message: '验证服务异常' }] };
+    }
+  };
+
+  // 集成键盘快捷键
+  useKeyboardShortcuts({
+    onSave: handleSave,
+    onSearch: handleSearch,
+    onReset: handleReset,
+    onEscape: () => {
+      if (saveModalVisible) {
         setSaveModalVisible(false);
         saveForm.resetFields();
       }
-    } catch (error) {
-      message.error(intl.formatMessage({ id: 'message.saveFailed' }));
-      console.error(error);
-    }
-  };
-
-  const handleExport = async () => {
-    try {
-      const filters = form.getFieldsValue();
-      await screenerService.exportResults({ ...filters, page: 1, pageSize: 10000 });
-      message.success(intl.formatMessage({ id: 'message.exportSuccess' }));
-    } catch (error) {
-      message.error(intl.formatMessage({ id: 'message.exportFailed' }));
-      console.error(error);
-    }
-  };
-
-  const handleStockClick = (symbol: string) => {
-    navigate(`/stock/${symbol}`);
-  };
-
-  const columns: ColumnsType<ScreenerResult> = [
-    {
-      title: intl.formatMessage({ id: 'table.columns.symbol' }),
-      dataIndex: 'symbol',
-      key: 'symbol',
-      width: 120,
-      fixed: 'left',
-      render: (symbol: string) => (
-        <a onClick={() => handleStockClick(symbol)}>
-          <strong>{symbol}</strong>
-        </a>
-      ),
+      if (drawerVisible) {
+        setDrawerVisible(false);
+      }
     },
-    {
-      title: intl.formatMessage({ id: 'table.columns.name' }),
-      dataIndex: 'name',
-      key: 'name',
-      width: 150,
-    },
-    {
-      title: intl.formatMessage({ id: 'table.columns.latestPrice' }),
-      dataIndex: 'price',
-      key: 'price',
-      width: 100,
-      align: 'right',
-      sorter: (a, b) => a.price - b.price,
-      render: (price: number) => `¥${price.toFixed(2)}`,
-    },
-    {
-      title: intl.formatMessage({ id: 'table.columns.changePercent' }),
-      dataIndex: 'changePercent',
-      key: 'changePercent',
-      width: 120,
-      align: 'right',
-      sorter: (a, b) => a.changePercent - b.changePercent,
-      render: (percent: number) => (
-        <Tag color={percent >= 0 ? 'success' : 'error'}>
-          {percent >= 0 ? '+' : ''}
-          {percent.toFixed(2)}%
-        </Tag>
-      ),
-    },
-    {
-      title: intl.formatMessage({ id: 'table.columns.volume' }),
-      dataIndex: 'volume',
-      key: 'volume',
-      width: 120,
-      align: 'right',
-      sorter: (a, b) => a.volume - b.volume,
-      render: (volume: number) => (volume / 10000).toFixed(2) + '万',
-    },
-    {
-      title: intl.formatMessage({ id: 'table.columns.marketCap' }),
-      dataIndex: 'marketCap',
-      key: 'marketCap',
-      width: 120,
-      align: 'right',
-      sorter: (a, b) => a.marketCap - b.marketCap,
-      render: (cap: number) => (cap / 100000000).toFixed(2) + '亿',
-    },
-    {
-      title: intl.formatMessage({ id: 'table.columns.peRatio' }),
-      dataIndex: 'peRatio',
-      key: 'peRatio',
-      width: 100,
-      align: 'right',
-      sorter: (a, b) => (a.peRatio || 0) - (b.peRatio || 0),
-      render: (ratio?: number) => (ratio ? ratio.toFixed(2) : '-'),
-    },
-    {
-      title: intl.formatMessage({ id: 'table.columns.pbRatio' }),
-      dataIndex: 'pbRatio',
-      key: 'pbRatio',
-      width: 100,
-      align: 'right',
-      sorter: (a, b) => (a.pbRatio || 0) - (b.pbRatio || 0),
-      render: (ratio?: number) => (ratio ? ratio.toFixed(2) : '-'),
-    },
-    {
-      title: intl.formatMessage({ id: 'table.columns.dividendYield' }),
-      dataIndex: 'dividendYield',
-      key: 'dividendYield',
-      width: 100,
-      align: 'right',
-      sorter: (a, b) => (a.dividendYield || 0) - (b.dividendYield || 0),
-      render: (yield_?: number) => (yield_ ? yield_.toFixed(2) + '%' : '-'),
-    },
-    {
-      title: intl.formatMessage({ id: 'table.columns.industry' }),
-      dataIndex: 'industry',
-      key: 'industry',
-      width: 120,
-      render: (industry: string) => <Tag>{industry}</Tag>,
-    },
-  ];
+  });
 
   return (
-    <PageContainer title={intl.formatMessage({ id: 'pages.screener.title' })}>
-      <Card bordered={false} style={{ marginBottom: 16 }}>
-        <Form form={form} layout="vertical">
-          <Row gutter={16}>
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage({ id: 'pages.screener.marketCapRange' })}>
-                <Space.Compact style={{ width: '100%' }}>
-                  <Form.Item name="marketCapMin" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                  <Form.Item name="marketCapMax" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                </Space.Compact>
-              </Form.Item>
-            </Col>
+    <PageContainer
+      title="股票筛选器"
+      subTitle="专业的股票筛选工具"
+      className={styles.screenerPage}
+      extra={
+        <Space>
+          <KeyboardShortcutsHelp />
+          <Button
+            type={showSavedScreeners ? 'primary' : 'default'}
+            onClick={() => setShowSavedScreeners(!showSavedScreeners)}
+          >
+            {showSavedScreeners ? '隐藏' : '显示'}筛选器库
+          </Button>
+        </Space>
+      }
+    >
+      {/* 筛选器库 */}
+      {showSavedScreeners && (
+        <div style={{ marginBottom: 16 }}>
+          <SavedScreeners onLoad={handleLoadScreener} />
+        </div>
+      )}
 
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage({ id: 'pages.screener.priceRange' })}>
-                <Space.Compact style={{ width: '100%' }}>
-                  <Form.Item name="priceMin" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                  <Form.Item name="priceMax" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                </Space.Compact>
-              </Form.Item>
-            </Col>
+      <div className={styles.content}>
+        <Row gutter={16} style={{ height: '100%' }}>
+          {/* 左侧筛选面板 */}
+          <Col span={6} style={{ height: '100%' }}>
+            <div className={styles.filterPanelWrapper}>
+              <FilterPanel
+                filters={filters}
+                onFiltersChange={handleFiltersChange}
+                onSearch={handleSearch}
+                onReset={handleReset}
+                onSave={handleSave}
+                loading={loading}
+                industries={industries}
+                sectors={sectors}
+                onValidateExpression={handleValidateExpression}
+              />
+            </div>
+          </Col>
 
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage({ id: 'pages.screener.peRatioRange' })}>
-                <Space.Compact style={{ width: '100%' }}>
-                  <Form.Item name="peRatioMin" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                  <Form.Item name="peRatioMax" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                </Space.Compact>
-              </Form.Item>
-            </Col>
+          {/* 右侧结果面板 */}
+          <Col span={18} style={{ height: '100%' }}>
+            <div className={styles.resultPanelWrapper}>
+              <ResultPanel
+                data={results}
+                total={total}
+                loading={loading}
+                pagination={{
+                  current: currentPage,
+                  pageSize,
+                  onChange: handlePageChange,
+                }}
+                filters={filters}
+                onExport={handleExport}
+                onSaveFilters={handleSave}
+                onSaveAsStrategy={handleSaveAsStrategy}
+                onReset={handleReset}
+              />
 
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage({ id: 'pages.screener.pbRatioRange' })}>
-                <Space.Compact style={{ width: '100%' }}>
-                  <Form.Item name="pbRatioMin" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                  <Form.Item name="pbRatioMax" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                </Space.Compact>
-              </Form.Item>
-            </Col>
-          </Row>
+              {/* 图表区域 */}
+              <ChartArea
+                selectedStocks={selectedStocks}
+                loading={loading}
+                onModeChange={toggleChartMode}
+              />
+            </div>
+          </Col>
+        </Row>
+      </div>
 
-          <Row gutter={16}>
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage({ id: 'pages.screener.changePercentRange' })}>
-                <Space.Compact style={{ width: '100%' }}>
-                  <Form.Item name="changePercentMin" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} />
-                  </Form.Item>
-                  <Form.Item name="changePercentMax" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} />
-                  </Form.Item>
-                </Space.Compact>
-              </Form.Item>
-            </Col>
-
-            <Col span={6}>
-              <Form.Item label={intl.formatMessage({ id: 'pages.screener.dividendYieldRange' })}>
-                <Space.Compact style={{ width: '100%' }}>
-                  <Form.Item name="dividendYieldMin" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.min' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                  <Form.Item name="dividendYieldMax" noStyle>
-                    <InputNumber placeholder={intl.formatMessage({ id: 'pages.screener.max' })} style={{ width: '50%' }} min={0} />
-                  </Form.Item>
-                </Space.Compact>
-              </Form.Item>
-            </Col>
-
-            <Col span={6}>
-              <Form.Item name="industries" label={intl.formatMessage({ id: 'table.columns.industry' })}>
-                <Select mode="multiple" placeholder={intl.formatMessage({ id: 'pages.screener.selectIndustry' })} allowClear>
-                  {industries.map((item) => (
-                    <Option key={item.code} value={item.code}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-
-            <Col span={6}>
-              <Form.Item name="sectors" label={intl.formatMessage({ id: 'pages.screener.sector' })}>
-                <Select mode="multiple" placeholder={intl.formatMessage({ id: 'pages.screener.selectSector' })} allowClear>
-                  {sectors.map((item) => (
-                    <Option key={item.code} value={item.code}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col span={24}>
-              <Space>
-                <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
-                  {intl.formatMessage({ id: 'button.search' })}
-                </Button>
-                <Button icon={<ReloadOutlined />} onClick={handleReset}>
-                  {intl.formatMessage({ id: 'button.reset' })}
-                </Button>
-                <Button
-                  icon={<SaveOutlined />}
-                  onClick={() => setSaveModalVisible(true)}
-                  disabled={results.length === 0}
-                >
-                  {intl.formatMessage({ id: 'pages.screener.save' })}
-                </Button>
-                <Button
-                  icon={<DownloadOutlined />}
-                  onClick={handleExport}
-                  disabled={results.length === 0}
-                >
-                  {intl.formatMessage({ id: 'button.export' })}
-                </Button>
-              </Space>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
-
-      <Card bordered={false}>
-        <Table
-          columns={columns}
-          dataSource={results}
-          rowKey="symbol"
-          loading={loading}
-          pagination={{
-            current: currentPage,
-            pageSize,
-            total,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => intl.formatMessage({ id: 'pages.screener.total' }, { total }),
-            onChange: (page, size) => {
-              setCurrentPage(page);
-              setPageSize(size);
-            },
-          }}
-          scroll={{ x: 1400 }}
-        />
-      </Card>
-
+      {/* 保存筛选器弹窗 */}
       <Modal
-        title={intl.formatMessage({ id: 'pages.screener.saveModal.title' })}
+        title="保存筛选器"
         open={saveModalVisible}
-        onOk={handleSaveScreener}
+        onOk={handleSaveConfirm}
         onCancel={() => {
           setSaveModalVisible(false);
           saveForm.resetFields();
         }}
-        okText={intl.formatMessage({ id: 'button.save' })}
-        cancelText={intl.formatMessage({ id: 'button.cancel' })}
+        okText="保存"
+        cancelText="取消"
       >
         <Form form={saveForm} layout="vertical">
           <Form.Item
             name="name"
-            label={intl.formatMessage({ id: 'pages.screener.saveModal.name' })}
-            rules={[{ required: true, message: intl.formatMessage({ id: 'pages.screener.saveModal.nameRequired' }) }]}
+            label="筛选器名称"
+            rules={[{ required: true, message: '请输入筛选器名称' }]}
           >
-            <Input placeholder={intl.formatMessage({ id: 'pages.screener.saveModal.namePlaceholder' })} />
+            <Input placeholder="例如：高成长低估值" />
           </Form.Item>
-          <Form.Item name="description" label={intl.formatMessage({ id: 'pages.screener.saveModal.description' })}>
-            <Input.TextArea rows={3} placeholder={intl.formatMessage({ id: 'pages.screener.saveModal.descriptionPlaceholder' })} />
+          <Form.Item name="description" label="描述">
+            <Input.TextArea
+              rows={3}
+              placeholder="简单描述筛选器的用途和条件"
+            />
           </Form.Item>
         </Form>
       </Modal>

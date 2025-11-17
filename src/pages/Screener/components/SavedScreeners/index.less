@@ -1,0 +1,47 @@
+.savedScreeners {
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+
+  :global {
+    .ant-tabs-nav {
+      margin-bottom: 16px;
+    }
+  }
+
+  .screenerGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+}
+
+.screenerCard {
+  transition: all 0.3s;
+  border-radius: 8px;
+  height: 100%;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  :global {
+    .ant-card-body {
+      padding: 16px;
+    }
+
+    .ant-card-extra {
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+  }
+
+  &:hover {
+    :global {
+      .ant-card-extra {
+        opacity: 1;
+      }
+    }
+  }
+}

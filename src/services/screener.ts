@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import type { ScreenerFilters, ScreenerResult as NewScreenerResult } from '@/pages/Screener/types';
 
 export interface ScreenerCondition {
   field: string;
@@ -170,6 +171,114 @@ class ScreenerService {
       method: 'POST',
       data: params,
       responseType: 'blob',
+    });
+  }
+
+  /**
+   * 使用新的筛选条件格式筛选股票
+   */
+  async screenStocksV2(
+    filters: ScreenerFilters,
+    page: number = 1,
+    pageSize: number = 20,
+    sortBy?: string,
+    sortOrder?: 'asc' | 'desc',
+  ): Promise<API.Response<API.PaginatedResponse<NewScreenerResult>>> {
+    return request('/api/screener/v2/stocks', {
+      method: 'POST',
+      data: {
+        filters,
+        page,
+        pageSize,
+        sortBy,
+        sortOrder,
+      },
+    });
+  }
+
+  /**
+   * 获取技术指标数据
+   */
+  async getTechnicalIndicators(
+    symbol: string,
+    indicators: string[],
+  ): Promise<API.Response<Record<string, any>>> {
+    return request('/api/screener/technical-indicators', {
+      method: 'POST',
+      data: { symbol, indicators },
+    });
+  }
+
+  /**
+   * 获取财务指标数据
+   */
+  async getFundamentalIndicators(
+    symbol: string,
+    indicators: string[],
+  ): Promise<API.Response<Record<string, any>>> {
+    return request('/api/screener/fundamental-indicators', {
+      method: 'POST',
+      data: { symbol, indicators },
+    });
+  }
+
+  /**
+   * 验证表达式
+   */
+  async validateExpression(expression: string): Promise<
+    API.Response<{
+      valid: boolean;
+      errors?: Array<{ line: number; column: number; message: string }>;
+    }>
+  > {
+    return request('/api/screener/validate-expression', {
+      method: 'POST',
+      data: { expression },
+    });
+  }
+
+  /**
+   * 批量获取股票迷你图数据
+   */
+  async getBatchMiniCharts(
+    symbols: string[],
+    period: '1d' | '5d' | '1m' = '5d',
+  ): Promise<API.Response<Record<string, any[]>>> {
+    return request('/api/screener/mini-charts', {
+      method: 'POST',
+      data: { symbols, period },
+    });
+  }
+
+  /**
+   * 保存筛选器为策略
+   */
+  async saveAsStrategy(data: {
+    name: string;
+    description?: string;
+    filters: ScreenerFilters;
+  }): Promise<API.Response<{ id: string }>> {
+    return request('/api/screener/save-as-strategy', {
+      method: 'POST',
+      data,
+    });
+  }
+
+  /**
+   * 获取已保存的筛选器列表
+   */
+  async getSavedScreeners(): Promise<API.Response<any[]>> {
+    return request('/api/screener/saved', {
+      method: 'GET',
+    });
+  }
+
+  /**
+   * 删除已保存的筛选器
+   */
+  async deleteSavedScreener(id: string): Promise<API.Response<void>> {
+    return request(`/api/screener/saved/${id}`, {
+      method: 'DELETE',
     });
   }
 }
