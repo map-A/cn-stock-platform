@@ -66,7 +66,7 @@ export async function getInitialState(): Promise<{
   applyThemeToDOM(savedThemeConfig);
   
   // 应用动态主题token到默认设置
-  const initialSettings = getLayoutSettings(defaultSettings as Partial<LayoutSettings>);
+  const initialSettings = getLayoutSettings(defaultSettings as Partial<LayoutSettings>, savedThemeConfig);
   
   // 初始化时设置CSS变量到:root
   if (initialSettings.token) {
@@ -163,7 +163,8 @@ export const layout: RunTimeLayoutConfig = ({
             settings={initialState?.settings}
             onSettingChange={(settings) => {
               // 应用动态主题token
-              const updatedSettings = getLayoutSettings(settings);
+              const currentThemeConfig = loadThemeConfig(); // Re-load to get latest, or pass from initialState
+              const updatedSettings = getLayoutSettings(settings, { ...currentThemeConfig, ...settings });
               
               // 动态更新CSS变量到:root
               if (updatedSettings.token) {
@@ -208,7 +209,7 @@ export const request: RequestConfig = {
  */
 export const antd = (memo: any) => {
   // 获取初始化的主题设置
-  const initialSettings = getLayoutSettings(defaultSettings as Partial<LayoutSettings>);
+  const initialSettings = getLayoutSettings(defaultSettings as Partial<LayoutSettings>, loadThemeConfig());
   const token = initialSettings.token || {};
 
   return {

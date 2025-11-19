@@ -28,7 +28,7 @@ export interface ThemeConfig {
  */
 export const DEFAULT_THEME_CONFIG: ThemeConfig = {
   mode: 'light',
-  colorPrimary: '#1677ff',
+  colorPrimary: '#3B82F6', // Vibrant blue
   animationSpeed: 'default',
   layout: 'mix',
   fixedHeader: false,
@@ -40,16 +40,16 @@ export const DEFAULT_THEME_CONFIG: ThemeConfig = {
  */
 export const LIGHT_MODE_TOKENS = {
   colorBgBase: '#ffffff',
-  colorBgContainer: '#f5f5f5',
-  colorText: '#1a1a1a',
-  colorTextSecondary: '#595959',
+  colorBgContainer: '#ffffff', // Clean white
+  colorText: '#212529', // Slightly darker for better readability
+  colorTextSecondary: '#495057', // Muted secondary text
   colorTextTertiary: '#8c8c8c',
   colorTextDisabled: '#bfbfbf',
   colorBorder: '#d9d9d9',
   colorBorderSecondary: '#f0f0f0',
-  colorBgLayout: '#f0f2f5',
+  colorBgLayout: '#f8f9fa', // Very light grey for spacious feel
   colorBgElevated: '#ffffff',
-  shadowBase: 'rgba(0, 0, 0, 0.1)',
+  shadowBase: 'rgba(0, 0, 0, 0.05)', // Softer shadow
 };
 
 /**
@@ -57,14 +57,14 @@ export const LIGHT_MODE_TOKENS = {
  */
 export const DARK_MODE_TOKENS = {
   colorBgBase: '#141414',
-  colorBgContainer: '#1f1f1f',
-  colorText: '#e8e8e8',
-  colorTextSecondary: '#bfbfbf',
+  colorBgContainer: '#2c2c2c', // Softer dark background
+  colorText: '#f8f9fa', // Brighter text for dark mode
+  colorTextSecondary: '#ced4da', // Muted secondary text
   colorTextTertiary: '#8c8c8c',
   colorTextDisabled: '#595959',
   colorBorder: '#434343',
   colorBorderSecondary: '#303030',
-  colorBgLayout: '#000000',
+  colorBgLayout: '#1a1a1a', // Softer dark background
   colorBgElevated: '#1f1f1f',
   shadowBase: 'rgba(0, 0, 0, 0.5)',
 };

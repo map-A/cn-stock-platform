@@ -3,6 +3,7 @@
  */
 import React, { useEffect, useRef } from 'react';
 import { Line } from '@ant-design/plots';
+import { theme } from 'antd';
 import type { TimeShareData } from '@/typings/stock';
 
 interface LineChartProps {
@@ -11,6 +12,7 @@ interface LineChartProps {
 }
 
 const LineChart: React.FC<LineChartProps> = ({ data, height = 400 }) => {
+  const { token } = theme.useToken();
   const config = {
     data,
     xField: 'time',
@@ -23,12 +25,12 @@ const LineChart: React.FC<LineChartProps> = ({ data, height = 400 }) => {
       },
     },
     line: {
-      color: '#1890ff',
+      color: token.colorPrimary,
       size: 2,
     },
     area: {
       style: {
-        fill: 'l(270) 0:#1890ff 0.5:rgba(24,144,255,0.5) 1:rgba(24,144,255,0.1)',
+        fill: `l(270) 0:${token.colorPrimary} 0.5:${token.colorPrimaryBgHover} 1:${token.colorPrimaryBg}`,
       },
     },
     xAxis: {
@@ -41,56 +43,55 @@ const LineChart: React.FC<LineChartProps> = ({ data, height = 400 }) => {
         },
       },
     },
-    yAxis: {
-      label: {
-        formatter: (v: string) => `¥${parseFloat(v).toFixed(2)}`,
-      },
-      grid: {
-        line: {
-          style: {
-            stroke: '#f0f0f0',
-            lineWidth: 1,
-            lineDash: [4, 4],
+          yAxis: {
+            label: {
+              formatter: (v: string) => `¥${parseFloat(v).toFixed(2)}`,
+            },
+            grid: {
+              line: {
+                style: {
+                  stroke: token.colorBorderSecondary,
+                  lineWidth: 1,
+                  lineDash: [4, 4],
+                },
+              },
+            },
           },
-        },
-      },
-    },
-    tooltip: {
-      formatter: (datum: any) => ({
-        name: '价格',
-        value: `¥${datum.price.toFixed(2)}`,
-      }),
-      customItems: (originalItems: any[]) => {
-        const datum = originalItems[0]?.data;
-        const items = [
-          {
-            name: '价格',
-            value: `¥${datum?.price?.toFixed(2) || '--'}`,
-            color: '#1890ff',
+          tooltip: {
+            formatter: (datum: any) => ({
+              name: '价格',
+              value: `¥${datum.price.toFixed(2)}`,
+            }),
+            customItems: (originalItems: any[]) => {
+              const datum = originalItems[0]?.data;
+              const items = [
+                {
+                  name: '价格',
+                  value: `¥${datum?.price?.toFixed(2) || '--'}`,
+                  color: token.colorPrimary,
+                },
+              ];
+              
+              if (datum?.avgPrice) {
+                items.push({
+                  name: '均价',
+                  value: `¥${datum.avgPrice.toFixed(2)}`,
+                  color: token.colorWarning,
+                });
+              }
+              
+              if (datum?.volume) {
+                items.push({
+                  name: '成交量',
+                  value: `${(datum.volume / 100).toFixed(0)}手`,
+                  color: token.colorSuccess,
+                });
+              }
+              
+              return items;
+            },
           },
-        ];
-        
-        if (datum?.avgPrice) {
-          items.push({
-            name: '均价',
-            value: `¥${datum.avgPrice.toFixed(2)}`,
-            color: '#faad14',
-          });
-        }
-        
-        if (datum?.volume) {
-          items.push({
-            name: '成交量',
-            value: `${(datum.volume / 100).toFixed(0)}手`,
-            color: '#52c41a',
-          });
-        }
-        
-        return items;
-      },
-    },
-  };
-
+        };
   return <Line {...config} height={height} />;
 };
 

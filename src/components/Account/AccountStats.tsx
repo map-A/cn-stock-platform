@@ -2,7 +2,7 @@
  * 账户统计卡片组件
  */
 import React from 'react';
-import { Row, Col, Statistic, Card } from 'antd';
+import { Row, Col, Statistic, Card, theme } from 'antd';
 import {
   DollarOutlined,
   RiseOutlined,
@@ -20,9 +20,11 @@ interface AccountStatsProps {
 }
 
 const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loading }) => {
+  const { token } = theme.useToken();
+
   if (!account) return null;
 
-  const profitColor = Number(account.total_profit_loss) >= 0 ? '#cf1322' : '#3f8600';
+  const profitColor = Number(account.total_profit_loss) >= 0 ? token.colorSuccess : token.colorError;
   const returnPct = Number(account.total_profit_loss_pct) || 0;
 
   return (
@@ -33,7 +35,7 @@ const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loadi
             title="总资产"
             value={Number(account.total_assets)}
             precision={2}
-            prefix={<DollarOutlined style={{ color: '#1890ff' }} />}
+            prefix={<DollarOutlined style={{ color: token.colorPrimary }} />}
             suffix="元"
           />
         </Card>
@@ -44,7 +46,7 @@ const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loadi
             title="持仓市值"
             value={Number(account.market_value)}
             precision={2}
-            prefix={<PieChartOutlined style={{ color: '#52c41a' }} />}
+            prefix={<PieChartOutlined style={{ color: token.colorInfo }} />}
             suffix="元"
           />
         </Card>
@@ -55,7 +57,7 @@ const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loadi
             title="可用资金"
             value={Number(account.available_cash)}
             precision={2}
-            prefix={<BarChartOutlined style={{ color: '#faad14' }} />}
+            prefix={<BarChartOutlined style={{ color: token.colorWarning }} />}
             suffix="元"
           />
         </Card>
@@ -67,7 +69,7 @@ const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loadi
             value={Number(account.total_profit_loss)}
             precision={2}
             valueStyle={{ color: profitColor }}
-            prefix={returnPct >= 0 ? <RiseOutlined /> : <FallOutlined />}
+            prefix={returnPct >= 0 ? <RiseOutlined style={{ color: token.colorSuccess }} /> : <FallOutlined style={{ color: token.colorError }} />}
             suffix={`元 (${returnPct.toFixed(2)}%)`}
           />
         </Card>
@@ -82,7 +84,7 @@ const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loadi
                 value={Number(performance.annual_return)}
                 precision={2}
                 suffix="%"
-                valueStyle={{ color: Number(performance.annual_return) >= 0 ? '#cf1322' : '#3f8600' }}
+                valueStyle={{ color: Number(performance.annual_return) >= 0 ? token.colorSuccess : token.colorError }}
               />
             </Card>
           </Col>
@@ -92,7 +94,7 @@ const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loadi
                 title="夏普比率"
                 value={Number(performance.sharpe_ratio) || 0}
                 precision={2}
-                prefix={<TrophyOutlined style={{ color: '#722ed1' }} />}
+                prefix={<TrophyOutlined style={{ color: token.colorInfo }} />}
               />
             </Card>
           </Col>
@@ -103,7 +105,7 @@ const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loadi
                 value={Number(performance.max_drawdown)}
                 precision={2}
                 suffix="%"
-                valueStyle={{ color: '#ff4d4f' }}
+                valueStyle={{ color: token.colorError }}
               />
             </Card>
           </Col>
@@ -114,7 +116,7 @@ const AccountStats: React.FC<AccountStatsProps> = ({ account, performance, loadi
                 value={Number(performance.win_rate)}
                 precision={2}
                 suffix="%"
-                valueStyle={{ color: '#52c41a' }}
+                valueStyle={{ color: token.colorSuccess }}
               />
             </Card>
           </Col>

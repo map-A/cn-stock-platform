@@ -2,7 +2,7 @@
  * 交易记录表格组件
  */
 import React from 'react';
-import { Table, Tag, Space, Typography } from 'antd';
+import { Table, Tag, Space, Typography, theme } from 'antd';
 import { SwapOutlined, ShoppingOutlined, DollarOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import type { ColumnsType } from 'antd/es/table';
@@ -27,10 +27,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   loading,
   onChange,
 }) => {
+  const { token } = theme.useToken();
   const typeMap: Record<string, { color: string; label: string; icon: React.ReactNode }> = {
-    buy: { color: 'red', label: '买入', icon: <ShoppingOutlined /> },
-    sell: { color: 'green', label: '卖出', icon: <DollarOutlined /> },
-    dividend: { color: 'blue', label: '分红', icon: <SwapOutlined /> },
+    buy: { color: token.colorError, label: '买入', icon: <ShoppingOutlined /> },
+    sell: { color: token.colorSuccess, label: '卖出', icon: <DollarOutlined /> },
+    dividend: { color: token.colorPrimary, label: '分红', icon: <SwapOutlined /> },
   };
 
   const columns: ColumnsType<AccountTransaction> = [

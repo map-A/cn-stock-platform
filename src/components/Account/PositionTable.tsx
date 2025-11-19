@@ -2,7 +2,7 @@
  * 持仓列表组件
  */
 import React from 'react';
-import { Table, Tag, Tooltip, Space } from 'antd';
+import { Table, Tag, Tooltip, Space, theme } from 'antd';
 import { RiseOutlined, FallOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import type { AccountPosition } from '@/services/account';
@@ -14,6 +14,7 @@ interface PositionTableProps {
 }
 
 const PositionTable: React.FC<PositionTableProps> = ({ positions, loading, onStockClick }) => {
+  const { token } = theme.useToken();
   const columns: ColumnsType<AccountPosition> = [
     {
       title: '股票代码',
@@ -84,8 +85,8 @@ const PositionTable: React.FC<PositionTableProps> = ({ positions, loading, onSto
         const isProfit = numValue >= 0;
         return (
           <Space>
-            <span style={{ color: isProfit ? '#cf1322' : '#3f8600', fontWeight: 'bold' }}>
-              {isProfit ? <RiseOutlined /> : <FallOutlined />}
+            <span style={{ color: isProfit ? token.colorSuccess : token.colorError, fontWeight: 'bold' }}>
+              {isProfit ? <RiseOutlined style={{ color: token.colorSuccess }} /> : <FallOutlined style={{ color: token.colorError }} />}
               ¥{Math.abs(numValue).toFixed(2)}
             </span>
           </Space>
@@ -103,7 +104,7 @@ const PositionTable: React.FC<PositionTableProps> = ({ positions, loading, onSto
         const numValue = Number(value);
         const isProfit = numValue >= 0;
         return (
-          <Tag color={isProfit ? 'red' : 'green'}>
+          <Tag color={isProfit ? token.colorSuccess : token.colorError}>
             {isProfit ? '+' : ''}
             {numValue.toFixed(2)}%
           </Tag>
@@ -142,7 +143,7 @@ const PositionTable: React.FC<PositionTableProps> = ({ positions, loading, onSto
               </Table.Summary.Cell>
               <Table.Summary.Cell index={5}></Table.Summary.Cell>
               <Table.Summary.Cell index={6} align="right">
-                <strong style={{ color: totalProfitLoss >= 0 ? '#cf1322' : '#3f8600' }}>
+                <strong style={{ color: totalProfitLoss >= 0 ? token.colorSuccess : token.colorError }}>
                   ¥{Math.abs(totalProfitLoss).toFixed(2)}
                 </strong>
               </Table.Summary.Cell>

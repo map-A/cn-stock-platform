@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Stock } from '@ant-design/plots';
+import { theme } from 'antd';
 import type { KLineData } from '@/typings/stock';
 
 interface KLineChartProps {
@@ -11,6 +12,7 @@ interface KLineChartProps {
 }
 
 const KLineChart: React.FC<KLineChartProps> = ({ data, height = 400 }) => {
+  const { token } = theme.useToken();
   const config = {
     data,
     xField: 'time',
@@ -31,48 +33,47 @@ const KLineChart: React.FC<KLineChartProps> = ({ data, height = 400 }) => {
         },
       },
     },
-    yAxis: {
-      label: {
-        formatter: (v: string) => `¥${parseFloat(v).toFixed(2)}`,
-      },
-      grid: {
-        line: {
-          style: {
-            stroke: '#f0f0f0',
-            lineWidth: 1,
-            lineDash: [4, 4],
+          yAxis: {
+            label: {
+              formatter: (v: string) => `¥${parseFloat(v).toFixed(2)}`,
+            },
+            grid: {
+              line: {
+                style: {
+                  stroke: token.colorBorderSecondary,
+                  lineWidth: 1,
+                  lineDash: [4, 4],
+                },
+              },
+            },
           },
-        },
-      },
-    },
-    tooltip: {
-      fields: ['time', 'open', 'close', 'high', 'low', 'volume'],
-      formatter: (datum: any) => {
-        return {
-          name: '行情',
-          value: `
-            开: ¥${datum.open.toFixed(2)}
-            收: ¥${datum.close.toFixed(2)}
-            高: ¥${datum.high.toFixed(2)}
-            低: ¥${datum.low.toFixed(2)}
-            ${datum.volume ? `量: ${(datum.volume / 10000).toFixed(2)}万手` : ''}
-          `,
+          tooltip: {
+            fields: ['time', 'open', 'close', 'high', 'low', 'volume'],
+            formatter: (datum: any) => {
+              return {
+                name: '行情',
+                value: `
+                开: ¥${datum.open.toFixed(2)}
+                收: ¥${datum.close.toFixed(2)}
+                高: ¥${datum.high.toFixed(2)}
+                低: ¥${datum.low.toFixed(2)}
+                ${datum.volume ? `量: ${(datum.volume / 10000).toFixed(2)}万手` : ''}
+              `,
+              };
+            },
+          },
+          // K线样式
+          stockStyle: {
+            up: {
+              fill: token.colorError,
+              stroke: token.colorError,
+            },
+            down: {
+              fill: token.colorSuccess,
+              stroke: token.colorSuccess,
+            },
+          },
         };
-      },
-    },
-    // K线样式
-    stockStyle: {
-      up: {
-        fill: '#f5222d',
-        stroke: '#f5222d',
-      },
-      down: {
-        fill: '#52c41a',
-        stroke: '#52c41a',
-      },
-    },
-  };
-
   return <Stock {...config} height={height} />;
 };
 

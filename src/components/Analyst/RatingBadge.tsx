@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Tag } from 'antd';
+import { Tag, theme } from 'antd';
 import {
   RiseOutlined,
   FallOutlined,
@@ -23,6 +23,8 @@ const RatingBadge: React.FC<RatingBadgeProps> = ({
   showIcon = true,
   size = 'default',
 }) => {
+  const { token } = theme.useToken();
+
   const getRatingConfig = (ratingValue: string) => {
     const normalizedRating = ratingValue?.toLowerCase();
 
@@ -34,20 +36,20 @@ const RatingBadge: React.FC<RatingBadgeProps> = ({
         color: 'success',
         icon: <RiseOutlined />,
         text: '强烈买入',
-        bgColor: '#f6ffed',
-        borderColor: '#b7eb8f',
-        textColor: '#52c41a',
+        bgColor: token.colorSuccessBgHover,
+        borderColor: token.colorSuccessBorderHover,
+        textColor: token.colorSuccess,
       };
     }
 
     if (normalizedRating?.includes('buy') || normalizedRating?.includes('买入')) {
       return {
-        color: 'green',
+        color: 'processing',
         icon: <CheckCircleOutlined />,
         text: '买入',
-        bgColor: '#e6f7ff',
-        borderColor: '#91d5ff',
-        textColor: '#1890ff',
+        bgColor: token.colorPrimaryBgHover,
+        borderColor: token.colorPrimaryBorderHover,
+        textColor: token.colorPrimary,
       };
     }
 
@@ -56,9 +58,9 @@ const RatingBadge: React.FC<RatingBadgeProps> = ({
         color: 'default',
         icon: <MinusOutlined />,
         text: '持有',
-        bgColor: '#fafafa',
-        borderColor: '#d9d9d9',
-        textColor: '#595959',
+        bgColor: token.colorFillTertiary,
+        borderColor: token.colorBorder,
+        textColor: token.colorTextSecondary,
       };
     }
 
@@ -67,9 +69,9 @@ const RatingBadge: React.FC<RatingBadgeProps> = ({
         color: 'error',
         icon: <FallOutlined />,
         text: '卖出',
-        bgColor: '#fff1f0',
-        borderColor: '#ffccc7',
-        textColor: '#ff4d4f',
+        bgColor: token.colorErrorBgHover,
+        borderColor: token.colorErrorBorderHover,
+        textColor: token.colorError,
       };
     }
 
@@ -81,9 +83,9 @@ const RatingBadge: React.FC<RatingBadgeProps> = ({
         color: 'error',
         icon: <FallOutlined />,
         text: '强烈卖出',
-        bgColor: '#fff1f0',
-        borderColor: '#ffa39e',
-        textColor: '#cf1322',
+        bgColor: token.colorErrorBgHover,
+        borderColor: token.colorErrorBorderHover,
+        textColor: token.colorError,
       };
     }
 
@@ -91,9 +93,9 @@ const RatingBadge: React.FC<RatingBadgeProps> = ({
       color: 'default',
       icon: <MinusOutlined />,
       text: ratingValue || '未评级',
-      bgColor: '#fafafa',
-      borderColor: '#d9d9d9',
-      textColor: '#8c8c8c',
+      bgColor: token.colorFillTertiary,
+      borderColor: token.colorBorder,
+      textColor: token.colorTextSecondary,
     };
   };
 

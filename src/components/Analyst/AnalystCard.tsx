@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Card, Badge, Typography, Row, Col, Space, Statistic } from 'antd';
+import { Card, Badge, Typography, Row, Col, Space, Statistic, theme } from 'antd';
 import { TrophyOutlined, RiseOutlined } from '@ant-design/icons';
 import { history } from '@umijs/max';
 import type { AnalystInfo } from '@/services/analyst';
@@ -22,6 +22,8 @@ const AnalystCard: React.FC<AnalystCardProps> = ({
   showRank = true,
   onClick,
 }) => {
+  const { token } = theme.useToken();
+
   const handleClick = () => {
     if (onClick) {
       onClick(analyst);
@@ -31,9 +33,9 @@ const AnalystCard: React.FC<AnalystCardProps> = ({
   };
 
   const getRatingBadge = (score: number) => {
-    if (score >= 4.5) return { color: 'gold', text: '五星分析师' };
-    if (score >= 4.0) return { color: 'blue', text: '四星分析师' };
-    if (score >= 3.5) return { color: 'green', text: '三星分析师' };
+    if (score >= 4.5) return { color: token.colorWarning, text: '五星分析师' };
+    if (score >= 4.0) return { color: token.colorPrimary, text: '四星分析师' };
+    if (score >= 3.5) return { color: token.colorSuccess, text: '三星分析师' };
     return { color: 'default', text: '普通分析师' };
   };
 
@@ -54,8 +56,8 @@ const AnalystCard: React.FC<AnalystCardProps> = ({
           {showRank && (
             <Col>
               <Space>
-                <TrophyOutlined style={{ fontSize: 20, color: '#faad14' }} />
-                <Text strong style={{ fontSize: 18 }}>
+                <TrophyOutlined style={{ fontSize: 20, color: token.colorWarning }} />
+                <Text strong style={{ fontSize: 18, color: token.colorText }}>
                   #{analyst.rank}
                 </Text>
               </Space>
@@ -65,7 +67,7 @@ const AnalystCard: React.FC<AnalystCardProps> = ({
             <Badge
               count={badge.text}
               style={{
-                backgroundColor: badge.color === 'gold' ? '#faad14' : undefined,
+                backgroundColor: badge.color === token.colorWarning ? token.colorWarning : undefined,
               }}
             />
           </Col>
@@ -87,7 +89,7 @@ const AnalystCard: React.FC<AnalystCardProps> = ({
               value={analyst.successRate}
               precision={1}
               suffix="%"
-              valueStyle={{ fontSize: 16, color: '#3f8600' }}
+              valueStyle={{ fontSize: 16, color: token.colorSuccess }}
             />
           </Col>
           <Col span={8}>
@@ -96,10 +98,10 @@ const AnalystCard: React.FC<AnalystCardProps> = ({
               value={analyst.avgReturn}
               precision={1}
               suffix="%"
-              prefix={<RiseOutlined />}
+              prefix={<RiseOutlined style={{ color: analyst.avgReturn >= 0 ? token.colorSuccess : token.colorError }} />}
               valueStyle={{
                 fontSize: 16,
-                color: analyst.avgReturn >= 0 ? '#cf1322' : '#3f8600',
+                color: analyst.avgReturn >= 0 ? token.colorSuccess : token.colorError,
               }}
             />
           </Col>
@@ -107,7 +109,7 @@ const AnalystCard: React.FC<AnalystCardProps> = ({
             <Statistic
               title="评级数"
               value={analyst.totalRatings}
-              valueStyle={{ fontSize: 16 }}
+              valueStyle={{ fontSize: 16, color: token.colorText }}
             />
           </Col>
         </Row>
@@ -118,7 +120,7 @@ const AnalystCard: React.FC<AnalystCardProps> = ({
             <Text type="secondary">分析师评分</Text>
           </Col>
           <Col>
-            <Text strong style={{ fontSize: 16, color: '#1890ff' }}>
+            <Text strong style={{ fontSize: 16, color: token.colorPrimary }}>
               {analyst.analystScore.toFixed(1)} / 5.0
             </Text>
           </Col>

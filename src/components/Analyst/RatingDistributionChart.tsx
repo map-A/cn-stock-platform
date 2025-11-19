@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Card, Typography, Row, Col, Progress } from 'antd';
+import { Card, Typography, Row, Col, Progress, theme } from 'antd';
 import type { RatingDistribution } from '@/services/analyst';
 
 const { Text, Title } = Typography;
@@ -18,33 +18,34 @@ const RatingDistributionChart: React.FC<RatingDistributionChartProps> = ({
   distribution,
   title = '评级分布',
 }) => {
+  const { token } = theme.useToken();
   const total = distribution.total || 1;
 
   const ratingItems = [
     {
       label: '强烈买入',
       count: distribution.strongBuy,
-      color: '#52c41a',
+      color: token.colorSuccess,
     },
     {
       label: '买入',
       count: distribution.buy,
-      color: '#1890ff',
+      color: token.colorPrimary,
     },
     {
       label: '持有',
       count: distribution.hold,
-      color: '#8c8c8c',
+      color: token.colorTextSecondary,
     },
     {
       label: '卖出',
       count: distribution.sell,
-      color: '#ff7a45',
+      color: token.colorWarning,
     },
     {
       label: '强烈卖出',
       count: distribution.strongSell,
-      color: '#ff4d4f',
+      color: token.colorError,
     },
   ];
 
@@ -54,16 +55,16 @@ const RatingDistributionChart: React.FC<RatingDistributionChartProps> = ({
 
       {/* 共识评级 */}
       <div style={{ marginBottom: 24, textAlign: 'center' }}>
-        <Text type="secondary">共识评级</Text>
+        <Text type="secondary" style={{ color: token.colorTextSecondary }}>共识评级</Text>
         <div>
           <Text
             strong
-            style={{ fontSize: 24, color: '#1890ff', marginRight: 16 }}
+            style={{ fontSize: 24, color: token.colorPrimary, marginRight: 16 }}
           >
             {distribution.consensus}
           </Text>
           {distribution.avgPriceTarget > 0 && (
-            <Text type="secondary">
+            <Text type="secondary" style={{ color: token.colorTextSecondary }}>
               平均目标价: ¥{distribution.avgPriceTarget.toFixed(2)}
             </Text>
           )}
@@ -79,10 +80,10 @@ const RatingDistributionChart: React.FC<RatingDistributionChartProps> = ({
             <div key={item.label} style={{ marginBottom: 12 }}>
               <Row justify="space-between" style={{ marginBottom: 4 }}>
                 <Col>
-                  <Text>{item.label}</Text>
+                  <Text style={{ color: token.colorText }}>{item.label}</Text>
                 </Col>
                 <Col>
-                  <Text strong>
+                  <Text strong style={{ color: token.colorText }}>
                     {item.count} ({percentage.toFixed(1)}%)
                   </Text>
                 </Col>
@@ -102,15 +103,15 @@ const RatingDistributionChart: React.FC<RatingDistributionChartProps> = ({
         style={{
           marginTop: 16,
           paddingTop: 16,
-          borderTop: '1px solid #f0f0f0',
+          borderTop: `1px solid ${token.colorBorderSecondary}`,
         }}
       >
         <Row justify="space-between">
           <Col>
-            <Text strong>总评级数</Text>
+            <Text strong style={{ color: token.colorText }}>总评级数</Text>
           </Col>
           <Col>
-            <Text strong style={{ fontSize: 16, color: '#1890ff' }}>
+            <Text strong style={{ fontSize: 16, color: token.colorPrimary }}>
               {distribution.total}
             </Text>
           </Col>

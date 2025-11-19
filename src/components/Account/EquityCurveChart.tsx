@@ -2,7 +2,7 @@
  * 资金曲线图组件
  */
 import React from 'react';
-import { Card, Empty, Radio } from 'antd';
+import { Card, Empty, Radio, theme } from 'antd';
 import { Line, Area } from '@ant-design/plots';
 import type { AccountDailySnapshot } from '@/services/account';
 
@@ -13,11 +13,12 @@ interface EquityCurveChartProps {
 
 const EquityCurveChart: React.FC<EquityCurveChartProps> = ({ snapshots, loading }) => {
   const [chartType, setChartType] = React.useState<'total' | 'return'>('total');
+  const { token } = theme.useToken();
 
   if (!snapshots || snapshots.length === 0) {
     return (
       <Card loading={loading}>
-        <Empty description="暂无资金曲线数据" />
+        <Empty description="暂无资金曲线数据" style={{ color: token.colorTextSecondary }} />
       </Card>
     );
   }
@@ -83,7 +84,7 @@ const EquityCurveChart: React.FC<EquityCurveChartProps> = ({ snapshots, loading 
     yField: 'value',
     smooth: true,
     areaStyle: () => ({
-      fill: 'l(270) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+      fill: `l(270) 0:${token.colorPrimaryBg} 0.5:${token.colorPrimaryBorder} 1:${token.colorPrimary}`,
     }),
     yAxis: {
       label: {

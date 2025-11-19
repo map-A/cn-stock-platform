@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Table, Tag, Button, Space, Tooltip } from 'antd';
+import { Table, Tag, Button, Space, Tooltip, theme } from 'antd';
 import {
   DownloadOutlined,
   StarOutlined,
@@ -43,6 +43,7 @@ const ListTable: React.FC<ListTableProps> = ({
   watchlistSymbols = [],
   onToggleWatchlist,
 }) => {
+  const { token } = theme.useToken();
   const [sortField, setSortField] = useState<string>();
   const [sortOrder, setSortOrder] = useState<'ascend' | 'descend'>();
 
@@ -74,11 +75,11 @@ const ListTable: React.FC<ListTableProps> = ({
     return (
       <Space>
         {isPositive ? (
-          <RiseOutlined style={{ color: '#f5222d' }} />
+          <RiseOutlined style={{ color: token.colorError }} />
         ) : (
-          <FallOutlined style={{ color: '#52c41a' }} />
+          <FallOutlined style={{ color: token.colorSuccess }} />
         )}
-        <span style={{ color: isPositive ? '#f5222d' : '#52c41a' }}>
+        <span style={{ color: isPositive ? token.colorError : token.colorSuccess }}>
           {formatPercent(value)}
         </span>
       </Space>
@@ -105,12 +106,13 @@ const ListTable: React.FC<ListTableProps> = ({
             {isInWatchlist ? (
               <StarFilled
                 className={styles.watchlistIcon}
-                style={{ color: '#faad14' }}
+                style={{ color: token.colorWarning }}
                 onClick={() => onToggleWatchlist?.(record.symbol)}
               />
             ) : (
               <StarOutlined
                 className={styles.watchlistIcon}
+                style={{ color: token.colorTextSecondary }}
                 onClick={() => onToggleWatchlist?.(record.symbol)}
               />
             )}
@@ -155,7 +157,7 @@ const ListTable: React.FC<ListTableProps> = ({
     const customColumns: ColumnsType<ListItem> = columnConfigs.map((col) => ({
       title: col.tooltip ? (
         <Tooltip title={col.tooltip}>
-          {col.title} <span style={{ color: '#999' }}>(?)</span>
+          {col.title} <span style={{ color: token.colorTextSecondary }}>(?)</span>
         </Tooltip>
       ) : (
         col.title

@@ -23,7 +23,7 @@ const InfoCard: React.FC<{
       style={{
         backgroundColor: token.colorBgContainer,
         boxShadow: token.boxShadow,
-        borderRadius: '8px',
+        borderRadius: token.borderRadius, // Use theme token for border radius
         fontSize: '14px',
         color: token.colorTextSecondary,
         lineHeight: '22px',
@@ -44,13 +44,11 @@ const InfoCard: React.FC<{
             width: 48,
             height: 48,
             lineHeight: '22px',
-            backgroundSize: '100%',
+            backgroundColor: token.colorPrimary, // Use primary color for background
             textAlign: 'center',
             padding: '8px 16px 16px 12px',
-            color: '#FFF',
+            color: '#FFF', // White text for contrast
             fontWeight: 'bold',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/zos/bmw-prod/daaf8d50-8e6d-4251-905d-676a24ddfa12.svg')",
           }}
         >
           {index}
@@ -91,14 +89,6 @@ const Welcome: React.FC = () => {
       <Card
         style={{
           borderRadius: 8,
-        }}
-        styles={{
-          body: {
-            backgroundImage:
-              initialState?.settings?.navTheme === 'realDark'
-                ? 'background-image: linear-gradient(75deg, #1A1B1F 0%, #191C1F 100%)'
-                : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
-          },
         }}
       >
         <div
